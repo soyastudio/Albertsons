@@ -239,7 +239,10 @@ public class ActionServlet extends HttpServlet {
         } else if (ParamType.QUERY_PARAM.equals(paramType)) {
             value = request.getParameter(param);
 
-        } else if (ParamType.PATH_PARAM.equals(paramType)) {
+        } else if (ParamType.QUERY_PARAM.equals(paramType)) {
+            value = request.getParameter(param);
+
+        } if (ParamType.PATH_PARAM.equals(paramType)) {
             // TODO:
 
         }
