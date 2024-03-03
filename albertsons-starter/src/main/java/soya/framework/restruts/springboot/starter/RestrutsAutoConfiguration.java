@@ -60,6 +60,10 @@ public class RestrutsAutoConfiguration {
         ApplicationContext context = event.getApplicationContext();
         Environment environment = context.getEnvironment();
 
+        Arrays.stream(context.getBeanDefinitionNames()).forEach(b -> {
+            System.out.println("------------- " + b);
+        });
+
         DefaultRestActionContext registration = context.getBean(DefaultRestActionContext.class);
         context.getBeansOfType(RestActionLoader.class).entrySet().forEach(e -> {
             registration.register(e.getValue());
@@ -116,6 +120,8 @@ public class RestrutsAutoConfiguration {
                 registration.register(e);
             });
         }
+
+
 
         if (properties.getSpecification().equalsIgnoreCase("SWAGGER")) {
             registration.setApi(new SwaggerRenderer().render(registration));

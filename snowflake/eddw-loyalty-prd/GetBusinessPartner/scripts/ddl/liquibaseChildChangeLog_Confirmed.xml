@@ -1,0 +1,39 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+	<include file="GetBusinessPartner/scripts/ddl/table_BUSINESS_PARTNER_NOTE_EXCEPTIONS.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_BUSINESS_PARTNER_ORGANIZATION_EXCEPTIONS.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_BUSINESS_PARTNER_SERVICE_AREA_EXCEPTIONS.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_BUSINESS_PARTNER_SERVICE_AREA_LOCATION_EXCEPTIONS.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_BUSINESS_PARTNER_SERVICE_FEE_EXCEPTIONS.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_BUSINESS_PARTNER_SITE_ORGANIZATION_EXCEPTIONS.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner_Contact.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner_Contact_EXCEPTIONS.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner_Note.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner_Organization.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner_Profile.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner_Service_Area.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner_Service_Area_Location.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner_Service_Fee.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner_Service_Override.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner_Service_Override_Exceptions.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner_Site_Contact.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner_Site_Contact_EXCEPTIONS.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_Business_Partner_Site_Organization.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_ESED_BusinessPartner.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_ESED_BusinessPartner_Rerun.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_GetBusinessPartner_Flat.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/table_GetBusinessPartner_Flat_Rerun.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/view_Business_Partner.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/view_Business_Partner_Contact.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/view_Business_Partner_Note.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/view_Business_Partner_Organization.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/view_Business_Partner_Profile.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/view_Business_Partner_Service_Area.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/view_Business_Partner_Service_Area_Location.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/view_Business_Partner_Service_Fee.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/view_Business_Partner_Service_Override.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/view_Business_Partner_Site_Contact.sql"/>
+	<include file="GetBusinessPartner/scripts/ddl/view_Business_Partner_Site_Organization.sql"/>
+</databaseChangeLog>

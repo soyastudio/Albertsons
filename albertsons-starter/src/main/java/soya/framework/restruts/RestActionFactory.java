@@ -4,6 +4,7 @@ import java.util.concurrent.Callable;
 
 public interface RestActionFactory {
     String getNamespace();
+
     Callable<?> create(ActionMapping mapping) throws ActionCreationException;
 
     class ActionCreationException extends RuntimeException {

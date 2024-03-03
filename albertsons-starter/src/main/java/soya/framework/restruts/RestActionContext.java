@@ -11,9 +11,11 @@ public interface RestActionContext {
     Serializer getSerializer(String mediaType);
 
     ActionMapping[] getActionMappings();
+
     ActionMapping getActionMapping(HttpServletRequest request);
 
     String getApiPath();
+
     String getApi();
 
 }

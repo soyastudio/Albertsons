@@ -1,0 +1,12 @@
+--liquibase formatted sql
+--changeset SYSTEM:SP_GetBusinessPartner_To_BIM_load_TASK runOnChange:true splitStatements:false OBJECT_TYPE:TASK
+use database <<EDM_DB_NAME>>;
+use schema <<EDM_DB_NAME>>.DW_APPL;
+
+CREATE OR REPLACE TASK SP_GETBUSINESSPARTNER_TO_BIM_LOAD_TASK
+WAREHOUSE='PROD_INGESTION_SMALL_WH'
+SCHEDULE='1 minutes'
+WHEN SYSTEM$STREAM_HAS_DATA('<<EDM_DB_NAME_R>>.DW_APPL.GetBusinessPartner_Flat_R_STREAM')
+AS CALL SP_GetBusinessPartner_To_BIM_load();
+
+ALTER TASK SP_GETBUSINESSPARTNER_TO_BIM_LOAD_TASK RESUME;

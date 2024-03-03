@@ -1,6 +1,7 @@
 package soya.framework.restruts;
 
 import org.apache.commons.io.IOUtils;
+import soya.framework.restruts.util.ConvertUtils;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletConfig;
@@ -113,6 +114,7 @@ public class ActionServlet extends HttpServlet {
     }
 
     private Callable<?> create(ActionMapping mapping, HttpServletRequest request) {
+        System.out.println("===================== " + mapping.getActionClass());
         Callable<?> callable = context.getActionFactory().create(mapping);
         Class<?> cls = callable.getClass();
 
@@ -126,10 +128,17 @@ public class ActionServlet extends HttpServlet {
         }
 
         final String consume = accept;
+
+        Map<String, String> ppms = null;
+        if (mapping.isPathMapping()) {
+            ppms = mapping.getPath().compile(request.getPathInfo());
+        }
+
+        final Map<String, String> pathParams = ppms;
         Field[] fields = getFields(cls);
         Arrays.stream(fields).forEach(f -> {
             ActionMapping.ParameterMapping param = mapping.getParamMapping(f.getName());
-            if(Modifier.isStatic(f.getModifiers()) || Modifier.isFinal(f.getModifiers())) {
+            if (Modifier.isStatic(f.getModifiers()) || Modifier.isFinal(f.getModifiers())) {
                 // do nothing
 
             } else if (param == null && f.getAnnotation(RestActionParameter.class) != null) {
@@ -157,6 +166,16 @@ public class ActionServlet extends HttpServlet {
                         throw new RuntimeException(e);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
+                    }
+
+                } else if (ParamType.PATH_PARAM.equals(param.getParameterType())) {
+                    if (mapping.isPathMapping()) {
+                        String value = pathParams.get(param.getReferredTo());
+                        try {
+                            f.set(callable, convert(value, fieldType));
+                        } catch (IllegalAccessException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
 
                 } else {
@@ -242,8 +261,9 @@ public class ActionServlet extends HttpServlet {
         } else if (ParamType.QUERY_PARAM.equals(paramType)) {
             value = request.getParameter(param);
 
-        } if (ParamType.PATH_PARAM.equals(paramType)) {
-            // TODO:
+        }
+        if (ParamType.PATH_PARAM.equals(paramType)) {
+            System.out.println("=================== path param: " + request.getPathInfo());
 
         }
 
@@ -251,8 +271,7 @@ public class ActionServlet extends HttpServlet {
     }
 
     private <T> T convert(String value, Class<T> type) {
-        logger.warning("TODO: convert");
-        return (T) value;
+        return (T) ConvertUtils.convert(value, type);
     }
 
     private <T> T convert(String value, Class<T> type, String mediaType) {

@@ -1,22 +1,19 @@
 package soya.framework.restruts;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class ActionMapping implements Comparable<ActionMapping>, Serializable {
     private String actionClass;
-
     private String action;
     private Path path;
-
     private String id;
-
     private String[] consumes;
     private String[] produces;
     private Map<String, ParameterMapping> parameters = new LinkedHashMap<>();
-
     private String[] tags;
 
     private ActionMapping(Class<?> actionClass, String action, HttpMethod method, String path) {
@@ -40,6 +37,10 @@ public class ActionMapping implements Comparable<ActionMapping>, Serializable {
 
     public Path getPath() {
         return path;
+    }
+
+    public boolean isPathMapping() {
+        return path.pathItems != null;
     }
 
     public String getId() {
@@ -170,12 +171,6 @@ public class ActionMapping implements Comparable<ActionMapping>, Serializable {
 
             if (path.contains("{")) {
                 pathItems = path.split("/");
-                for (int i = 0; i < pathItems.length; i++) {
-                    String item = pathItems[i];
-                    if (item.contains("{") && item.contains("}")) {
-                        pathItems[i] = "*";
-                    }
-                }
             }
         }
 
@@ -213,14 +208,6 @@ public class ActionMapping implements Comparable<ActionMapping>, Serializable {
             return result;
         }
 
-        public boolean match(String path) {
-            if (path.equals(path)) {
-                return true;
-            }
-
-            return false;
-        }
-
         @Override
         public int compareTo(Path o) {
             int result = path.compareTo(o.path);
@@ -229,6 +216,34 @@ public class ActionMapping implements Comparable<ActionMapping>, Serializable {
             }
 
             return result;
+        }
+
+        public boolean match(String path) {
+            String[] items = path.split("/");
+            if(pathItems.length > items.length) {
+                return false;
+
+            } else {
+                for(int i = 0; i < pathItems.length; i ++) {
+                    if(!pathItems[i].equals(items[i]) && !pathItems[i].contains("{")) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public Map<String, String> compile(String path) {
+            Map<String, String> values = new HashMap<>();
+            String[] items = path.split("/");
+            for(int i = 0; i < pathItems.length; i ++) {
+                String token = pathItems[i];
+                if(token.startsWith("{") && token.endsWith("}")) {
+                    String key = token.substring(1, token.length() - 1);
+                    values.put(key, items[i]);
+                }
+            }
+            return values;
         }
 
         private static int sort(String method) {

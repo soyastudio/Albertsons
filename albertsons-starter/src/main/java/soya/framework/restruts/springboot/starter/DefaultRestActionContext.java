@@ -7,12 +7,17 @@ import java.util.*;
 
 class DefaultRestActionContext implements RestActionContext {
     private Map<ActionMapping.Path, ActionMapping> registrations = new HashMap();
-    private DependencyInjector injector;
+    private List<ActionMapping> pathMappings = new ArrayList<>();
+
     private Map<String, Serializer> serializerMap = new HashMap<>();
+
+    private DependencyInjector injector;
+
     private RestActionFactory actionFactory = new DefaultRestActionFactory();
 
     private String apiPath;
     private String api;
+
     public DependencyInjector getDependencyInjector() {
         return injector;
     }
@@ -38,7 +43,20 @@ class DefaultRestActionContext implements RestActionContext {
     }
 
     public ActionMapping getActionMapping(HttpServletRequest request) {
-        return registrations.get(ActionMapping.path(request.getMethod(), request.getPathInfo()));
+        ActionMapping.Path key = ActionMapping.path(request.getMethod(), request.getPathInfo());
+        if (registrations.containsKey(key)) {
+            return registrations.get(key);
+        } else {
+            Iterator<ActionMapping> iterator = pathMappings.iterator();
+            while (iterator.hasNext()) {
+                ActionMapping next = iterator.next();
+                if(next.getPath().equals(key)) {
+                    return next;
+                }
+            }
+
+            return null;
+        }
     }
 
     @Override
@@ -82,6 +100,9 @@ class DefaultRestActionContext implements RestActionContext {
 
     DefaultRestActionContext register(ActionMapping mapping) {
         registrations.put(mapping.getPath(), mapping);
+        if (mapping.isPathMapping()) {
+            pathMappings.add(mapping);
+        }
         return this;
     }
 
