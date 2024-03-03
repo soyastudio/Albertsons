@@ -1,0 +1,46 @@
+{
+    "env": "PRD",
+    "user": "APPL_EDM_MONITOR",
+    "account": "abs_itds_prd.west-us-2.azure",
+    "warehouse": "PROD_MONITOR_WH",
+    "role": "ROLE_APPL_EDM_MONITOR",
+    "objects":
+    [
+        {
+            "database": "EDM_CONFIRMED_PRD",
+            "schema": "DW_APPL",
+            "SP": [""],
+            "pipe": [""],
+            "stage": [""],
+            "stream": [""],
+            "table": [""],
+            "task": [""]
+        },
+        {
+            "database":"EDM_CONFIRMED_PRD",
+            "schema":"DW_C_LOYALTY",
+            "table":[""]
+        },
+        {
+            "database": "EDM_REFINED_PRD",
+            "schema": "DW_APPL",
+            "SP": [""],
+			"pipe": ["EDM_EPISODIC_CUSTOMMETRICS_PIPE_PRDBLOB_INC","EDM_EPISODIC_DRAWING_PRIZES_PIPE_PRDBLOB_INC","EDM_EPISODIC_DRAWING_PIPE_PRDBLOB_INC",
+	     "EDM_EPISODIC_EVENTS_PIPE_PRDBLOB_INC","EDM_EPISODIC_GAME_PIPE_PRDBLOB_INC","EDM_EPISODIC_INSTANTWINPLAYS_PIPE_PRDBLOB_INC",
+			 "EDM_EPISODIC_LANDDETAILS_PIPE_PRDBLOB_INC","EDM_EPISODIC_OAMOEEARNS_STAGE_PRDBLOB_INC","EDM_EPISODIC_PRIZE_STAGE_PRDBLOB_INC",
+			 "EDM_EPISODIC_PROFILE_STAGE_PRDBLOB_INC","EDM_EPISODIC_PROGRAM_STAGE_PRDBLOB_INC","EDM_EPISODIC_SELECTIONS_STAGE_PRDBLOB_INC",
+			 "EDM_EPISODIC_SWEEPSENTRIES_STAGE_PRDBLOB_INC","EDM_EPISODIC_WINS_STAGE_PRDBLOB_INC"],
+			"stream": ["EPISODIC_CUSTOMMETRICS_FLAT_R_STREAM","EPISODIC_DRAWING_PRIZES_FLAT_R_STREAM","EPISODIC_DRAWING_FLAT_R_STREAM"]
+        },
+        {
+            "database":"EDM_REFINED_PRD",
+            "schema":"DW_R_LOYALTY",
+            "table": [""]
+        },
+		{
+            "database":"EDM_VIEWS_PRD",
+            "schema":"DW_VIEWS",
+            "view": [""]
+        }
+    ]
+}

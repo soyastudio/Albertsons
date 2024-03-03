@@ -1,0 +1,22 @@
+USE DATABASE EDM_CONFIRMED_PRD;
+USE SCHEMA DW_C_LOYALTY;
+
+
+create or replace TABLE OFFER_REDEMPTION_REPORTING_DETAILED_SUMMARY (
+	STORE VARCHAR(16777216) COMMENT 'Store Number where the transaction took place',
+	LANE VARCHAR(16777216)  COMMENT 'The register at which the transaction took place',
+	TRANSACTION_NUMBER NUMBER(38,0) COMMENT 'Transaction sequence number on the register',
+	HHID NUMBER(38,0) COMMENT 'Unique identifier of the Household. The aggregateId in CHMS service is the HHID unlike the other services where the aggegatedid we map to the CustomerId',
+	REDEMPTION_COUNT NUMBER(38,0) COMMENT 'The no of items the offers has been applied',
+	REDEMPTION_AMOUNT NUMBER(10,2) COMMENT 'Total Redemption Amount for the transaction',
+	POINTS_AMOUNT NUMBER(10,2) COMMENT 'Total club card points earned for the transaction',
+	POINTS_PROGRAMNAME VARCHAR(16777216) COMMENT 'Program Name for the club card points being earned or burned',
+	TRANSACTION_DATE TIMESTAMP_LTZ(9) COMMENT 'The real time of the transaction. Date and Time as printed on the receipt which is coimg from POS',
+	OFFER_ID VARCHAR(16777216) COMMENT 'This is the Offer ID applied to the savings item',
+	OFFER_START_DATE DATE COMMENT 'Effective start date in oms offer',
+	OFFER_END_DATE DATE COMMENT 'Effective end date in oms offer',
+	CLIPS_TOTALCOLUMN NUMBER(18,0)  COMMENT 'clip type Card(C) & List(L) has same J4U offer ID(When we do clip)',
+	REDEMPTION_TOTALCOLUMN NUMBER(18,0) COMMENT 'The no of items the offers has been applied',
+	MARKDOWN_TOTALCOLUMN NUMBER(38,2)  COMMENT 'Total Redemption Amount for the transaction',
+	DW_CREATE_TS TIMESTAMP_LTZ(9) COMMENT 'The timestamp the record was inserted.'
+);

@@ -1,0 +1,9 @@
+--liquibase formatted sql
+--changeset SYSTEM:VISITOR_MAPPING runOnChange:true splitStatements:false OBJECT_TYPE:TABLE
+use database EDM_CONFIRMED_<<ENV>>;
+use schema DW_C_STAGE;
+create or replace TRANSIENT TABLE VISITOR_MAPPING (
+	VISITOR_INTEGRATION_ID NUMBER(38,0),
+	SRC_VISITOR_ID VARCHAR(16777216),
+	TGT_VISITOR_ID VARCHAR(16777216)
+);

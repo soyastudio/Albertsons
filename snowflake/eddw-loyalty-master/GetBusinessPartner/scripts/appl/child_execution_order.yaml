@@ -1,0 +1,22 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetBusinessPartner/scripts/appl/Pipe_EDDW_BUSINESSPARTNER_PIPE_PRDBLOB_INC.sql
+    - GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_TO_BIM_LOAD_Business_Partner.sql
+    - GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_TO_BIM_LOAD_Business_Partner_Profile.sql
+    - GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_TO_BIM_LOAD_Business_Partner_Service_Area_Location.sql
+    - GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_Business_Partner_Note.sql
+    - GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_Business_Partner_Service_Fee.sql
+    - GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_Business_Partner_Service_Override.sql
+    - GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_LOAD_Business_Partner_Service_Area.sql
+    - GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_load_Business_Partner_Contact.sql
+    - GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_load_Business_Partner_Organization.sql
+    - GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_load_Business_Partner_Site_Contact.sql
+    - GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_load_Business_Partner_Site_Organization.sql
+    - GetBusinessPartner/scripts/appl/Task_SP_GetBusinessPartner_To_BIM_load_TASK.sql
+    - GetBusinessPartner/scripts/appl/sp_GetBusinessPartner_To_BIM_load.sql
+    - GetBusinessPartner/scripts/appl/stream_ESED_BusinessPartner_R_STREAM.sql
+    - GetBusinessPartner/scripts/appl/stream_GetBusinessPartner_Flat_R_STREAM.sql

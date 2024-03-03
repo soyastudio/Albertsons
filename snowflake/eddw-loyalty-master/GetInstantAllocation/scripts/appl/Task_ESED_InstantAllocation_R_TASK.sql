@@ -1,0 +1,12 @@
+--liquibase formatted sql
+--changeset SYSTEM:ESED_InstantAllocation_R_TASK runOnChange:true splitStatements:false OBJECT_TYPE:TASK
+use database EDM_REFINED_PRD;
+use schema EDM_REFINED_PRD.DW_APPL;
+
+CREATE OR REPLACE TASK ESED_INSTANTALLOCATION_R_TASK
+WAREHOUSE='PROD_INGESTION_SMALL_WH'
+SCHEDULE='1 minutes'
+WHEN SYSTEM$STREAM_HAS_DATA('ESED_InstantAllocation_R_STREAM')
+AS call sp_GetInstantAllocation_To_FLAT_load();
+
+ALTER TASK ESED_INSTANTALLOCATION_R_TASK RESUME;

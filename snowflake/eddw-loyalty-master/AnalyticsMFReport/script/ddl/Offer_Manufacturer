@@ -1,0 +1,163 @@
+USE DATABASE EDM_VIEWS_PRD;
+	USE SCHEMA DW_VIEWS;
+
+  
+	Create or Replace View Offer_Manufacturer
+	(
+	Account_Name  COMMENT  'Account name is Vendor/Manufacturer name',
+	Headline COMMENT  'Headline is brand name of the manufacturer',
+	Agg_ID COMMENT  'Agg Id is aggregator identification',
+	Offer_ID COMMENT  'Offer_ID is the external Offer id of the offer',
+	Price_Text COMMENT  'Price_Text is amount discount on the offer ',
+	Description COMMENT  'Description is summary of discount of the product',
+    CREATE_TS COMMENT 'It is create timestamp of the latest offer in database',
+	Submit_Date COMMENT  'Submit Date is date on which Manufacturer sent the offer to Albertsons',
+	Campaign_Start_Date COMMENT  'Campaign Start Date is start date of the offer',
+	Display_End_Date COMMENT  'Display End Date is the end date of offer display in J4U ',
+	Offer_End_Date COMMENT  'It is the end date of the Offer',
+	Region_Name COMMENT 'Region Name is the Division name of the offer - Single Value',
+    POD_Offer_Dsc COMMENT 'Offer Description shown on the Coupon in J4U',
+    Offer_type  COMMENT 'It tells what type of offer is being provided to the customer',
+    Discount_type  COMMENT 'Specifies the kind of discount customer gets with this offer',
+    In_Ad  COMMENT 'Specifies if the Offer is in Ad or not',
+    In_Email  COMMENT 'Specifies if the Offer is sent via email or not',
+	Category Comment 'Category defines the which category, manufacturer coupon belongs',
+	Clip_limit COMMENT 'Clip limit provides number of ties an offer can be be used by a single user',
+	Accepted_Regions COMMENT 'Accepted_Regions is also the division of the offer with comma seperated multiple values',
+	Status COMMENT  'It is Current Status of the Offer/Campaign',
+	Targeting COMMENT 'This field used target a particular kind of customer either Household or Storebased',
+    Create_Ts_Rank COMMENT 'It is Ranking over create timestamp for offers'
+	)
+	Copy Grants 
+	Comment = 'View For MF PBI Report'
+	AS 
+    Select *, rank() over (partition by Offer_ID order by CREATE_TS desc) as Create_ts_Rank
+    from 
+    (  Select
+	DISTINCT oms_off.Chargeback_Vendor_Nm As Account_Name,
+	oms_off.Headline_Txt As Headline,
+	oms_off.Aggregator_Offer_Id As Agg_ID,
+	oms_off.External_Offer_Id As Offer_ID,
+	oms_off.Price_Title_Txt As Price_Text,
+	oms_off.Description_Txt As Description,
+    MAX(oms_off.DW_CREATE_TS)
+    OVER (PARTITION BY 
+	oms_off.Chargeback_Vendor_Nm
+	,oms_off.Headline_Txt
+	,oms_off.Aggregator_Offer_Id
+	,oms_off.External_Offer_Id
+	,oms_off.Price_Title_Txt
+	,oms_off.Description_Txt
+	,oms_off.Submitted_Dt
+	,oms_off.Display_Effective_Start_Dt
+	,oms_off.Display_Effective_End_Dt
+	,oms_off.Effective_End_Dt
+	,oms_off_reg.Division_nm
+	,oms_off.Offer_Status_dsc
+	,oms_off.Subprogram_Nm
+	,oms_off.PRODUCT_DSC1
+    ,oms_off.Offer_Prototype_Dsc
+    ,oms_bnft_dsc.BENEFIT_VALUE_TYPE_DSC
+    ,oms_off.Ad_Type_Cd
+    ,oms_off.In_Email_Ind
+	,oms_off.Primary_category_txt
+	,oms_off.Usage_Limit_Per_Offer_Cnt
+    ) as Create_TS,
+	Min(oms_off.Submitted_Dt)
+	OVER (PARTITION BY 
+	oms_off.Chargeback_Vendor_Nm
+	,oms_off.Headline_Txt
+	,oms_off.Aggregator_Offer_Id
+	,oms_off.External_Offer_Id
+	,oms_off.Price_Title_Txt
+	,oms_off.Description_Txt
+	//,oms_off.Submitted_Dt
+	,oms_off.Display_Effective_Start_Dt
+	,oms_off.Display_Effective_End_Dt
+	,oms_off.Effective_End_Dt
+	,oms_off_reg.Division_nm
+	,oms_off.Offer_Status_dsc
+	,oms_off.Subprogram_Nm
+	,oms_off.PRODUCT_DSC1
+    ,oms_off.Offer_Prototype_Dsc
+    ,oms_bnft_dsc.BENEFIT_VALUE_TYPE_DSC
+    ,oms_off.Ad_Type_Cd
+    ,oms_off.In_Email_Ind
+	,oms_off.Primary_category_txt
+	,oms_off.Usage_Limit_Per_Offer_Cnt
+     ) As Submit_Date,
+	oms_off.Display_Effective_Start_Dt As Campaign_Start_Date,
+	oms_off.Display_Effective_End_Dt As Display_End_Date,
+	oms_off.Effective_End_Dt As Offer_End_Date,
+	oms_off_reg.Division_nm As Region_Name,
+	oms_off.PRODUCT_DSC1 as POD_Offer_Dsc,
+    oms_off.Offer_Prototype_Dsc as Offer_type,
+    oms_bnft_dsc.BENEFIT_VALUE_TYPE_DSC as Discount_type,
+    oms_off.Ad_Type_Cd as In_Ad,
+    oms_off.In_Email_Ind as In_Email,
+	oms_off.Primary_category_txt as Category,
+	oms_off.Usage_Limit_Per_Offer_Cnt as Clip_limit,
+	listagg(distinct Accepted_region_store_count, ', ') within group (order by Accepted_region_store_count ) 
+	OVER (PARTITION BY 
+	oms_off.Chargeback_Vendor_Nm
+	,oms_off.Headline_Txt
+	,oms_off.Aggregator_Offer_Id
+	,oms_off.External_Offer_Id
+	,oms_off.Price_Title_Txt
+	,oms_off.Description_Txt
+	,oms_off.Submitted_Dt
+	,oms_off.Display_Effective_Start_Dt
+	,oms_off.Display_Effective_End_Dt
+	,oms_off.Effective_End_Dt
+	//,oms_off_reg.Division_nm
+	,oms_off.Offer_Status_dsc
+	,oms_off.Subprogram_Nm
+	,oms_off.PRODUCT_DSC1
+    ,oms_off.Offer_Prototype_Dsc
+    ,oms_bnft_dsc.BENEFIT_VALUE_TYPE_DSC
+    ,oms_off.Ad_Type_Cd
+    ,oms_off.In_Email_Ind
+	,oms_off.Primary_category_txt
+	,oms_off.Usage_Limit_Per_Offer_Cnt
+    ) As Accepted_Regions,
+	oms_off.Offer_Status_dsc As Status_dsc,
+	Case oms_off.Subprogram_Nm
+	When 'MC' Then 'Store'
+	When 'HTO' Then 'Household' 
+	End AS Targeting 
+    from 
+	"EDM_CONFIRMED_PRD"."DW_C_PRODUCT"."OMS_OFFER" oms_off
+    JOIN 
+	--"EDM_CONFIRMED_PRD"."DW_C_PRODUCT"."OMS_OFFER_REGION" oms_off_reg
+	(		
+select distinct  PSG.store_group_id,
+            PSG.OMS_OFFER_ID,A.division_id,
+            A.Division_Nm,CONCAT(A.Division_Nm,'
+(', COUNT(Distinct F.FACILITY_NBR),')' ) as Accepted_region_store_count
+					from "EDM_CONFIRMED_PRD"."DW_C_LOCATION"."FACILITY" F
+                    INNER JOIN "EDM_CONFIRMED_PRD"."DW_C_LOCATION"."DIVISION" A ON F.division_id = A.division_id 
+                    INNER JOIN "EDM_CONFIRMED_PRD"."DW_C_PRODUCT"."OMS_STORE_GROUP_STORE" SG ON F.facility_integration_id = SG.facility_integration_id
+                    INNER JOIN "EDM_CONFIRMED_PRD"."DW_C_PRODUCT"."OMS_OFFER_POD_STORE_GROUP" PSG on PSG.store_group_id = SG.store_group_id
+                    where
+                          f.DW_LOGICAL_DELETE_IND = 'FALSE' and f.DW_CURRENT_VERSION_IND = 'TRUE'
+                         AND A.DW_CURRENT_VERSION_IND = 'TRUE' AND A.DW_LOGICAL_DELETE_IND = 'FALSE'
+                         AND SG.DW_CURRENT_VERSION_IND = 'TRUE' AND SG.DW_LOGICAL_DELETE_IND = 'FALSE'
+                         AND PSG.DW_CURRENT_VERSION_IND = 'TRUE' AND PSG.DW_LOGICAL_DELETE_IND = 'FALSE'
+                         AND f.CORPORATION_ID ='001'
+                         AND A.CORPORATION_ID ='001'
+					 group by 1,2,3,4
+	) oms_off_reg
+	ON
+	oms_off.OMS_Offer_Id = oms_off_reg.OMS_OFFER_ID
+    Left JOIN 
+    "EDM_CONFIRMED_PRD"."DW_C_PRODUCT"."OMS_OFFER_BENEFIT_DISCOUNT" oms_bnft_dsc
+    on 
+    oms_off.OMS_Offer_Id = oms_bnft_dsc.OMS_OFFER_ID
+	where 
+	oms_off.PROGRAM_CODE_DSC = 'Manufacturer Coupon'
+	AND
+	oms_off.DW_CURRENT_VERSION_IND = 'TRUE'
+	AND
+	oms_off.DW_LOGICAL_DELETE_IND= 'FALSE'
+    ) as B
+    qualify Create_ts_Rank = 1;

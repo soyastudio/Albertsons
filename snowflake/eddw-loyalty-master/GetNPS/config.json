@@ -1,0 +1,41 @@
+{
+    "env": "PRD",
+    "user": "APPL_EDM_MONITOR",
+    "account": "abs_itds_prd.west-us-2.azure",
+    "warehouse": "PROD_MONITOR_WH",
+    "role": "ROLE_APPL_EDM_MONITOR",
+    "objects":
+    [
+        {
+            "database": "EDM_CONFIRMED_PRD",
+            "schema": "DW_APPL",
+            "SP": ["SP_GetNPSSURVEY_TO_BIM_LOAD_SURVEY_RESPONSE","SP_GetNPSSURVEY_TO_BIM_LOAD_NET_PROMOTER_SCORE_SURVEY","SP_GetNPSSurvey_C_Pipeline_DDL","SP_GetNPSSurvey_To_BIM_load"],
+            "pipe": [""],
+            "stage": [""],
+            "stream": [""],
+            "table": [""],
+            "task": ["SP_GETNPSSURVEY_TO_BIM_LOAD_TASK"]
+        },
+        {
+            "database":"EDM_CONFIRMED_PRD",
+            "schema":"DW_C_LOYALTY",
+            "table":["NET_PROMOTER_SCORE_SURVEY","SURVEY_RESPONSE"]
+        },
+        {
+            "database": "EDM_REFINED_PRD",
+            "schema": "DW_APPL",
+            "SP": ["GETNPSSURVEY_FLAT","SP_ESED_NPS_SURVEY_SNOWPIPE_TO_FLAT"],
+			"pipe": ["EDM_NPSSURVEY_PIPE_PRDBLOB_INC","EDM_GETNPSUMASURVEY_PIPE_PRDBLOB_INC"]
+        },
+        {
+            "database":"EDM_REFINED_PRD",
+            "schema":"DW_R_LOYALTY",
+            "table": [""]
+        },
+		{
+            "database":"EDM_VIEWS_PRD",
+            "schema":"DW_VIEWS",
+            "view": ["Survey_Response","Net_Promoter_Score_Survey","Survey_Question"]
+        }
+    ]
+}

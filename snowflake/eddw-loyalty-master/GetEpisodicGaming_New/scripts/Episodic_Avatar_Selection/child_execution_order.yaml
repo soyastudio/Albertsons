@@ -1,0 +1,13 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetEpisodicGaming/scripts/Episodic_Avatar_Selection/ddl/BIM_EPISODIC_AVATAR_SELECTION.sql
+    - GetEpisodicGaming/scripts/Episodic_Avatar_Selection/ddl/EPISODIC_AVATAR_SELECTION_FLAT.sql
+    - GetEpisodicGaming/scripts/Episodic_Avatar_Selection/ddl/VIEW_EPISODIC_AVATAR_SELECTION.sql
+    - GetEpisodicGaming/scripts/Episodic_Avatar_Selection/appl/EPISODIC_AVATAR_SELECTION_FLAT_RERUN.sql
+    - GetEpisodicGaming/scripts/Episodic_Avatar_Selection/appl/PIPE_EPISODIC_AVATAR_SELECTION.sql
+    - GetEpisodicGaming/scripts/Episodic_Avatar_Selection/appl/SP_GETEPISODIC_TO_BIM_LOAD_EPISODIC_AVATAR_SELECTION.sql
+    - GetEpisodicGaming/scripts/Episodic_Avatar_Selection/appl/SP_GETEPISODIC_TO_BIM_LOAD_EPISODIC_AVATAR_SELECTION_TASK.sql

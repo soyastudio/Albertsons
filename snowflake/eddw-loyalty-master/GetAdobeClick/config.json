@@ -1,0 +1,31 @@
+{
+    "env": "PRD",
+    "user": "APPL_EDM_MONITOR",
+    "account": "abs_itds_prd.west-us-2.azure",
+    "warehouse": "PROD_MONITOR_WH",
+    "role": "ROLE_APPL_EDM_MONITOR",
+    "objects":
+    [
+        {
+            "database": "EDM_ANALYTICS_PRD",
+            "schema": "DW_APPL",
+            "SP": ["SP_CLICK_STREAM_CART_STAGING_POPULATION","SP_CLICK_STREAM_CART_POPULATION","SP_CLICK_STREAM_CART","SP_AUDIT_LOG","SP_ERROR_LOG"],            
+            "task": ["SP_CLICK_STREAM_CART_TASK"]
+        },
+        {
+            "database":"EDM_ANALYTICS_PRD",
+            "schema":"DW_DIGITAL_EXP",
+            "table": ["CLICK_STREAM_CART","CLICK_STREAM_PAGE","CLICK_STREAM_ANALYTICAL_JOB","CLICK_STREAM_ANALYTICAL_JOB_ERRORLOG","CLICK_STREAM_ANALYTICAL_JOB_AUDITLOG"]
+        },        
+        {
+            "database":"EDM_ANALYTICS_PRD",
+            "schema":"DW_STAGE",
+            "table":["CLICK_STREAM_CART_DAY1DAY_WRK","CLICK_STREAM_CART_HIST_RAW_WRK","CLICK_STREAM_CART_HIST_WRK","CLICK_STREAM_CART_HIST_RAW2_WRK","CLICK_STREAM_CART_CUSTOMER_WRK","CLICK_STREAM_CART_VISITS_WRK","CLICK_STREAM_CART_DATA_WRK","CLICK_STREAM_CART_OTHER_WRK","CLICK_STREAM_CART_SHOP_WRK","CLICK_STREAM_CART_METRICS_WRK","CLICK_STREAM_CART_LOYALTY_WRK"]
+        },
+        {
+            "database":"EDM_VIEWS_PRD",
+            "schema":"DW_VIEWS",
+            "view": ["CLICK_STREAM_CART","CLICK_STREAM_PAGE","CLICK_STREAM_SHOPPING_CART_JOURNEY","CLICK_STREAM_ANALYTICAL_JOB","CLICK_STREAM_ANALYTICAL_JOB_ERRORLOG","CLICK_STREAM_ANALYTICAL_JOB_AUDITLOG"]
+        }
+    ]
+}

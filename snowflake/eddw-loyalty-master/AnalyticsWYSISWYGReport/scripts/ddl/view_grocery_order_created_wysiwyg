@@ -1,0 +1,92 @@
+CREATE OR replace VIEW EDM_VIEWS_PRD.DW_VIEWS.grocery_order_created_wysiwyg COPY GRANTS AS
+                       WITH ord_select                               AS
+                       (
+                              SELECT *
+                              FROM   edm_refined_prd.dw_r_ecommerce.getgroceryorder_flat
+                              WHERE  
+                                    FULFILLINGFACILITY_RETAILSTOREID in (select distinct store_id from edm_confirmed_prd.dw_c_stage.grocery_order_facilitylist_wysiwyg)
+                              AND    orderstatus_statustypecd = 'CREATED'
+                       
+                       )
+                       ,
+                       ord_sav AS
+                       (
+                                SELECT   orderid,
+                                         savingscategorynm,
+                                         baseproductnbr,
+                                         sum(groceryorderdetail_savingsamt) AS groceryorderdetail_savingsamt
+                                FROM     EDM_VIEWS_PRD.DW_VIEWS.grocery_order_savings_wysiwyg
+                                GROUP BY orderid ,
+                                         savingscategorynm ,
+                                         baseproductnbr
+                       )
+                    SELECT DISTINCT t.orderid,
+                              LPAD(storeid,4,0)             AS storeid,
+                              'CREATED'                     AS order_status,
+							  ORDERCREATEDATE,
+                              (totalamt - NVL(chargeamt,0)) AS netamt,
+                              NVL(chargeamt,0)              AS chargeamt,
+                              totalamt,
+                              p.promo_code,
+                              t.totalcustomersavingsamt,
+                              t.baseproductnbr,
+                              itemdescription,
+                              uomcd AS random_weighted,
+                              unitpriceamt,
+                              quantity,
+                              basepriceamt,
+                              rewards_savings,
+                              club_card_savings,
+                              j4u_savings,
+                              employee_savings,
+                              (rewards_savings + club_card_savings + j4u_savings+ employee_savings)                                   AS total_savings,
+                              (((basepriceamt) * (quantity)) - (rewards_savings + club_card_savings + j4u_savings+ employee_savings)) AS total_ecom_sales_amt
+                        FROM            (
+                                              SELECT DISTINCT orderid,
+                                                              orderstatus_statustypecd AS order_status,
+                                                              totalamt,
+                                                              totalcustomersavingsamt,
+                                                              baseproductnbr,
+                                                              itemdescription,
+                                                              uomcd,
+                                                              unitpriceamt,
+                                                              quantity,
+                                                              chargeamt,
+															  DATE(ORDERCREATETS) as ORDERCREATEDATE,
+                                                              fulfillingfacility_retailstoreid                                                                                     AS storeid,
+                                                              Sum(basepriceamt) OVER (partition BY orderid,orderstatus_statustypecd,groceryorderheader_versionnbr,baseproductnbr ) AS basepriceamt
+                                              FROM            (
+                                                                       SELECT   ord_ver.*,
+                                                                                ROW_NUMBER() OVER (partition BY orderid, orderstatus_statustypecd, groceryorderheader_versionnbr, totalamt, totalcustomersavingsamt, baseproductnbr, 
+                                                                                                   itemdescription, uomcd, unitpriceamt, quantity, basepriceamt, chargeamt,
+                                                                                                   fulfillingfacility_retailstoreid
+                                                                                                    ORDER BY creationdt DESC ) AS rn
+                                                                       FROM     (
+                                                                                         SELECT   ord.* ,
+                                                                                                  RANK() OVER (partition BY orderid,orderstatus_statustypecd ORDER BY groceryorderheader_versionnbr DESC ) AS rnk
+                                                                                         FROM     ord_select ord ) ord_ver
+                                                                       WHERE    rnk = 1 )
+                                              WHERE           rn = 1  ) t
+                          INNER JOIN
+                              (
+                                     SELECT orderid,
+                                            baseproductnbr,
+                                            NVL("'Rewards Savings'",0)   AS rewards_savings ,
+                                            NVL("'Club Card Savings'",0) AS club_card_savings,
+                                            NVL("'J4U Savings'",0)       AS j4u_savings,
+                                            NVL("'Employee Savings'",0)  AS employee_savings
+                                     FROM   ord_sav PIVOT(Sum(groceryorderdetail_savingsamt) FOR savingscategorynm IN ('Rewards Savings',
+                                                                                                                       'Club Card Savings',
+                                                                                                                       'J4U Savings',
+                                                                                                                       'Employee Savings')) AS p ) s
+                          ON              t.orderid = s.orderid
+                          AND             t.baseproductnbr = s.baseproductnbr
+                          INNER JOIN
+                          (
+                            select orderid,
+                        array_agg(distinct PROMOTIONTYPE_CODE) within group (order by PROMOTIONTYPE_CODE asc) as promo_code
+                        FROM edm_refined_prd.dw_r_ecommerce.getgroceryorder_flat
+                        group by orderid
+                          ) p
+                          ON t.orderid = p.orderid
+                          ;

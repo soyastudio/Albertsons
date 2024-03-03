@@ -1,0 +1,22 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - OneTag/scripts/appl/Task_ONE_TAG_SUSPEND.sql
+    - OneTag/scripts/appl/table_wrk_rename.sql
+    - OneTag/scripts/ddl/table_bim_rename.sql
+    - OneTag/scripts/appl/SP_ONETAG_OTHER_TO_BIM_LOAD_PAGE.sql
+    - OneTag/scripts/appl/SP_ONETAG_OTHER_TO_BIM_LOAD_OPERATING_SYSTEM_DETAIL.sql
+    - OneTag/scripts/appl/SP_ONETAG_TO_BIM_LOAD_VISITOR.sql
+    - OneTag/scripts/appl/SP_ONETAG_OTHER_TO_BIM_LOAD_EVENT_MASTER.sql
+    - OneTag/scripts/appl/SP_ONETAG_TO_BIM_LOAD_IMPRESSIONS.sql
+    - OneTag/scripts/appl/SP_ONETAG_OTHER_TO_ANALYTICAL_PRODUCT_IMPRESSIONS.sql
+    - OneTag/scripts/appl/SP_ONETAG_ADOBE_VISIT_LOAD_MAIN.sql
+    - OneTag/scripts/ddl/VW_ONETAG_PAGE.sql
+    - OneTag/scripts/ddl/VW_ONETAG_OPERATING_SYSTEM_DETAIL.sql
+    - OneTag/scripts/ddl/view_click_stream_visitor.sql
+    - OneTag/scripts/ddl/VW_ONETAG_EVENT_MASTER.sql
+    - OneTag/scripts/ddl/view_click_stream_impression.sql
+    - OneTag/scripts/appl/Task_ONE_TAG_RESUME.sql

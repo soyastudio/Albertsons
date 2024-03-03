@@ -1,0 +1,22 @@
+{
+    "env": "PRD",
+    "user": "APPL_EDM_MONITOR",
+    "account": "abs_itds_prd.west-us-2.azure",
+    "warehouse": "PROD_MONITOR_WH",
+    "role": "ROLE_APPL_EDM_MONITOR",
+    "objects":
+    [
+        
+        
+        {
+            "database":"EDM_CONFIRMED_OUT_PRD",
+            "schema":"DW_APPL",
+            "SP": ["SP_Digital_Redemption_Neptune_To_KafkaOutQueue","SP_Inlane_Redemption_Neptune_To_KafkaOutQueue"]
+        },
+		{
+            "database":"EDM_VIEWS_PRD",
+            "schema":"DW_VIEWS",
+            "view": [""]
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetOffer/scripts/appl/SP_EPE_OFFER_COPY_ACTIVE_OFFERS_LOAD.sql
+    - GetOffer/scripts/appl/SP_EPE_OFFER_COPY_PAYLOAD.sql
+    - GetOffer/scripts/appl/SP_JSON_EPE_OFFER.sql
+    - GetOffer/scripts/appl/SP_JSON_EPE_PROMOTION.sql
+    - GetOffer/scripts/appl/SP_LOAD_EPE_PROMOTION.sql
+    - GetOffer/scripts/appl/Task_EPE_OFFER_COPY_PAYLOAD_TASK.sql
+    - GetOffer/scripts/appl/Task_EPE_OFFER_JSON_TASK.sql
+    - GetOffer/scripts/appl/Task_EPE_PROMOTION_JSON_TASK.sql
+    - GetOffer/scripts/appl/Task_ESED_Offer_Outbound_R_TASK.sql
+    - GetOffer/scripts/appl/sp_split_full_load_offer.sql
+    - GetOffer/scripts/appl/stream_EPE_OFFER_JSON_O_STREAM.sql
+    - GetOffer/scripts/appl/stream_EPE_OFFER_O_STREAM.sql
+    - GetOffer/scripts/appl/stream_ESED_Offer_Outbound_R_STREAM.sql
+    - GetOffer/scripts/appl/stream_GETOFFER_FLAT_O_STREAM.sql

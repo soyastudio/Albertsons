@@ -1,0 +1,8 @@
+--liquibase formatted sql
+--changeset SYSTEM:Create_STREAM_for_Foodstorm runOnChange:true splitStatements:false OBJECT_TYPE:STREAM
+USE DATABASE <<EDM_DB_NAME_R>>;
+USE SCHEMA <<EDM_DB_NAME_R>>.DW_APPL;
+
+CREATE OR REPLACE STREAM GetFOODSTORM_Flat_R_STREAM
+
+ON TABLE <<EDM_DB_NAME_R>>.DW_R_LOYALTY.GETFOODSTORM_FLAT;

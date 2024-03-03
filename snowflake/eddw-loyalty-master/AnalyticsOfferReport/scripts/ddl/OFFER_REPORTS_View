@@ -1,0 +1,200 @@
+use database edm_views_PRD;
+use schema dw_views;
+
+create or replace view OFFER_REPORTS(
+	GROUP_NAME COMMENT 'Group Name of Offer Request Group',
+	AGG COMMENT 'Aggregator Offer ID in OMS Offer',
+	AMOUNT COMMENT 'DISCOUNT TIER AMT in OMS_OFFER_BENEFIT_DISCOUNT_TIER',
+	ATTRIBUTE COMMENT 'QUALIFICATION_ATTRIBUTE_TYPE_TXT from OMS_OFFER_QUALIFICATION_ATTRIBUTE',
+	BEEP COMMENT 'Cashier message Beep duration number',
+	CASHIER_MESSAGE COMMENT 'Cashier Message Beep type text',
+	CATEGORY COMMENT 'Category description of the offer',
+	CHANNEL COMMENT 'Deliver Channel Description in OMS offer',
+	CHARGEBACK_VENDOR_NAME COMMENT 'Vendor name of the offers',
+	CHARGEBACK_DEPARTMENT COMMENT 'Description of Chargeback for benefit discounts',
+	CREATED_BY COMMENT 'User ID in OMS offer',
+	CUSTOMER_GROUP COMMENT 'Group ID from Qualification customers',
+	DAY COMMENT 'Day of the Effective start date',
+	DEFER_EVALUATION_UNTIL_EOS COMMENT 'Evaluation indication in OMS offer',
+	DIGITAL_STORE_GROUP COMMENT 'External offer Id with D as suffix',
+	DISCOUNT COMMENT 'Benefit value type description',
+	DISPLAY_END_DATE COMMENT 'Effective end date in OMS Offer',
+	DISPLAY_START_DATE COMMENT 'Effective start date in OMS Offer',	
+	DOLLAR_LIMIT COMMENT 'Amount in Benefit discount tier',
+	ECOMMERCE_TEXT COMMENT 'Ecom description in OMS Offer',
+	END_DATE COMMENT 'Effective end date in OMS Offer',
+	ENTERPRISE_INSTANT_WIN COMMENT 'Number of prizes from OMS Offer',
+	EVENT COMMENT 'Event Description text from OMS offer event',
+	EXCLUDED_CUSTOMER COMMENT 'User Indicator from Customer group',
+	EXCLUDED_TERMINALS COMMENT 'Number Text from excluded terminals',
+	EXTERNAL_OFFER_ID COMMENT 'External Offer ID from OMS Offer',
+	FIRST_DEPLOYED COMMENT 'Redemption Engine Timestamp from OMS Offer',
+	FIRST_PUBLISHED COMMENT 'J4U Timestamp from OMS Offer',
+	HEADLINE COMMENT 'Headline Text from OMS offer',
+	IN_AD COMMENT 'Type code from OMS Offer',
+	IN_EMAIL COMMENT 'Email indicator in OMS Offer',
+	ITEM_LIMIT COMMENT 'Quantity in discount tier',
+	IVIE_IMAGE_ID COMMENT 'Image ID in OMS Offer',
+	J4U_REGIONS COMMENT 'Region code from OMS offer regions',
+	JUST_FOR_U_STORE_GROUP COMMENT 'External offer ID with D as suffix',
+	LAST_DEPLOYED COMMENT 'Redemption Engine Timestamp from OMS offer',
+	LAST_PUBLISHED COMMENT 'First J4U timestamp in OMS offer',
+	LAST_UPDATED_BY COMMENT 'User last name from OMS offer',
+	LEFT_NAV_CATEGORY COMMENT 'Primart category text from OMS offer',
+	LEVEL COMMENT 'Discount description',
+	MIN_PURCHASE COMMENT 'Purchase amount from product group',
+	NON_DIGITAL_STORE_GROUP COMMENT 'External offer ID with ND as suffix',
+	OFFER_DESCRIPTION COMMENT 'Protype description from OMS offer',
+	OFFER_ID COMMENT 'Offer ID from OMS offer',
+	OFFER_NAME COMMENT 'Offer Name from OMS offer',
+	OFFER_TYPE COMMENT 'Prototype code from OMS offer',
+	POD_OFFER_DESCRIPTION COMMENT 'Limit type per user description',
+	POD_OFFER_DETAILS_DISCLAIMER COMMENT 'Disclaimer Text',
+	POINTS_GROUP COMMENT 'Points Group ID',
+	POINTS_GROUP_1 COMMENT 'Point group Name',
+	PRICE_TEXT COMMENT 'Title text in OMS offer',
+	PRINTED_MESSAGE COMMENT 'Message code in printed message',
+	PRIORITY COMMENT 'Priority code in OMS offer',
+	PRODUCT_DISQUALIFER COMMENT 'Disqualifer Text of the product',
+	PRODUCT_GROUP_ID COMMENT 'Points program Id from benefit points',
+	PRODUCT_GROUP_1 COMMENT 'Points program name from benefit points',
+	PROGRAM_CODE COMMENT 'Program_Code from OMS offer',
+	TIER_LEVEL_QUANTITY COMMENT 'Quantity of the points Tier',
+	TIER_QUANTITY COMMENT 'Quantity of the Tier',
+	RECEIPT_TEXT COMMENT 'Receipt Text from Discount tier',
+	REMOVED_FOR_ALL COMMENT 'Indicator for all removed',
+	REMOVED_FOR_UNCLIPPED COMMENT 'Indicator for removed unclipped',
+	REMOVED_ON COMMENT 'Timestamp of the removed',
+	OFFER_REQUEST_ID COMMENT 'OMS Offer Request ID',
+	REQUESTED_BY COMMENT 'Created User ID from OMS Offer',
+	REWARD_FREQ COMMENT 'Eligibility frequency text',
+	ROG COMMENT 'ROG ID from Retail store',
+	SCENE_7_IMAGE_ID COMMENT 'Product Image ID',
+	SCORECARD_TEXT COMMENT 'Text for the scorecard',
+	SCORECARD COMMENT 'Number of the scorecard',
+	SHOPPING_LIST_CATEGORY COMMENT 'primary category text',
+	CASHIER_SHOW_ALWAYS COMMENT 'Notification indicator for cashier message',
+	PRINTED_SHOW_ALWAYS COMMENT 'Notification indicator for printed message',
+	START_DATE COMMENT 'Offer start date from OMS Offer',
+	STORE_GROUP COMMENT 'Name of the store group',
+	SUBMITTED COMMENT 'Unclipped Timestamp from OMS offer',
+	TERMINALS COMMENT 'Number text of the terminal',
+	TIERS COMMENT 'Tier code from OMS offer',
+	ACCUMULATION_MESSAGE COMMENT 'Accumulation Printed Message text',
+	TIME COMMENT 'Time from effective start date',
+	TRIGGER_CODE COMMENT 'Trigger_Code from qualification',
+	UNIT_OF_MEASURE COMMENT 'unit type description from product group',
+	USAGE COMMENT 'User level description from OMS offer',
+	PRICE_VALUE COMMENT 'Value text from OMS offer',
+	SAVINGS_VALUE_TEXT COMMENT 'savings Value Text from OMS offer',
+	BENEFIT_VALUE_TYPE COMMENT 'benefit Value Type from OMS offer',
+	ADVANCED COMMENT 'Allow negative/ Flex negative',
+	OFFER_STATUS COMMENT 'Status description from OMS offer',
+	EXCLUDED_PRODUCTS COMMENT 'Product group name from product group',
+	OFFER_REQUEST_ID_TXT COMMENT 'Text of Offer Request ID from OMS Offer',
+	CUSTOM_LIMIT COMMENT 'Usage Limit Per User from OMS Offer',
+	CUSTOM_PERIOD COMMENT 'Period Number from OMS Offer',
+	CUSTOM_TYPE COMMENT 'Period Type from OMS Offer',
+	PER_LB_LIMIT COMMENT 'Weight limit quantity in discount benefit tier',
+	RN COMMENT 'Row number for latest records',
+	CREATED_TS COMMENT 'Record inserted date in Fact table'
+) COMMENT='VIEW for Offer_Report_VW'
+ as
+		SELECT 
+			  GROUP_NAME
+			 ,Agg                         
+			 ,Amount                      
+			 ,Attribute                   
+			 ,Beep                        
+			 ,Cashier_Message             
+			 ,Category                    
+			 ,Channel                     
+			 ,Chargeback_Vendor_Name      
+			 ,Chargeback_Department       
+			 ,Created_by                  
+			 ,Customer_Group              
+			 ,Day                         
+			 ,Defer_Evaluation_Until_EOS  
+			 ,Digital_Store_Group         
+			 ,Discount                    
+			 ,Display_End_Date            
+			 ,Display_Start_Date          			 
+			 ,Dollar_Limit                
+			 ,eCommerce_Text              
+			 ,End_Date                    
+			 ,Enterprise_Instant_Win      
+			 ,Event                       
+			 ,Excluded_Customer           
+			 ,Excluded_Terminals          
+			 ,External_Offer_ID           
+			 ,First_Deployed              
+			 ,First_Published             
+			 ,Headline                    
+			 ,In_AD                       
+			 ,In_Email                    
+			 ,Item_Limit                  
+			 ,Ivie_Image_ID               
+			 ,J4U_Regions                 
+			 ,Just_for_U_Store_Group      
+			 ,Last_Deployed               
+			 ,Last_Published              
+			 ,Last_updated_by             
+			 ,Left_Nav_Category           
+			 ,Level                       
+			 ,Min_Purchase                
+			 ,Non_Digital_Store_Group     
+			 ,Offer_Description           
+			 ,Offer_ID                    
+			 ,Offer_Name                  
+			 ,Offer_Type                  
+			 ,POD_Offer_Description       
+			 ,POD_Offer_Details_Disclaimer
+			 ,Points_Group                
+			 ,Points_Group_1              
+			 ,Price_Text                  
+			 ,Printed_Message             
+			 ,Priority                    
+			 ,Product_Disqualifer         
+			 ,Product_Group_Id            
+			 ,Product_Group_1             
+			 ,Program_Code                
+			 ,Tier_Level_Quantity         
+			 ,Tier_Quantity               
+			 ,Receipt_Text                
+			 ,Removed_for_All             
+			 ,Removed_for_Unclipped       
+			 ,Removed_On                  
+			 ,Offer_Request_ID            
+			 ,Requested_By                
+			 ,Reward_Freq                 
+			 ,ROG                         
+			 ,Scene_7_Image_ID            
+			 ,Scorecard_Text              
+			 ,Scorecard                   
+			 ,Shopping_List_Category      
+			 ,Cashier_Show_Always         
+			 ,Printed_Show_Always         
+			 ,Start_Date                  
+			 ,Store_Group                 
+			 ,Submitted                   
+			 ,Terminals                   
+			 ,Tiers                       
+			 ,Accumulation_Message        
+			 ,Time                        
+			 ,Trigger_Code                
+			 ,Unit_of_Measure             
+			 ,Usage                       
+			 ,price_Value                 
+			 ,savings_Value_Text          
+			 ,benefit_Value_Type          
+			 ,Advanced                    
+			 ,Offer_Status                
+			 ,Excluded_Products           
+			 ,Offer_Request_Id_Txt  
+			 ,Custom_Limit  		
+			 ,Custom_Period  		
+			 ,Custom_Type  			
+			 ,Per_Lb_Limit
+			 ,RN                          
+			 ,Created_TS 
+		FROM EDM_CONFIRMED_PRD.DW_C_PRODUCT.Fact_Offer_Reports;

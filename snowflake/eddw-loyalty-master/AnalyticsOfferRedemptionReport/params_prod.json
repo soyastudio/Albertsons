@@ -1,0 +1,11 @@
+{
+    "ENV":"PRD",
+    "env":"prod",
+    "ENVI":"PROD",
+    "EDM_DB_NAME" : "EDM_CONFIRMED_PRD",
+    "EDM_DB_NAME_R" : "EDM_REFINED_PRD",
+    "EDM_VIEW_NAME" : "EDM_VIEWS_PRD",
+    "EDM_PIPE_INTEGRATION" : "EDDW_PRD_SNOWPIPEINTEGRATION",
+    "EDM_PIPE_DB" : "EDM_BIZOPS_PRD",
+    "WH" : "EDM_ADMIN_WH"
+}

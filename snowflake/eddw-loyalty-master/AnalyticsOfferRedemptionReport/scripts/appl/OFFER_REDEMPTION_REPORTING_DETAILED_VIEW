@@ -1,0 +1,34 @@
+USE DATABASE EDM_VIEWS_PRD;
+USE SCHEMA DW_VIEWS;
+
+create or replace view EDM_VIEWS_PRD.DW_VIEWS.OFFER_REDEMPTION_REPORTING_DETAILED(
+	STORE COMMENT 'Store Number where the transaction took place',
+	LANE COMMENT 'The register at which the transaction took place',
+	TRANSACTION_NUMBER COMMENT 'Transaction sequence number on the register',
+	HHID COMMENT 'Unique identifier of the Household. The aggregateId in CHMS service is the HHID unlike the other services where the aggegatedid we map to the CustomerId',
+	REDEMPTION_COUNT COMMENT 'The no of items the offers has been applied',
+	REDEMPTION_AMOUNT COMMENT 'Total Redemption Amount for the transaction',
+	POINTS_AMOUNT COMMENT 'Total club card points earned for the transaction',
+	POINTS_PROGRAMNAME COMMENT 'Program Name for the club card points being earned or burned',
+	TRANSACTION_DATE COMMENT 'The real time of the transaction. Date and Time as printed on the receipt which is coimg from POS',
+	OFFER_ID COMMENT 'This is the Offer ID applied to the savings item',
+	OFFER_START_DATE COMMENT 'Effective start date in oms offer',
+	OFFER_END_DATE COMMENT 'Effective end date in oms offer'
+) COMMENT='VIEW for Offer_Redemption_Reporting_Detailed'
+ as
+
+Select 
+STORE,
+LANE,
+TRANSACTION_NUMBER COMMENT,
+HHID,
+REDEMPTION_COUNT,
+REDEMPTION_AMOUNT,
+POINTS_AMOUNT,
+POINTS_PROGRAMNAME,
+TRANSACTION_DATE :: TIMESTAMP_NTZ TRANSACTION_DATE,
+cast (OFFER_ID as VARCHAR) OFFER_ID,
+OFFER_START_DATE,
+OFFER_END_DATE
+
+From EDM_CONFIRMED_PRD.DW_C_LOYALTY.OFFER_REDEMPTION_REPORTING_DETAILED_SUMMARY;

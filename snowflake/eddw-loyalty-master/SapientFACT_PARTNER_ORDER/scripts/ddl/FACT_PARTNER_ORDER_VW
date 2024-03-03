@@ -1,0 +1,38 @@
+USE DATABASE EDM_VIEWS_PRD;
+USE SCHEMA DW_VIEWS;
+
+create or replace view FACT_PARTNER_ORDER(
+TXN_DATE COMMENT 'Date when a Partner transaction fulfilled at the Albertsons Store.',
+USER_ID COMMENT 'Unique ID for customer at the partner channel who made the transaction at third party channel.',
+ORDER_ID COMMENT 'Unique ID for the order placed at partner channel',
+BANNER_D1_SK COMMENT 'Unique Banner Id of the store where actual transaction happened.',
+BUSINESS_PARTNER_D1_SK COMMENT 'Unique Delivery partner channel id through which order was placed. 1 for Instacart',
+GMV_ORDER_VALUE COMMENT 'Total order amount paid by the customer. It is set to Gross Merch Value of the order',
+LOYALTY_INDICATOR COMMENT 'Indicator to specify if the phone number entered at partner channel while placing the order exists in Albertsons Customer base or not',
+DIVISION_D1_SK COMMENT 'Unique Division ID of the store where actual transaction happened.',
+LOY_ACTV_ID COMMENT 'Flag to specify if the customer identified by phone number entered is Digitaly activated or not. A customer is treated as digitaly active if it has a online account at Albertsons. 1 for Digitaly activated and 2 for Instore activated.',
+DW_CREATE_TS COMMENT 'Timestamp representing creation of record in the Table'
+) COMMENT='This view contains total amount spent by each customer on each order. This table contains transactions made at Partner channel only'
+as
+SELECT
+FPOT.Transaction_Dt as TXN_DATE,
+FPOT.Partner_Order_User_Identifier as USER_ID,
+FPOT.order_id,
+FPOT.Banner_D1_Sk,
+FPOT.business_partner_d1_sk,
+sum(FPOT.GMV_order_value),
+FPOT.LOYALTY_IND_CD as loyalty_indicator,
+FPOT.Division_D1_Sk,
+(CASE WHEN clp.loyalty_program_card_nbr IS NOT NULL THEN 1
+ELSE 2 END) as loy_actv_id,
+FPOT.dw_create_ts
+FROM EDM_ANALYTICS_PRD.DW_RETAIL_EXP.F_PARTNER_ORDER_TRANSACTION FPOT
+left join edm_views_prd.dw_views.D1_RETAIL_CUSTOMER drc
+on FPOT.RETAIL_CUSTOMER_D1_SK = drc.RETAIL_CUSTOMER_D1_SK
+AND drc.DW_LOGICAL_DELETE_IND= FALSE
+and drc.DW_CURRENT_VERSION_IND = TRUE
+AND to_date(drc.DW_LAST_UPDATE_TS) ='9999-12-31'
+LEFT JOIN EDM_VIEWS_PRD.DW_VIEWS.CUSTOMER_LOYALTY_PROGRAM clp
+ON drc.Retail_Customer_UUID = clp.Retail_Customer_UUID
+group by 1,2,3,4,5,7,8,9,10
+;

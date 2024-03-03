@@ -1,0 +1,18 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetFreshpass/scripts/appl/Pipe_EDDW_FRESHPASS_PIPE_PRDBLOB_INC.sql
+    - GetFreshpass/scripts/appl/SP_GETFRESHPASS_SNOWPIPE_TO_LOAD_VARIANT.sql
+    - GetFreshpass/scripts/appl/SP_GETFRESHPASS_SUBSCRIPTION_TO_BIM_LOAD.sql
+    - GetFreshpass/scripts/appl/SP_GETFRESHPASS_SUBSCRIPTION_TO_BIM_LOAD_BENEFIT.sql
+    - GetFreshpass/scripts/appl/SP_GETFRESHPASS_SUBSCRIPTION_TO_BIM_LOAD_EVENT.sql
+    - GetFreshpass/scripts/appl/SP_GETFRESHPASS_SUBSCRIPTION_TO_BIM_LOAD_PLAN.sql
+    - GetFreshpass/scripts/appl/SP_GETFRESHPASS_TO_FLAT_LOAD.sql
+    - GetFreshpass/scripts/appl/Task_ESED_FRESHPASS_R_TASK.sql
+    - GetFreshpass/scripts/appl/Task_GET_FRESHPASS_SUBSCRIPTION_TASK.sql
+    - GetFreshpass/scripts/appl/stage_EDDW_FRESHPASS_STAGE_PRDBLOB_INC.sql
+    - GetFreshpass/scripts/appl/stream_ESED_FRESHPASS_R_STREAM.sql
+    - GetFreshpass/scripts/appl/stream_GETFRESHPASS_FLAT_R_STREAM.sql

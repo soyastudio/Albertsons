@@ -1,0 +1,57 @@
+Use database EDM_VIEWS_PRD;
+Use Schema DW_VIEWS;
+
+create or replace view MF_STORE_TAG
+(
+OFFER_STATUS_DSC COMMENT 'Status of the offer. Defines the different stages of an offer and its effective date',
+OMS_Offer_Region_Nm COMMENT 'Name of the offer region',
+Chargeback_Vendor_Nm COMMENT 'Name of the chargeback vendor',
+Headline_Txt COMMENT 'Headline text of offer',
+Product_Group_Nm COMMENT 'Name of the product group',
+Aggregator_Offer_Id COMMENT 'Offer Aggregate Identifier',
+UPC_Cd COMMENT 'UPC number e.g: 3520450097',
+UPC_Dsc COMMENT 'Description of UPC',
+Display_Effective_Start_Dt COMMENT 'Date from when the offer will be displayed',
+Display_Effective_End_Dt COMMENT 'Date till when the offer will be displayed',
+Offer_Prototype_Dsc COMMENT 'Prototype description of the offer',
+Benefit_Value_Type_Dsc COMMENT 'Description of benefit value type',
+Discount_Tier_Amt COMMENT 'Amount of the discount tier',
+Item_Limit_Qty COMMENT 'Quantity of the item limit',
+Weight_Limit_Qty COMMENT 'Quantity of the weight limit',
+Price_Title_Txt COMMENT 'Price title text of the offer',
+Brand_Size_Dsc COMMENT 'Description of the offer brand size',
+Usage_Limit_Type_Per_User_Dsc COMMENT 'Description of the usage limit for the Offer',
+Store_Tag_Amt COMMENT 'Offer Amount on the store tag of the offer',
+Store_Tag_Comments_Txt COMMENT 'Comments on the store tag',
+Pod_Offer_Detail_Dsc COMMENT 'Description of POD offer details',
+Min_Qty_To_Buy COMMENT 'To pick the minimun quantity' ,
+External_Offer_Id COMMENT 'External Offer Id from OMS Offer'
+)
+copy grants
+COMMENT ='View for MF_STORE_TAG'
+as
+Select
+OFFER_STATUS_DSC ,
+OMS_Offer_Region_Nm ,
+Chargeback_Vendor_Nm ,
+Headline_Txt ,
+Product_Group_Nm ,
+Aggregator_Offer_Id ,
+UPC_Cd ,
+UPC_Dsc ,
+Display_Effective_Start_Dt ,
+Display_Effective_End_Dt ,
+Offer_Prototype_Dsc ,
+Benefit_Value_Type_Dsc ,
+Discount_Tier_Amt ,
+Item_Limit_Qty ,
+Weight_Limit_Qty ,
+Price_Title_Txt ,
+Brand_Size_Dsc ,
+Usage_Limit_Type_Per_User_Dsc ,
+Store_Tag_Amt ,
+Store_Tag_Comments_Txt ,
+Pod_Offer_Detail_Dsc ,
+Min_Qty_To_Buy ,
+External_Offer_Id
+From EDM_CONFIRMED_PRD.DW_C_PRODUCT.MF_STORE_TAG_REPORT;

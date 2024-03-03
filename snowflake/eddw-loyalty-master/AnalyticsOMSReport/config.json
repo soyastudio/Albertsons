@@ -1,0 +1,16 @@
+{
+    "env" : "PRD",
+    "user": "APPL_EDM_MONITOR",
+    "account": "abs_itds_prd.west-us-2.azure",
+    "warehouse": "PROD_MONITOR_WH",
+    "role": "ROLE_APPL_EDM_MONITOR",
+    "database":"EDM_CONFIRMED_PRD",
+    "schema":"DW_C_PRODUCT",
+    "SP": ["sp_GETOFFERREQUEST_To_Analytical_load","SP_GetOfferRequest_To_Analytical_LOAD_DIM_Store","SP_GetOfferRequest_To_Analytical_LOAD_DIM_Store_Group","SP_GetOfferRequest_To_Analytical_LOAD_dim_channel","SP_GetOfferRequest_To_Analytical_LOAD_dim_discount","SP_GetOfferRequest_To_Analytical_LOAD_Dim_Group","SP_GetOfferRequest_To_Analytical_LOAD_Dim_Offer_Type","SP_GETOFFERREQUEST_TO_ANALYTICAL_LOAD_DIM_PRODUCT_GROUP_UPC","SP_GetOfferRequest_To_Analytical_LOAD_Dim_Program","SP_GETOFFERREQUEST_TO_ANALYTICAL_LOAD_DIM_ROG","SP_GETOFFERREQUEST_TO_ANALYTICAL_LOAD_FACT_OFFER_REQUEST","SP_OfferOMS_TO_Analytical_Update_FACT_OFFER_REQUEST","SP_OfferOMS_To_Analytical_LOAD","SP_ProductGroup_To_Analytics_LOAD","SP_StoreGroup_To_Analytical_LOAD","SP_StoreGroup_To_Analytical_Load_Fact_Offer_Request","Sp_productgroup_to_analytical_load_fact_offer_request_update"],
+    "pipe": [""],
+    "stage": [""],
+    "stream": [""],
+    "table": ["DIM_Channel","DIM_Discount","DIM_Group","DIM_Offer_Type","DIM_Product_Group_UPC","DIM_Program","DIM_ROG","DIM_Store","DIM_Store_Group","Fact_Offer_Request"],
+    "task": ["SP_GETOFFERREQUEST_To_Analytics_load_TASK","SP_StoreGroup_To_Analytics_LOAD_TASK","SP_ProductGroup_To_Analytics_LOAD_TASK","SP_OFFEROMS_TO_ANALYTICS_LOAD_TASK"],
+    "view": ["DIM_Channel","DIM_Discount","DIM_Group","DIM_Offer_Type","DIM_Product_Group_UPC","DIM_Program","DIM_ROG","DIM_Store","DIM_Store_Group","Fact_Offer_Request"]
+}

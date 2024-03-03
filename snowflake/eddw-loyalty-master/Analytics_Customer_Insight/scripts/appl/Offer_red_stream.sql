@@ -1,0 +1,8 @@
+--liquibase formatted sql
+--changeset SYSTEM:Offer_red_stream runOnChange:true splitStatements:false OBJECT_TYPE:STREAM
+
+USE DATABASE <<EDM_DB_NAME>>;
+USE SCHEMA <<EDM_DB_NAME>>.DW_APPL;
+
+// Create Stream 
+CREATE OR REPLACE STREAM OFFER_REDEMPTION_REPORTING_DETAILED_SUMMARY_Stream ON TABLE <<EDM_DB_NAME>>.DW_C_RETAILSALE.EPE_TRANSACTION_HEADER; 

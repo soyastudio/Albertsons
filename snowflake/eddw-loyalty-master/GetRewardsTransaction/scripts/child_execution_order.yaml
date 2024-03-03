@@ -1,0 +1,14 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+
+       - GetRewardsTransaction/scripts/appl/c_task_suspend.sql
+       - GetRewardsTransaction/scripts/ddl/Bim_key_change.sql
+       - GetRewardsTransaction/scripts/appl/SP_GETREWARDTRANSACTION_TO_BIM_REWARD_TRANSACTION_AUDIT_LOG.sql
+       - GetRewardsTransaction/scripts/appl/SP_GetRewardTransaction_To_BIM_Reward_Transaction.sql
+       - GetRewardsTransaction/scripts/ddl/view.sql
+       - GetRewardsTransaction/scripts/appl/c_task_resume.sql
+

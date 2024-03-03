@@ -1,0 +1,39 @@
+--liquibase formatted sql
+--changeset SYSTEM:Oms_Product_Group_Upc runOnChange:true splitStatements:false OBJECT_TYPE:TABLE
+use database <<EDM_DB_NAME>>;
+use schema <<EDM_DB_NAME>>.DW_C_PRODUCT;
+
+create or replace TABLE OMS_PRODUCT_GROUP_UPC (
+	PRODUCT_GROUP_ID NUMBER(38,0) NOT NULL COMMENT 'Product Group Primary Key',
+	UPC_CD VARCHAR(14) NOT NULL COMMENT 'UPC number e.g: 3520450097',
+	DW_FIRST_EFFECTIVE_TS TIMESTAMP_LTZ(9) NOT NULL,
+	DW_LAST_EFFECTIVE_TS TIMESTAMP_LTZ(9) NOT NULL,
+	DW_CREATE_TS TIMESTAMP_LTZ(9),
+	DW_LAST_UPDATE_TS TIMESTAMP_LTZ(9),
+	DW_LOGICAL_DELETE_IND BOOLEAN,
+	DW_SOURCE_CREATE_NM VARCHAR(255),
+	DW_SOURCE_UPDATE_NM VARCHAR(255),
+	DW_CURRENT_VERSION_IND BOOLEAN,
+	UPC_VERSION_TXT VARCHAR(16777216),
+	UPC_DSC VARCHAR(16777216),
+	LIST_TYPE_DSC VARCHAR(16777216),
+	ORIGIN_DSC VARCHAR(16777216) COMMENT 'represents how this specific UPC is originated, whether it is \"Original/Added/Removed\"',
+	STATUS_DSC VARCHAR(16777216) COMMENT 'UPC status \"accepted/review\"',
+	GROUP_ID VARCHAR(16777216) COMMENT 'UPC group Id, e.g: \"95\"',
+	GROUP_NM VARCHAR(16777216) COMMENT 'UPC group name e.g: \"IN-STORE SWEET BAKED GOODS\"',
+	CATEGORY_ID VARCHAR(16777216) COMMENT 'UPC category id, e.g: \"9501\"',
+	CATEGORY_DSC VARCHAR(16777216) COMMENT 'UPC category description, e.g: \"ISB DESERTS\"',
+	MANUFACTURER_CD VARCHAR(16777216) COMMENT 'UPC manufacturer code, e.g: \"10374\"',
+	ITEM_QTY NUMBER(38,0) COMMENT 'UPC qty, e.g: 1/2…',
+	ITEM_UOM_CD VARCHAR(16777216) COMMENT 'Unit of measurement of the UPC, e.g: \"EA/LB\"',
+	ITEM_PRICE_AMT NUMBER(12,4) COMMENT 'Average price of the UPC',
+	ITEM_SCORE_NBR NUMBER(38,0) COMMENT 'UPC expansion score reference to similarity of the origin UPC, score 100 is perfect match, 400 is distant match',
+	BRAND_ID VARCHAR(16777216) COMMENT 'UPC brnad Id, e.g: \"95221\"',
+	BRAND_NM VARCHAR(16777216) COMMENT 'UPC brand name, e.g: \"Mc Bakers\"',
+	CREATE_TS TIMESTAMP_LTZ(9) COMMENT 'UPC added date time, e.g: \"2021-08-01T03:48:40.712Z\"',
+	UPDATE_TS TIMESTAMP_LTZ(9) COMMENT 'UPC updated date time, e.g: \"2021-08-01T03:48:40.712Z\"',
+	CREATE_USER_ID VARCHAR(16777216) COMMENT 'UPC added user name, e.g: \"rkasi01\"',
+	UPDATE_USER_ID VARCHAR(16777216) COMMENT 'UPC updated user name, e.g: \"rkasi01\"',
+	primary key (PRODUCT_GROUP_ID, UPC_CD, DW_FIRST_EFFECTIVE_TS, DW_LAST_EFFECTIVE_TS)
+)COMMENT='This table contains information about OMS_PRODUCT_GROUP_UPC'
+;

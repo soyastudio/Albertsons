@@ -1,0 +1,13 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetCDPSMS/scripts/appl/SP_GETSMSDETAILS_TO_BIM_LOAD_MARKETING_CONTENT_DEFINITION.sql
+    - GetCDPSMS/scripts/appl/SP_GETSMS_MARKETING_CONTENT_DEFITION_TO_BIM_LOAD.sql
+    - GetCDPSMS/scripts/appl/SP_GET_SMS_MARKETING_CONTENT_DEFITION_TO_FLAT.sql
+    - GetCDPSMS/scripts/appl/Pipe_EDM_SMS_MARKETING_DEFITION_PIPE_PRDBLOB_INC.sql
+    - GetCDPSMS/scripts/appl/Task_GET_SMS_MARKETING_CONTENT_DEFITION_TASK.sql
+    - GetCDPSMS/scripts/appl/stage_EDM_SMS_MARKETING_DEFITION_STAGE_PRDBLOB_INC.sql
+    - GetCDPSMS/scripts/appl/stream_GET_SMS_MARKETING_DEFITION_FLAT_R_STREAM.sql

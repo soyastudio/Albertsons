@@ -1,0 +1,14 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetFreshpass/scripts/ddl/table_ESED_FRESHPASS.sql
+    - GetFreshpass/scripts/ddl/table_FRESHPASS_SUBSCRIPTION_BENEFIT.sql
+    - GetFreshpass/scripts/ddl/table_FRESHPASS_SUBSCRIPTION_EVENT.sql
+    - GetFreshpass/scripts/ddl/table_FRESHPASS_SUBSCRIPTION_PLAN.sql
+    - GetFreshpass/scripts/ddl/table_GETFRESHPASS_FLAT.sql
+    - GetFreshpass/scripts/ddl/view_FRESHPASS_SUBSCRIPTION_BENEFIT.sql
+    - GetFreshpass/scripts/ddl/view_FRESHPASS_SUBSCRIPTION_EVENT.sql
+    - GetFreshpass/scripts/ddl/view_FRESHPASS_SUBSCRIPTION_PLAN.sql

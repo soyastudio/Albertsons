@@ -1,0 +1,13 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetEpisodicGaming/scripts/Episodic_Offer_Clipped/ddl/BIM_EPISODIC_OFFER_CLIPPED.sql
+    - GetEpisodicGaming/scripts/Episodic_Offer_Clipped/ddl/EPISODIC_OFFER_CLIPPED_FLAT.sql
+    - GetEpisodicGaming/scripts/Episodic_Offer_Clipped/ddl/VIEW_EPISODIC_OFFER_CLIPPED.sql
+    - GetEpisodicGaming/scripts/Episodic_Offer_Clipped/appl/EPISODIC_OFFER_CLIPPED_FLAT_RERUN.sql
+    - GetEpisodicGaming/scripts/Episodic_Offer_Clipped/appl/PIPE_EPISODIC_OFFER_CLIPPED.sql
+    - GetEpisodicGaming/scripts/Episodic_Offer_Clipped/appl/SP_GETEPISODIC_TO_BIM_LOAD_EPISODIC_OFFER_CLIPPED.sql
+    - GetEpisodicGaming/scripts/Episodic_Offer_Clipped/appl/SP_GETEPISODIC_TO_BIM_LOAD_EPISODIC_OFFER_CLIPPED_TASK.sql

@@ -1,0 +1,7 @@
+--liquibase formatted sql
+--changeset SYSTEM:CLICK_STREAM_VISITOR runOnChange:true splitStatements:false OBJECT_TYPE:TABLE
+use database EDM_CONFIRMED_<<ENV>>;
+use schema DW_C_USER_ACTIVITY;
+
+INSERT INTO CLICK_STREAM_VISITOR 
+VALUES (-1,TO_TIMESTAMP('9999-12-31'),TO_TIMESTAMP('9999-12-31'),'Unknown',-1,-1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,getdate(),getdate(),FALSE,'OneTag','OneTag',TRUE,NULL);

@@ -1,0 +1,13 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - OCGP/scripts/OCGP_PRIZE/ddl/01_OCGP_PRIZE_FLAT_DDL.sql
+    - OCGP/scripts/OCGP_PRIZE/appl/02_OCGP_PRIZE_R_PIPELINE_DDL.sql
+    - OCGP/scripts/OCGP_PRIZE/appl/03_OCGP_PRIZE_RERUN_AND_WRK_DDL.sql
+    - OCGP/scripts/OCGP_PRIZE/ddl/04_OCGP_PRIZE_BIM_DDL.sql
+    - OCGP/scripts/OCGP_PRIZE/appl/05_SP_OCGP_PRIZE_TO_BIM_LOAD.sql
+    - OCGP/scripts/OCGP_PRIZE/appl/06_TASK_SP_OCGP_PRIZE_TO_BIM_LOAD_TASK.sql
+    - OCGP/scripts/OCGP_PRIZE/ddl/07_VIEW_OCGP_PRIZE.sql

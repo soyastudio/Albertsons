@@ -1,0 +1,10 @@
+--liquibase formatted sql
+--changeset SYSTEM:CHANGE_TRACKING runOnChange:true splitStatements:false OBJECT_TYPE:TABLE
+use database <<EDM_DB_NAME>>;
+use schema <<EDM_DB_NAME>>.DW_C_RETAILSALE;
+
+alter table <<EDM_DB_NAME>>.DW_C_RETAILSALE.EPE_TRANSACTION_HEADER_SAVINGS
+set CHANGE_TRACKING = TRUE;
+
+alter table <<EDM_DB_NAME>>.DW_C_RETAILSALE.EPE_TRANSACTION_ITEM_SAVINGS
+set CHANGE_TRACKING = TRUE;

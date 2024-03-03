@@ -1,0 +1,16 @@
+{
+    "env" : "PRD",
+    "user": "APPL_EDM_MONITOR",
+    "account": "abs_itds_prd.west-us-2.azure",
+    "warehouse": "PROD_MONITOR_WH",
+    "role": "ROLE_APPL_EDM_MONITOR",
+    "database":"EDM_CONFIRMED_PRD",
+    "schema":"DW_C_PRODUCT",
+    "SP": [""],
+    "pipe": ["EDDW_PARTNERREWARDTRANSACTION_PIPE_PRDBLOB_INC"],
+    "stage": ["EDDW_PARTNERREWARDTRANSACTION_STAGE_PRDBLOB_INC"],
+    "stream": ["ESED_PARTNERREWARDTRANSACTION_R_STREAM","GetPartnerRewardTransaction_Flat_R_STREAM"],
+    "table": ["GetPartnerRewardTransaction_Flat","ESED_PartnerRewardTransaction","ESED_PARTNERREWARDTRANSACTION_Rerun","GetPartnerRewardTransaction_Flat_Rerun"],
+    "task": [""],
+    "view": [""]
+}

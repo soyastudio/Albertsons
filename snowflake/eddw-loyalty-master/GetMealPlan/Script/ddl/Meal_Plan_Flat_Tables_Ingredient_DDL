@@ -1,0 +1,13 @@
+--liquibase formatted sql
+--changeset SYSTEM:Meal_Plan_Flat_Tables_Ingredient_DDL runOnChange:true splitStatements:false OBJECT_TYPE:TABLE
+USE DATABASE <<EDM_DB_NAME_R>>;
+USE SCHEMA DW_R_LOYALTY;
+
+CREATE OR REPLACE TABLE GetMeal_Plan_Ingredient_Flat
+(  
+  Id            VARCHAR NULL ,
+  name          VARCHAR NULL ,
+  DW_Create_Ts  TIMESTAMP NULL ,
+  File_Name     VARCHAR NULL
+)
+CHANGE_TRACKING = TRUE;

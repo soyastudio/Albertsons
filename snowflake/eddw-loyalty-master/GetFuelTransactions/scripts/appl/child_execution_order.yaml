@@ -1,0 +1,12 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetFuelTransactions/scripts/appl/SP_GetPartnerRewardTransaction_To_BIM_load_Business_Partner_Reward_Transaction.sql
+    - GetFuelTransactions/scripts/appl/Task_SP_GETPARTNERREWARDTRANSACTION_TO_BIM_LOAD_TASK.sql
+    - GetFuelTransactions/scripts/appl/sp_GetPartnerRewardTransaction_To_BIM_load.sql
+    - GetFuelTransactions/scripts/appl/stage_EDDW_PARTNERREWARDTRANSACTION_STAGE_PRDBLOB_INC.sql
+    - GetFuelTransactions/scripts/appl/stream_ESED_PARTNERREWARDTRANSACTION_R_STREAM.sql
+    - GetFuelTransactions/scripts/appl/stream_GetPartnerRewardTransaction_Flat_R_STREAM.sql

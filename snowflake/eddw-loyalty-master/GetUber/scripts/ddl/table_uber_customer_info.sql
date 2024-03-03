@@ -1,0 +1,14 @@
+--liquibase formatted sql
+--changeset SYSTEM:uber_customer_info runOnChange:true splitStatements:false OBJECT_TYPE:TABLE
+use database <<EDM_DB_NAME_R>>;
+use schema <<EDM_DB_NAME_R>>.DW_R_LOYALTY;
+
+create or replace TABLE UBER_CUSTOMER_INFO (
+	FILENAME VARCHAR(16777216),
+	EMAIL_ADDR_TXT VARCHAR(16777216),
+	FIRST_NM VARCHAR(16777216),
+	USER_ID VARCHAR(16777216),
+	LAST_NM VARCHAR(16777216),
+	FULL_PHONE_NBR VARCHAR(16777216)
+);
+

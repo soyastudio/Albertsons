@@ -1,0 +1,16 @@
+{
+    "env" : "PRD",
+    "user": "APPL_EDM_MONITOR",
+    "account": "abs_itds_prd.west-us-2.azure",
+    "warehouse": "PROD_MONITOR_WH",
+    "role": "ROLE_APPL_EDM_MONITOR",
+    "database":"EDM_CONFIRMED_PRD",
+    "schema":"DW_C_PRODUCT",
+    "SP": ["ocrp_loyalty_partnership","sp_dimesion_household_load","sp_f_transaction_partner_engagement_load","sp_registration_redemption_load"],
+    "pipe": [""],
+    "stage": [""],
+    "stream": [""],
+    "table": [""],
+    "task": [""],
+    "view": [""]
+}

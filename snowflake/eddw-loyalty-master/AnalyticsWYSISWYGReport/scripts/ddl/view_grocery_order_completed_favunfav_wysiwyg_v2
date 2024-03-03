@@ -1,0 +1,46 @@
+create or replace View EDM_VIEWS_prd.DW_VIEWS.grocery_order_completed_favunfav_wysiwyg_v2 COPY GRANTS as
+select 
+a.ORDERID
+,a.STOREID
+,a.ORDERSTATUS
+,a.TransactionDate
+,a.NETAMT
+,a.CHARGEAMT
+,a.TOTALAMT
+,a.BASEPRODUCTNBR
+,a.UPCID
+,a.ITEMDESCRIPTION
+,a.UNITPRICEAMT
+,a.ORDERQTY
+,a.TotalFulfilledb4savings
+,a.FulfilledQty
+,b.club_mkdn            
+,b.StorePaperCoupon_mkdn
+,b.J4U_mkdn
+,b.J4U_BASKET_mkdn
+,b.J4U_DEPT_mkdn              
+,b.EMPLOYEE_mkdn        
+,b.DEPARTMENT_mkdn      
+,b.BASKET_mkdn          
+,b.REWARDS_mkdn     
+,b.REWARDS_BASKET_mkdn
+,b.REWARDS_DEPT_mkdn
+,b.CSCCredit_mkdn       
+,b.OTHER_mkdn   
+,b.Total_Savings_categorized
+,a.TotalSavings as Total_Savings_noncategorized
+,a.TotalPaid 
+,a.SUBSTITUTED
+,a.RandomWeighted
+,b.WOD_AMT
+,(c.Total_ecom_sales_amt - a.totalpaid)::decimal(10,2) AS FAV_UNFAV
+,a.TotalSavings - b.REWARDS_BASKET_mkdn - b.J4U_BASKET_mkdn - b.REWARDS_DEPT_mkdn - b.J4U_DEPT_mkdn as Total_Savings_noncategorized_NOWOD
+,(a.TOTALFULFILLEDB4SAVINGS + b.CLUB_MKDN + b.J4U_MKDN)/a.FULFILLEDQTY as PRICE_PER_UNIT
+from EDM_VIEWS_prd.DW_VIEWS.grocery_order_completed_wysiwyg_v2 a
+JOIN EDM_VIEWS_PRD.DW_VIEWS.grocery_order_completed_savings_categorized_wysiwyg b 
+on a.orderid = b.orderid
+and a.UPCID = b.UPCID
+LEFT OUTER join
+EDM_VIEWS_prd.DW_VIEWS.grocery_order_created_wysiwyg c
+on a.orderid = c.orderid
+and a.baseproductnbr = c.baseproductnbr;

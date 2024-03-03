@@ -1,0 +1,46 @@
+--liquibase formatted sql
+--changeset SYSTEM:FRESHPASS_SUBSCRIPTION_EVENT runOnChange:true splitStatements:false OBJECT_TYPE:TABLE
+use database <<EDM_DB_NAME>>;
+use schema <<EDM_DB_NAME>>.DW_C_LOYALTY;
+
+create or replace TABLE FRESHPASS_SUBSCRIPTION_EVENT (
+	RETAIL_CUSTOMER_UUID VARCHAR(16777216) NOT NULL COMMENT 'Customer Unique Identifier',
+	EVENT_ID VARCHAR(16777216) NOT NULL COMMENT 'Identifier of the event',
+	SUBSCRIPTION_PLAN_INTEGRATION_ID NUMBER(38,0) NOT NULL COMMENT 'Generated Integration Identifier based on alternate keys',
+	DW_FIRST_EFFECTIVE_DT DATE NOT NULL COMMENT 'The date the record was inserted.  For update Primary Keys this values is used from the prior record of the primary key',
+	DW_LAST_EFFECTIVE_DT DATE NOT NULL COMMENT 'for the current record this is ''12/31/9999''.  for updated records based on the primary key of the table, this is the new current records DW_First_Effective_Dt -1 day',
+	RETAIL_CUSTOMER_GUID VARCHAR(16777216) COMMENT 'Customer Global Unique Identifier',
+	CUSTOMER_HOUSEHOLD_ID VARCHAR(16777216) COMMENT 'Customer Household Identifier',
+	BANNER_NM VARCHAR(16777216) COMMENT 'Banner Name',
+	CUSTOMER_COMMENT_TXT VARCHAR(16777216) COMMENT 'Comment added by customer before cancelling the subscription',
+	CUSTOMER_ORDER_CNT NUMBER(38,0) COMMENT 'Customer Order count',
+	CYCLE_DELIVERY_SAVINGS_AMT NUMBER(12,2) COMMENT 'Freshpass delivery savings amount',
+	CYCLE_PERK_SAVINGS_AMT NUMBER(12,2) COMMENT 'Freshpass Perk Savings amount',
+	CYCLE_TOTAL_SAVINGS_AMT NUMBER(12,2) COMMENT 'Freshpass Cycle total savings',
+	EVENT_TS TIMESTAMP_LTZ(9) COMMENT 'Timestamp when the event took place',
+	EVENT_TYPE_DSC VARCHAR(16777216) COMMENT 'Description of the frespass event',
+	LIFE_DELIVERY_SAVINGS_AMT NUMBER(12,2) COMMENT 'Freshpass Life Delivery Savings',
+	LIFE_PERK_SAVINGS_AMT NUMBER(12,2) COMMENT 'Freshpass Life Perk Savings',
+	LIFE_TOTAL_SAVINGS_AMT NUMBER(12,2) COMMENT 'FreshPass Life Total Savings',
+	MASKED_CARD_NBR VARCHAR(16777216) COMMENT 'MaskedNumber with Last 4 Digits',
+	REENROLLED_USER_IND BOOLEAN COMMENT 'Indicator to identify if the user is re-enrolled user',
+	SUBSCRIPTION_STATUS_DSC VARCHAR(16777216) COMMENT 'Customer Subscription Status of the plan',
+	SUBSCRIPTION_STATUS_ID VARCHAR(16777216) COMMENT 'Generated Identifier of the Subscription Status of the plan',
+	SOURCE_SYSTEM_CD VARCHAR(16777216) COMMENT 'Source System Code ',
+	SUBSCRIPTION_PAYMENT_DT DATE COMMENT 'FreshPass Payment Date',
+	TENDER_TYPE_DSC VARCHAR(16777216) COMMENT 'TenderType - Shop Or DeliverySubscription',
+	PLAN_CANCELLATION_REASON_DSC VARCHAR(16777216) COMMENT 'FreshPass Cancellation reason',
+	PLAN_ENROLLMENT_DT DATE COMMENT 'FreshPass Plan Active Date',
+	PLAN_EXPIRY_DT DATE COMMENT 'Current FreshPassPlan Expiry Date',
+	PLAN_RENEWAL_DT DATE COMMENT 'Plan Renewal Date',
+	PLAN_SIGNUP_DT DATE COMMENT 'Customer SignUp Date',
+	DW_CREATE_TS TIMESTAMP_LTZ(9) COMMENT 'The timestamp the record was inserted.',
+	DW_LAST_UPDATE_TS TIMESTAMP_LTZ(9) COMMENT 'When a record is updated  this would be the current timestamp',
+	DW_LOGICAL_DELETE_IND BOOLEAN COMMENT 'Set to True when we receive a delete record for the primary key, else False',
+	DW_SOURCE_CREATE_NM VARCHAR(255) COMMENT 'The Bod (data source) name of this insert.',
+	DW_SOURCE_UPDATE_NM VARCHAR(255) COMMENT 'The Bod (data source) name of this update or delete.',
+	DW_CURRENT_VERSION_IND BOOLEAN COMMENT 'set to yes when the current record is deleted,  the Last Effective date on this record is still set to be  current date -1 d',
+	SUBSCRIPTION_TAX_AMT NUMBER(12,2) COMMENT 'Freshpass plan Price tax\n',
+	TOTAL_CHARGES_AMT NUMBER(12,2) COMMENT 'Total Plan Charges\n',
+	constraint XPKFRESHPASS_EVENT primary key (RETAIL_CUSTOMER_UUID, EVENT_ID, SUBSCRIPTION_PLAN_INTEGRATION_ID, DW_FIRST_EFFECTIVE_DT, DW_LAST_EFFECTIVE_DT)
+);

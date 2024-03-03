@@ -1,0 +1,12 @@
+--liquibase formatted sql
+--changeset SYSTEM:ESED_StoreGroup_R_TASK runOnChange:true splitStatements:false OBJECT_TYPE:TASK
+use database <<EDM_DB_NAME_R>>;
+use schema <<EDM_DB_NAME_R>>.DW_R_PRODUCT;
+
+CREATE OR REPLACE TASK ESED_STOREGROUP_R_TASK
+WAREHOUSE='PROD_INGESTION_BIG_WH'
+SCHEDULE='1 minutes'
+WHEN SYSTEM$STREAM_HAS_DATA('<<EDM_DB_NAME_R>>.DW_R_PRODUCT.ESED_StoreGroup_R_Stream')
+AS call SP_StoreGroup_TO_FLAT_LOAD_RERUN();
+
+ALTER TASK ESED_STOREGROUP_R_TASK RESUME;

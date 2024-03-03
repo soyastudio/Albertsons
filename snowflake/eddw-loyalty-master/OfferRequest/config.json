@@ -1,0 +1,16 @@
+{
+    "env" : "PRD",
+    "user": "APPL_EDM_MONITOR",
+    "account": "abs_itds_prd.west-us-2.azure",
+    "warehouse": "PROD_MONITOR_WH",
+    "role": "ROLE_APPL_EDM_MONITOR",
+    "database":"EDM_CONFIRMED_PRD",
+    "schema":"DW_C_PRODUCT",
+    "SP": [""],
+    "pipe": ["EDDW_OFFERREQUEST_PIPE_PRODBLOB_INC"],
+    "stage": ["EDDW_OFFERREQUEST_STAGE_PRODBLOB_INC"],
+    "stream": ["ESED_OfferRequest_R_STREAM","GetOfferRequest_FLAT_R_STREAM"],
+    "table": ["ESED_OfferRequest","GetOfferRequest_Flat"],
+    "task": ["SP_GetOfferRequest_To_BIM_load_TASK","ESED_OfferRequest_R_TASK"],
+    "view": [""]
+}

@@ -1,0 +1,24 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetNPS/scripts/appl/Pipe_EDM_GETNPSUMASURVEY_PIPE_PRDBLOB_INC.sql
+    - GetNPS/scripts/appl/Pipe_EDM_NPSSURVEY_PIPE_PRDBLOB_INC.sql
+    - GetNPS/scripts/appl/SP_ESED_NPS_SURVEY_SNOWPIPE_TO_FLAT.sql
+    - GetNPS/scripts/appl/SP_GETNPSDETAILS_TO_BIM_LOAD_SURVEY_SENTIMENT.sql
+    - GetNPS/scripts/appl/SP_GETNPSSURVEY_TO_BIM_LOAD_NET_PROMOTER_SCORE_UMA_SURVEY.sql
+    - GetNPS/scripts/appl/SP_GETNPS_SURVEY_SENTIMENT_TO_BIM_LOAD.sql
+    - GetNPS/scripts/appl/SP_GET_SURVEY_SENTIMENT_TO_FLAT.sql
+    - GetNPS/scripts/appl/SP_GetNPSSURVEY_TO_BIM_LOAD_NET_PROMOTER_SCORE_SURVEY.sql
+    - GetNPS/scripts/appl/SP_GetNPSSURVEY_TO_BIM_LOAD_SURVEY_RESPONSE.sql
+    - GetNPS/scripts/appl/SP_GetNPSSurvey_C_Pipeline_DDL.sql
+    - GetNPS/scripts/appl/SP_GetNPSSurvey_To_BIM_load.sql
+    - GetNPS/scripts/appl/Task_GET_NPSSURVEYUMASCORE_TASK.sql
+    - GetNPS/scripts/appl/Task_GET_SURVEY_SENTIMENT_TASK.sql
+    - GetNPS/scripts/appl/Task_SP_GETNPSSURVEY_TO_BIM_LOAD_TASK.sql
+    - GetNPS/scripts/appl/stage_EDM_GETNPSUMASURVEY_FLAT_STAGE_PRDBLOB_INC.sql
+    - GetNPS/scripts/appl/stage_EDM_NPSSURVEY_STAGE_PRDBLOB_INC.sql
+    - GetNPS/scripts/appl/stream_GETNPSSURVEY_FLAT_R_STREAM.sql
+    - GetNPS/scripts/appl/stream_GETNPSUMASURVEY_FLAT_R_STREAM.sql

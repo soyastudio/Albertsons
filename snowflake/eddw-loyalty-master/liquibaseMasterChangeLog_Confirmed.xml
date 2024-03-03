@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+	<include file="GetInstantAllocation/scripts/appl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GETEPETransaction/scripts/appl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GETEPETransaction/scripts/ddl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetAlaskaAirMiles/scripts/appl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetAlaskaAirMiles/scripts/ddl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetOffer/scripts/appl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetOffer/scripts/ddl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetBusinessPartner/scripts/appl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetBusinessPartner/scripts/ddl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetFuelTransactions/scripts/appl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetFuelTransactions/scripts/ddl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetCustomerRewards/scripts/appl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetCustomerRewards/scripts/ddl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetRewardReconciliation/scripts/appl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetRewardReconciliation/scripts/ddl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetDoordash/scripts/appl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetDoordash/scripts/ddl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetOfferOMS/scripts/appl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetOfferOMS/scripts/ddl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetProductGroup/scripts/appl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetProductGroup/scripts/ddl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetUber/scripts/appl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetUber/scripts/ddl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetStoreGroup/scripts/aapl/liquibaseChildChangeLog_Confirmed.xml"/>
+	<include file="GetStoreGroup/scripts/ddl/liquibaseChildChangeLog_Confirmed.xml"/>
+</databaseChangeLog>

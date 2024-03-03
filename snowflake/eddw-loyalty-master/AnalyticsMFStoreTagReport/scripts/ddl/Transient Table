@@ -1,0 +1,36 @@
+use database EDM_CONFIRMED_PRD;
+use schema DW_C_STAGE;
+
+// Creating Target Work table
+CREATE OR REPLACE transient TABLE MF_STORE_TAG_REPORT_WRK(
+   Offer_Status_Dsc VARCHAR(16777216) ,
+   OMS_Offer_Region_Nm VARCHAR(16777216) ,
+   Chargeback_Vendor_Nm VARCHAR(16777216) ,
+   Headline_Txt VARCHAR(16777216) ,
+   Product_Group_Nm VARCHAR(16777216) ,
+   OFFER_PROTOTYPE_CD VARCHAR(16777216) ,  
+   Aggregator_Offer_Id VARCHAR(16777216) ,
+   OMS_Offer_Id VARCHAR(16777216) ,
+   UPC_Cd VARCHAR(14) ,
+   UPC_Dsc VARCHAR(16777216) ,
+   Display_Effective_Start_Dt DATE ,
+   Display_Effective_End_Dt DATE ,
+   Offer_Prototype_Dsc VARCHAR(16777216) ,
+   Benefit_Value_Type_Dsc VARCHAR(16777216) ,
+   Discount_Tier_Amt NUMBER(38,3) ,
+   Discount_Tier_Id NUMBER(38,0) ,
+   Item_Limit_Qty NUMBER(38,0) ,  
+   Weight_Limit_Qty NUMBER(38,0) ,
+   Price_Title_Txt VARCHAR(16777216) ,
+   Brand_Size_Dsc VARCHAR(16777216) ,
+   Usage_Limit_Type_Per_User_Dsc VARCHAR(16777216) ,
+   Store_Tag_Amt NUMBER(38,3) ,
+   Store_Tag_Comments_Txt VARCHAR(16777216) ,
+   Pod_Offer_Detail_Dsc VARCHAR(250) ,
+   TIER_LEVEL_AMT NUMBER(14,4) , 
+   UNIT_OF_MEASURE_DSC VARCHAR(100) , 
+   Min_Qty_To_Buy VARCHAR(16777216) ,
+   Program_cd VARCHAR(16777216) ,
+   External_Offer_Id VARCHAR(16777216) ,
+   RN NUMBER(18,0)   
+);

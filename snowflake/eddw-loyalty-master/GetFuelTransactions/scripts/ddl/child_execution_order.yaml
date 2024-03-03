@@ -1,0 +1,13 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetFuelTransactions/scripts/ddl/table_Business_Partner_Reward_Transaction.sql
+    - GetFuelTransactions/scripts/ddl/table_Business_Partner_Reward_Transaction_EXCEPTIONS.sql
+    - GetFuelTransactions/scripts/ddl/table_ESED_PARTNERREWARDTRANSACTION_Rerun.sql
+    - GetFuelTransactions/scripts/ddl/table_ESED_PartnerRewardTransaction.sql
+    - GetFuelTransactions/scripts/ddl/table_GetPartnerRewardTransaction_Flat.sql
+    - GetFuelTransactions/scripts/ddl/table_GetPartnerRewardTransaction_Flat_Rerun.sql
+    - GetFuelTransactions/scripts/ddl/view_Business_Partner_Reward_Transaction.sql

@@ -1,0 +1,97 @@
+USE DATABASE EDM_ANALYTICS_PRD;
+USE SCHEMA DW_RETAIL_EXP;
+
+CREATE OR REPLACE TABLE F_TRANSACTION_PARTNER_ENGAGEMENT_BKP AS 
+SELECT 
+TRANSACTION_ID,
+  FISCAL_DAY_ID,
+  DIVISION_D1_SK,
+  RETAIL_STORE_D1_SK,
+  TRANSACTION_DT,
+  RETAIL_CUSTOMER_D1_SK,
+  BUSINESS_PARTNER_D1_SK,
+  CUSTOMER_BUSINESS_PARTNER_REGISTRATION_D1_SK,
+  BANNER_D1_SK,
+  ADOBE_BANNER_NM,
+  ORDER_ID,
+  TRANSACTION_AMT,
+  GROSS_MERCHANT_VALUE_AMT,
+  J4U_ENGAGEMENT_IND,
+  GROCERY_REWARD_ENGAGEMENT_IND,
+  FUEL_REWARD_OWN_ENGAGEMENT_IND,
+  FUEL_REWARD_PARTNER_ENGAGEMENT_IND,
+  POINTS_EARNED_NBR,
+  DW_LAST_UPDATE_TS,
+  DW_CREATE_TS
+ FROM F_TRANSACTION_PARTNER_ENGAGEMENT;
+
+create or replace TABLE F_TRANSACTION_PARTNER_ENGAGEMENT (
+	TRANSACTION_ID NUMBER(38,0) NOT NULL COMMENT 'Transaction Identifier. Unique number to identify one transactin happened at Albertsons. This will include transaction''s happened directly at Albertsons, transaction happened through partner channel and transaction happened at Partner Gas station',
+	FISCAL_DAY_ID NUMBER(8,0) NOT NULL COMMENT 'Fiscal Day Identifier; Format: YYYYMMDD; e.g. 20210101',
+	DIVISION_D1_SK NUMBER(38,0) NOT NULL COMMENT 'A Surrogate Key - system-generated unique identifier that is used instead of the natural key.',
+	RETAIL_STORE_D1_SK NUMBER(38,0) NOT NULL COMMENT 'A Surrogate Key - system-generated unique identifier that is used instead of the natural key.',
+	TRANSACTION_DT DATE NOT NULL COMMENT 'Date when actual transaction took place',
+	RETAIL_CUSTOMER_D1_SK NUMBER(38,0) NOT NULL COMMENT 'A Surrogate Key - system-generated unique identifier that is used instead of the natural key.',
+	BUSINESS_PARTNER_D1_SK NUMBER(38,0) NOT NULL COMMENT 'A Surrogate Key - system-generated unique identifier that is used instead of the natural key.',
+	CUSTOMER_BUSINESS_PARTNER_REGISTRATION_D1_SK NUMBER(38,0) NOT NULL COMMENT 'A Surrogate Key - system-generated unique identifier that is used instead of the natural key.',
+	BANNER_D1_SK NUMBER(38,0) NOT NULL COMMENT 'A Surrogate Key - system-generated unique identifier that is used instead of the natural key.',
+	ADOBE_BANNER_NM VARCHAR(50) NOT NULL COMMENT 'Degenrate Dimension - Banner Name as it comes from Adobe',
+	ORDER_ID VARCHAR(50) NOT NULL COMMENT 'Unique Order id for transaction happened at partner channel. It will be 0 for orders which happened directly at albertsons.',
+	TRANSACTION_AMT NUMBER(9,2) NOT NULL COMMENT 'Total amount to be paid for the particular transaction',
+	GROSS_MERCHANT_VALUE_AMT NUMBER(9,2) NOT NULL COMMENT 'Total amount chanrged by partner channel to the customer for the perticular transaction.It will be set to 0 For  transactions happenning directly at Albertsons.',
+	J4U_ENGAGEMENT_IND BOOLEAN NOT NULL COMMENT 'Flag to specify if J4U coupon applied at Point of sales at the time of checkout',
+	GROCERY_REWARD_ENGAGEMENT_IND BOOLEAN NOT NULL COMMENT 'Flag to specify if GR coupon applied at Point of sales at the time of checkout',
+	FUEL_REWARD_OWN_ENGAGEMENT_IND BOOLEAN NOT NULL COMMENT 'Flag to specify if any coupon applied to the transaction at gas stations owned by Albertsons',
+	FUEL_REWARD_PARTNER_ENGAGEMENT_IND BOOLEAN NOT NULL COMMENT 'Flag to specify if any coupon applied to the transaction at partner gas station',
+	POINTS_EARNED_NBR NUMBER(38,0) NOT NULL COMMENT 'Total Points earned by the customer for the perticulat transaction.',
+	DW_LAST_UPDATE_TS TIMESTAMP_LTZ(9) NOT NULL COMMENT 'DW Last Update Timestamp',
+	DW_CREATE_TS TIMESTAMP_LTZ(9) NOT NULL COMMENT 'DW Create Timestamp',
+	primary key (TRANSACTION_ID, FISCAL_DAY_ID, DIVISION_D1_SK, RETAIL_STORE_D1_SK)
+)COMMENT='Transaction level Fact to measure Partner Engagement per Division, per Store, per Day'
+;
+
+INSERT INTO F_Transaction_Partner_Engagement
+(TRANSACTION_ID,
+  FISCAL_DAY_ID,
+  DIVISION_D1_SK,
+  RETAIL_STORE_D1_SK,
+  TRANSACTION_DT,
+  RETAIL_CUSTOMER_D1_SK,
+  BUSINESS_PARTNER_D1_SK,
+  CUSTOMER_BUSINESS_PARTNER_REGISTRATION_D1_SK,
+  BANNER_D1_SK,
+  ADOBE_BANNER_NM,
+  ORDER_ID,
+  TRANSACTION_AMT,
+  GROSS_MERCHANT_VALUE_AMT,
+  J4U_ENGAGEMENT_IND,
+  GROCERY_REWARD_ENGAGEMENT_IND,
+  FUEL_REWARD_OWN_ENGAGEMENT_IND,
+  FUEL_REWARD_PARTNER_ENGAGEMENT_IND,
+  POINTS_EARNED_NBR,
+  DW_LAST_UPDATE_TS,
+  DW_CREATE_TS)
+  select 
+  TRANSACTION_ID,
+  FISCAL_DAY_ID,
+  DIVISION_D1_SK,
+  RETAIL_STORE_D1_SK,
+  TRANSACTION_DT,
+  RETAIL_CUSTOMER_D1_SK,
+  BUSINESS_PARTNER_D1_SK,
+  CUSTOMER_BUSINESS_PARTNER_REGISTRATION_D1_SK,
+  BANNER_D1_SK,
+  ADOBE_BANNER_NM,
+  ORDER_ID,
+  TRANSACTION_AMT,
+  GROSS_MERCHANT_VALUE_AMT,
+  J4U_ENGAGEMENT_IND,
+  GROCERY_REWARD_ENGAGEMENT_IND,
+  FUEL_REWARD_OWN_ENGAGEMENT_IND,
+  FUEL_REWARD_PARTNER_ENGAGEMENT_IND,
+  POINTS_EARNED_NBR,
+  DW_LAST_UPDATE_TS,
+  DW_CREATE_TS
+  from F_Transaction_Partner_Engagement_BKP;
+
+DROP TABLE F_TRANSACTION_PARTNER_ENGAGEMENT_BKP;

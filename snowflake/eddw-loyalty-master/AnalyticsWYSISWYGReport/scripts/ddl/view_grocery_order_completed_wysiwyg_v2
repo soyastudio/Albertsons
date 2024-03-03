@@ -1,0 +1,455 @@
+create or replace view EDM_VIEWS_PRD.DW_VIEWS.grocery_order_completed_wysiwyg_v2 COPY GRANTS as
+WITH txn_hdr_driver AS (
+SELECT  h.txn_id
+,       h.txn_dte
+,       g.order_id
+,       h.txn_tm
+,       h.store_id
+,       h.card_nbr
+,       h.checker_nbr
+,       h.register_nbr
+ ,      h.net_amt
+  ,     h.TOTAL_MISC_AMT
+  ,     h.TOTAL_MFR_CPN_AMT
+FROM    EDM_VIEWS_PRD.DW_EDW_VIEWS.txn_hdr h
+inner join EDM_VIEWS_PRD.DW_EDW_VIEWS.gw_online_register_txn g
+on      g.TXN_DT = h.txn_dte
+and     g.txn_id  = h.txn_id
+AND     G.STORE_ID = H.STORE_ID
+WHERE   g.TXN_DT  >= current_date - 3 
+  AND     G.STORE_ID  in (select distinct store_id from edm_confirmed_prd.dw_c_stage.grocery_order_facilitylist_wysiwyg)
+)
+,txn_dtl_facts AS (
+SELECT  dt.src
+,       dt.order_id
+,       dt.txn_id
+,       dt.txn_dte
+,       dt.txn_tm
+,       dt.store_id
+,       dt.card_nbr
+,       dt.checker_nbr
+,       dt.register_nbr
+,       dt.net_amt
+,       dt.total_misc_amt
+,       dt.txn_seq_nbr
+,       dt.upc_id
+,       upc.upc_dsc
+,       dt.dtl_subtype_id
+,       dt.amount
+,       dt.item_qty
+,       dt.meas_qty
+,       dt.promotion_id
+,       dt.coupon_id
+FROM    (
+  
+Select 'i'::CHAR(2)    AS src
+,order_id
+,txn_id
+,txn_dte
+,txn_tm
+,store_id
+,card_nbr
+,checker_nbr
+,register_nbr
+,net_amt
+,total_misc_amt
+,0 as txn_seq_nbr
+,upc_id
+,dtl_subtype_id
+,Sum (amount) as amount
+,sum (item_qty) as item_qty
+,Sum (meas_qty) as meas_qty
+,promotion_id
+,coupon_id
+from (
+
+SELECT  'i'::CHAR(2)    AS src
+,       h.order_id
+,       h.txn_id
+,       h.txn_dte
+,       h.txn_tm
+,       h.store_id
+,       h.card_nbr
+,       h.checker_nbr
+,       h.register_nbr
+  ,       h.net_amt + h.TOTAL_MFR_CPN_AMT as net_amt
+,       h.total_misc_amt
+,       i.txn_seq_nbr
+,       CASE WHEN i.upc_id is null Then 0 Else i.upc_id end as upc_id
+,       i.dtl_subtype_id
+,       i.gross_amt     AS amount
+,       i.item_qty
+,       i.meas_qty::DECIMAL(18,2)  as meas_qty
+,       NULL::DECIMAL(18,0) AS promotion_id
+,       NULL::DECIMAL(18,0) AS coupon_id
+FROM    txn_hdr_driver h
+INNER   JOIN EDM_VIEWS_PRD.DW_EDW_VIEWS.txn_item i
+ON      i.txn_id = h.txn_id
+AND     i.txn_dt = h.txn_dte
+)
+group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,18,19
+  
+UNION
+ 
+ SELECT  concat ('im' , c.rn )   AS src
+,       c.order_id
+,       c.txn_id
+,       c.txn_dte
+,       c.txn_tm
+,       c.store_id
+,       c.card_nbr
+,       c.checker_nbr
+,       c.register_nbr
+,       c.net_amt
+,       c.total_misc_amt
+,       c.txn_seq_nbr
+,       c.upc_id
+,       c.dtl_subtype_id
+,       c.amount
+,       c.item_qty
+,       NULL            AS meas_qty
+,       c.promotion_id
+,       c.coupon_id
+  from (
+
+SELECT  'im'    AS src
+,       h.order_id
+,       h.txn_id
+,       h.txn_dte
+,       h.txn_tm
+,       h.store_id
+,       h.card_nbr
+,       h.checker_nbr
+,       h.register_nbr
+,       h.net_amt
+,       h.total_misc_amt
+,       i.txn_seq_nbr
+,       i.upc_id
+,       i.dtl_subtype_id
+,       i.mkdn_amt   :: Decimal(10,2)    AS amount
+,       i.mkdn_qty      AS item_qty
+,       i.promotion_id
+,       i.coupon_id
+,       row_number() over ( PARTITION BY h.order_id,h.txn_id,h.txn_dte,h.txn_tm,h.store_id,h.card_nbr,h.checker_nbr,h.register_nbr,h.net_amt,h.total_misc_amt,i.upc_id order by  i.txn_seq_nbr desc ) as rn
+FROM    txn_hdr_driver h
+INNER   JOIN EDM_VIEWS_PRD.DW_EDW_VIEWS.txn_item_mkdn i
+ON      i.txn_id = h.txn_id
+AND     i.txn_dt = h.txn_dte
+) c    
+) dt
+LEFT  OUTER JOIN EDM_VIEWS_PRD.DW_EDW_VIEWS.lu_upc upc
+ON      upc.upc_id = dt.upc_id
+AND     upc.corporation_id = 1
+
+ORDER   BY txn_seq_nbr
+)
+
+,pivot as
+(
+  select distinct
+  order_id
+,txn_id
+,txn_dte
+,txn_tm
+,store_id
+,upc_id
+,upc_dsc
+ , sum (Savings1) as Savings1
+  ,sum (Savings2) as Savings2
+  ,sum (Savings3) as Savings3
+  ,sum (Savings4) as Savings4
+from (
+select
+order_id
+,txn_id
+,txn_dte
+,txn_tm
+,store_id
+,upc_id
+,upc_dsc
+ ,"'im1'" :: Decimal(10,2) as Savings1
+  ,"'im2'" :: Decimal(10,2) as Savings2
+  ,"'im3'" :: Decimal(10,2) as Savings3
+  ,"'im4'" :: Decimal(10,2) as Savings4
+  from
+( 
+Select 
+ src
+ ,order_id
+,txn_id
+,txn_dte
+,txn_tm
+,store_id
+,upc_id
+,upc_dsc
+ ,amount :: Decimal(10,2)  as amount
+from txn_dtl_facts
+where src in  ('im1','im2','im3','im4'))
+  pivot (sum(amount) for src in ('im1','im2','im3','im4'))
+  
+  union all
+  
+  select
+order_id
+,txn_id
+,txn_dte
+,txn_tm
+,store_id
+,upc_id
+,upc_dsc
+ ,"'im5'" :: Decimal(10,2) as Savings1
+  ,"'im6'" :: Decimal(10,2) as Savings2
+  ,"'im7'" :: Decimal(10,2) as Savings3
+  ,"'im8'" :: Decimal(10,2) as Savings4
+  from
+( 
+Select 
+ src
+ ,order_id
+,txn_id
+,txn_dte
+,txn_tm
+,store_id
+,upc_id
+,upc_dsc
+ ,amount :: Decimal(10,2)  as amount
+from txn_dtl_facts
+where src in  ('im5','im6','im7','im8'))
+  pivot (sum(amount) for src in ('im5','im6','im7','im8'))
+  
+  union all
+  
+  select
+order_id
+,txn_id
+,txn_dte
+,txn_tm
+,store_id
+,upc_id
+,upc_dsc
+ ,"'im9'" :: Decimal(10,2) as Savings1
+  ,"'im10'" :: Decimal(10,2) as Savings2
+  ,"'im11'" :: Decimal(10,2) as Savings3
+  ,"'im12'" :: Decimal(10,2) as Savings4
+  from
+( 
+Select 
+ src
+ ,order_id
+,txn_id
+,txn_dte
+,txn_tm
+,store_id
+,upc_id
+,upc_dsc
+ ,amount :: Decimal(10,2)  as amount
+from txn_dtl_facts
+where src in  ('im9','im10','im11','im12'))
+  pivot (sum(amount) for src in ('im9','im10','im11','im12'))
+  
+  union all
+  
+select
+order_id
+,txn_id
+,txn_dte
+,txn_tm
+,store_id
+,upc_id
+,upc_dsc
+ ,"'im13'" :: Decimal(10,2) as Savings1
+  ,"'im14'" :: Decimal(10,2) as Savings2
+  ,"'im15'" :: Decimal(10,2) as Savings3
+  ,"'im16'" :: Decimal(10,2) as Savings4
+  from
+( 
+Select 
+ src
+ ,order_id
+,txn_id
+,txn_dte
+,txn_tm
+,store_id
+,upc_id
+,upc_dsc
+ ,amount :: Decimal(10,2)  as amount
+from txn_dtl_facts
+where src in  ('im13','im14','im15','im16'))
+  pivot (sum(amount) for src in ('im13','im14','im15','im16'))
+  
+  union all
+  
+  select
+order_id
+,txn_id
+,txn_dte
+,txn_tm
+,store_id
+,upc_id
+,upc_dsc
+ ,"'im17'" :: Decimal(10,2) as Savings1
+  ,"'im18'" :: Decimal(10,2) as Savings2
+  ,"'im19'" :: Decimal(10,2) as Savings3
+  ,"'im20'" :: Decimal(10,2) as Savings4
+  from
+( 
+Select 
+ src
+ ,order_id
+,txn_id
+,txn_dte
+,txn_tm
+,store_id
+,upc_id
+,upc_dsc
+ ,amount :: Decimal(10,2)  as amount
+from txn_dtl_facts
+where src in  ('im17','im18','im19','im20'))
+  pivot (sum(amount) for src in ('im17','im18','im19','im20'))
+ )
+ group by 1,2,3,4,5,6,7
+)
+,txn_data as
+(
+select
+  f.order_id
+  ,f.txn_id
+	,f.txn_dte
+	,f.txn_tm
+	,f.store_id
+	,case when upr.upc_id is null Then f.upc_id else upr.upc_id end as upc_id
+	,f.upc_dsc
+	,f.amount as base_amount
+    ,case when f.meas_qty > 0 Then f.meas_qty Else f.item_qty End as Qty_MEAS
+	,p.Savings1 
+	,p.Savings2
+	,p.Savings3
+	,p.Savings4
+    ,f.net_amt
+    ,f.total_misc_amt
+  from txn_dtl_facts f
+  LEFT join pivot p
+  on p.order_id = f.order_id
+  and p.txn_id = f.txn_id
+  and p.txn_dte = f.txn_dte
+  and p.txn_tm = f.txn_tm
+  and p.store_id = f.store_id
+  and p.upc_id = f.upc_id
+  and p.upc_dsc =f.upc_dsc
+  INNER JOIN EDM_VIEWS_PRD.DW_EDW_VIEWS.lu_store str
+  ON f.store_id = str.store_id
+  LEFT OUTER JOIN EDM_VIEWS_PRD.DW_EDW_VIEWS.upc_plu_rog_day_single upr
+  ON UPR.ROG_ID = STR.ROG_ID
+  AND upr.plu_cd = f.upc_id
+  and upr.txn_dt = f.txn_dte
+  Where f.src  in ('i','m')
+  )
+,bpn as (  
+  select distinct
+     t.order_id
+     ,t.txn_id
+	,t.txn_dte
+	,t.txn_tm
+	,t.store_id
+    ,gw2.BPN_ID AS BPN_ID
+	,t.upc_id
+	,t.upc_dsc
+	,t.base_amount
+    ,t.Qty_MEAS
+	,case when t.Savings1 is Null Then '0.00' Else t.Savings1 End as Savings1
+	,case when t.Savings2 is Null Then '0.00' Else t.Savings2 End as Savings2
+	,case when t.Savings3 is Null Then '0.00' Else t.Savings3 End as Savings3
+	,case when t.Savings4 is Null Then '0.00' Else t.Savings4 End as Savings4
+    ,t.net_amt
+    ,t.total_misc_amt
+    from txn_data t
+    LEFT OUTER JOIN edm_dcat_prd.dw_work.clog_in_product_upc gw2
+    on gw2.upc_id = t.upc_id
+    AND gw2.upc_status = 'active'
+    WHERE t.upc_dsc not like '%DELIVERY CHARGE%')
+    
+,delivered_itm as  ( SELECT DISTINCT
+a.orderid
+,case when a.BASEPRODUCTNBR is null Then go2.BASEPRODUCTNBR Else a.BASEPRODUCTNBR end as BASEPRODUCTNBR
+,a.UPC_ID
+,a.ITEMDESCRIPTION
+,a.Total_Fulfilled_b4_savings
+,a.Savings_Type1
+,a.Savings_Type2
+,a.Savings_Type3
+,a.Savings_Type4
+,a.Total_Paid
+,a.Total_Savings
+,case when a.Subst is Null Then go2.DELIVEREDITEM_SUBSTITUTEDITEMIND Else a.Subst End as Subst
+,case when a.Type_of_Item is Null Then go2.DELIVEREDITEM_UOM_UOMCD Else a.Type_of_Item End as Type_of_Item
+,case when a.UNITPRICEAMT is Null Then go2.UNITPRICEAMT Else a.UNITPRICEAMT End as UNITPRICEAMT
+,case when a.ORDERQTY is Null Then go2.ORDERQTY Else a.ORDERQTY End as ORDERQTY
+,a.net_amt
+,a.total_misc_amt
+,a.store_id
+,a.FulfilledQty
+,a.txn_date            
+  FROM ( 
+   Select distinct
+    bpn.order_id as ORDERID
+   ,go.BASEPRODUCTNBR as BASEPRODUCTNBR
+   ,bpn.UPC_ID as UPC_ID
+   ,case when go.ITEMDESCRIPTION is not null then go.ITEMDESCRIPTION else bpn.UPC_DSC End as ITEMDESCRIPTION
+   ,bpn.base_amount as Total_Fulfilled_b4_savings
+   ,bpn.Savings1 as Savings_Type1
+   ,bpn.Savings2 as Savings_Type2
+   ,bpn.Savings3 as Savings_Type3
+   ,bpn.Savings4 as Savings_Type4
+   ,base_amount + Savings1 + Savings2 + Savings3 + Savings4 as Total_Paid
+   ,Savings1 + Savings2 + Savings3 + Savings4 as Total_Savings
+   ,min (go.DELIVEREDITEM_SUBSTITUTEDITEMIND) as Subst
+   ,go.DELIVEREDITEM_UOM_UOMCD as Type_of_Item
+   ,max(go.UNITPRICEAMT) as UNITPRICEAMT
+   ,go.ORDERQTY as ORDERQTY
+   ,bpn.net_amt
+   ,bpn.total_misc_amt
+   ,bpn.store_id
+   ,bpn.Qty_MEAS as FulfilledQty
+    ,bpn.txn_dte as Txn_date
+   from bpn
+   LEFT OUTER join EDM_REFINED_PRD.DW_R_ECOMMERCE.GETGROCERYORDER_FLAT go
+   on go.orderid = bpn.order_id 
+   And go.BASEPRODUCTNBR = bpn.bpn_id
+   AND go.ORDERSTATUS_STATUSTYPECD = 'PAYMENT_REQUESTED' 
+   WHERE Total_Fulfilled_b4_savings > 0  OR (Total_Fulfilled_b4_savings < 0 AND (ITEMDESCRIPTION like '%PROMOTION%' OR ITEMDESCRIPTION IS NULL))
+   group by 1,2,3,4,5,6,7,8,9,13,15,16,17,18,19,20
+   ) A
+ 
+   LEFT OUTER join EDM_REFINED_PRD.DW_R_ECOMMERCE.GETGROCERYORDER_FLAT go2
+   on go2.orderid = A.orderid 
+   And TRIM(A.UPC_ID) = LTRIM(go2.DELIVEREDITEM_ITEM_UPC_UPCNBR,0)
+   AND go2.ORDERSTATUS_STATUSTYPECD = 'PAYMENT_REQUESTED' 
+
+   )
+   
+SELECT distinct
+   src.ORDERID
+   ,lpad(src.store_id,4,0) AS STOREID
+   ,'COMPLETED' AS ORDERSTATUS
+   ,txn_date as TransactionDate
+   ,src.net_amt as NETAMT
+   ,ABS(src.total_misc_amt) as CHARGEAMT
+   ,NETAMT + ABS(src.total_misc_amt) as TOTALAMT
+   ,case when ORDERQTY <> FulfilledQty and Type_of_Item <> 'WV' Then Null Else src.BASEPRODUCTNBR End as BASEPRODUCTNBR
+   ,src.UPC_ID as UPCID
+   ,src.ITEMDESCRIPTION
+   ,max(src.UNITPRICEAMT) as UNITPRICEAMT
+   ,src.ORDERQTY
+   ,src.Total_Fulfilled_b4_savings AS TotalFulfilledb4savings
+   ,src.FulfilledQty :: Decimal(10,2) AS FulfilledQty
+   ,src.Savings_Type1 AS SavingsType1
+   ,src.Savings_Type2 AS SavingsType2
+   ,src.Savings_Type3 AS SavingsType3
+   ,src.Savings_Type4 AS SavingsType4
+   ,src.Total_Savings AS TotalSavings
+   ,src.Total_Paid AS TotalPaid
+   ,max (src.Subst)     AS SUBSTITUTED
+   ,max (src.Type_of_Item) AS RandomWeighted
+   from delivered_itm src
+   group by 1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,17,18,19,20
+   ORDER BY 1,2,3,4,5,6,7,8,9,10,11

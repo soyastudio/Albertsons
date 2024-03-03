@@ -1,0 +1,76 @@
+use warehouse edm_admin_wh;
+
+create or replace  table edm_confirmed_prd.dw_c_ecommerce.grocery_order_savings_created_wysiwyg  as
+with Level_1_flatten
+        as
+        (
+            select tbl.SRC_XML:"@"::string AS BODNm,
+                    tbl.FILENAME AS FILENAME,
+                    GetGroceryOrder.Value as Value,
+                    GetGroceryOrder.SEQ::integer as SEQ,
+                    GetGroceryOrder.index::integer as idx
+             FROM  EDM_REFINED_PRD.DW_R_ECOMMERCE.ESED_GROCERYORDER tbl
+                ,LATERAL FLATTEN(tbl.SRC_XML:"$") GetGroceryOrder
+                  Where tbl.src_xml like '%<Abs:StatusTypeCd>CREATE</Abs:StatusTypeCd>%'
+          and date(created_ts) > '2021-02-25'
+        )
+SELECT OrderId,GroceryOrderHeader_VersionNbr,BaseProductNbr,ItemDescription,GroceryOrderDetail_SavingsCategoryId,GroceryOrderDetail_SavingsCategoryNm,GroceryOrderDetail_SavingsAmt,CURRENT_TIMESTAMP AS dw_create_ts
+from (
+  SELECT XMLGET(GroceryOrderData.value,'Abs:OrderId'):"$"::string AS OrderId
+  		,XMLGET(GroceryOrderData.value,'Abs:VersionNbr'):"$"::string AS GroceryOrderHeader_VersionNbr
+                  ,GetGroceryOrder.SEQ::integer as SEQ
+                ,GetGroceryOrder.idx::integer as idx
+                ,GroceryOrderData.SEQ::integer as SEQ1
+                ,GroceryOrderData.index::integer as idx1
+                 FROM    Level_1_flatten GetGroceryOrder
+                ,LATERAL FLATTEN(GetGroceryOrder.value:"$") GroceryOrderData
+             WHERE    GetGroceryOrder.value like '<GroceryOrderData>%'
+             AND    GroceryOrderData.value like '<Abs:GroceryOrderHeader>%' ) main      
+  LEFT JOIN (
+           SELECT
+            XMLGET(GroceryOrderDetail.value,'Abs:BaseProductNbr'):"$"::string AS BaseProductNbr
+            ,XMLGET(GroceryOrderDetail.value,'Abs:ItemDescription'):"$"::string AS ItemDescription
+              ,GetGroceryOrder.SEQ::integer as SEQ
+                ,GetGroceryOrder.idx::integer as idx
+                ,GroceryOrderData.SEQ::integer as SEQ1
+                ,GroceryOrderData.index::integer as idx1
+                ,GrocerySubOrder.SEQ::integer as SEQ2
+                ,GrocerySubOrder.index::integer as idx2
+                ,GroceryOrderDetail.SEQ::integer as SEQ3
+                ,GroceryOrderDetail.index::integer as idx3
+                      FROM    Level_1_flatten GetGroceryOrder
+                ,LATERAL FLATTEN(GetGroceryOrder.value:"$") GroceryOrderData
+                ,LATERAL FLATTEN(GroceryOrderData.value:"$") GrocerySubOrder
+                ,LATERAL FLATTEN(GrocerySubOrder.value:"$") GroceryOrderDetail
+             WHERE    GetGroceryOrder.value like '<GroceryOrderData>%'
+             AND    GroceryOrderData.value like '<Abs:GrocerySubOrder>%'
+             AND    GrocerySubOrder.value like '<Abs:GroceryOrderDetail>%'
+             AND    GroceryOrderDetail.value like '<Abs:ItemId>%'
+             ) Item
+              on Item.SEQ = Main.SEQ AND Item.idx = Main.idx
+            LEFT JOIN (
+            SELECT
+            XMLGET(CustomerSavings.value,'Abs:SavingsCategoryId'):"$"::string AS GroceryOrderDetail_SavingsCategoryId
+             ,XMLGET(CustomerSavings.value,'Abs:SavingsCategoryNm'):"$"::string AS GroceryOrderDetail_SavingsCategoryNm
+             ,XMLGET(CustomerSavings.value,'Abs:SavingsAmt'):"$"::string AS GroceryOrderDetail_SavingsAmt
+        ,GetGroceryOrder.SEQ::integer as SEQ
+        ,GetGroceryOrder.idx::integer as idx
+        ,GroceryOrderData.SEQ::integer as SEQ1
+        ,GroceryOrderData.index::integer as idx1
+        ,GrocerySubOrder.SEQ::integer as SEQ2
+        ,GrocerySubOrder.index::integer as idx2
+        ,GroceryOrderDetail.SEQ::integer as SEQ3
+        ,GroceryOrderDetail.index::integer as idx3
+    FROM    LEVEL_1_FLATTEN AS GetGroceryOrder
+        ,LATERAL FLATTEN(TO_ARRAY(GetGroceryOrder.value:"$")) GroceryOrderData
+        ,LATERAL FLATTEN(TO_ARRAY(GroceryOrderData.value:"$")) GrocerySubOrder
+        ,LATERAL FLATTEN(TO_ARRAY(GrocerySubOrder.value:"$")) GroceryOrderDetail
+        ,LATERAL FLATTEN(TO_ARRAY(GroceryOrderDetail.value:"$")) CustomerSavings
+    WHERE    GetGroceryOrder.value like '<GroceryOrderData>%'
+    AND    (GroceryOrderData.value like '<Abs:GrocerySubOrder>%' )
+    AND    (GrocerySubOrder.value like '<Abs:GroceryOrderDetail>%' )
+    AND    (GroceryOrderDetail.value like '<Abs:CustomerSavings>%' )
+    AND    (CustomerSavings.value like '<Abs:SavingsCategoryType>%' ) ) sav
+              on sav.SEQ = Item.SEQ AND sav.idx = Item.idx
+                    AND sav.SEQ1 = Item.SEQ1 AND sav.idx1 = Item.idx1
+                    AND sav.SEQ2 = Item.SEQ2 AND sav.idx2 = Item.idx2;

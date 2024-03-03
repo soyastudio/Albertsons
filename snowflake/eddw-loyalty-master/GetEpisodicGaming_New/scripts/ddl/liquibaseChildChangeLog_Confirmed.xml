@@ -1,0 +1,46 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_CUSTOMMETRICS_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_CUSTOM_METRIC.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_DRAWING.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_DRAWING_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_DRAWING_PRIZE.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_DRAWING_PRIZES_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_EVENT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_EVENTS_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_GAME.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_GAME_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_INSTANTWINPLAYS_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_INSTANT_WIN_PLAY.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_LANDDETAILS_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_LAND_DETAIL.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_OAMOEEARNS_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_OAMOE_EARN.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_PRIZE.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_PRIZE_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_PROFILE.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_PROFILE_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_PROGRAM.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_PROGRAM_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_SELECTION.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_SELECTIONS_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_SWEEPSENTRIES_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_SWEEP_ENTRY.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_WIN.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/table_EPISODIC_WINS_FLAT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_CUSTOM_METRIC.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_DRAWING.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_DRAWING_PRIZE.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_EVENT.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_GAME.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_INSTANT_WIN_PLAY.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_LAND_DETAIL.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_OAMOE_EARN.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_PRIZE.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_PROFILE.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_PROGRAM.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_SELECTION.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_SWEEP_ENTRY.sql"/>
+	<include file="GetEpisodicGaming/scripts/ddl/view_EPISODIC_WIN.sql"/>
+</databaseChangeLog>

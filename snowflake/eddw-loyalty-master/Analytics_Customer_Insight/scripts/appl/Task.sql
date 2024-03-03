@@ -1,0 +1,8 @@
+--liquibase formatted sql
+--changeset SYSTEM:Task runOnChange:true splitStatements:false OBJECT_TYPE:SP
+
+
+USE DATABASE <<EDM_DB_NAME>>;
+USE SCHEMA <<EDM_DB_NAME>>.DW_APPL;
+
+ALTER TASK OFFER_REDEMPTION_REPORTING_DETAILED_SUMMARY_Task RESUME;

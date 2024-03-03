@@ -1,0 +1,11 @@
+
+--liquibase formatted sql
+--changeset SYSTEM:CUSTOMER_ALTERNATE_TMP_REBATE_REPROCESS runOnChange:true splitStatements:false OBJECT_TYPE:TABLE
+
+use database <<EDM_DB_NAME>>;
+use schema DW_STAGE;
+
+create or replace TABLE CUSTOMER_ALTERNATE_TMP_REBATE_REPROCESS (
+	RETAIL_CUSTOMER_UUID VARCHAR(16777216),
+	ALTERNATE_ID_TXT VARCHAR(100)
+);

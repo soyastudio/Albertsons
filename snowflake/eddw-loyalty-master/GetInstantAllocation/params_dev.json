@@ -1,0 +1,5 @@
+{
+    "ENV":"DEV",
+    "EDM_DB_NAME" : "EDM_CONFIRMED_DEV",
+    "EDM_DB_NAME_R" : "EDM_REFINED_DEV"
+}

@@ -1,0 +1,22 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - OneTag/scripts/ddl/table_ONE_TAG_CAROUSEL.sql
+    - OneTag/scripts/ddl/table_ONE_TAG_OTHER.sql
+    - OneTag/scripts/ddl/table_ONE_TAG_CART_TRANSACTION.sql
+    - OneTag/scripts/ddl/table_ONE_TAG_CARTINFO.sql
+    - OneTag/scripts/ddl/table_ONE_TAG_CARTITEM.sql
+    - OneTag/scripts/ddl/table_ONE_TAG_GLOBAL.sql
+    - OneTag/scripts/ddl/table_ONE_TAG_SEARCH_IMPRESSIONS.sql
+    - OneTag/scripts/ddl/table_ONE_TAG_USER_VENDOR.sql
+    - OneTag/scripts/ddl/view_ONE_TAG_CAROUSEL.sql
+    - OneTag/scripts/ddl/view_ONE_TAG_CARTINFO.sql
+    - OneTag/scripts/ddl/view_ONE_TAG_CART_TRANSACTION.sql
+    - OneTag/scripts/ddl/view_ONE_TAG_OTHER.sql
+    - OneTag/scripts/ddl/view_ONE_TAG_CARTITEM.sql
+    - OneTag/scripts/ddl/view_ONE_TAG_GLOBAL.sql
+    - OneTag/scripts/ddl/view_ONE_TAG_SEARCH_IMPRESSIONS.sql
+    - OneTag/scripts/ddl/view_ONE_TAG_USER_VENDOR.sql

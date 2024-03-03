@@ -1,0 +1,16 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetRewardReconciliation/scripts/ddl/table_Business_Partner_Reward_Reconciliation.sql
+    - GetRewardReconciliation/scripts/ddl/table_Business_Partner_Reward_Reconciliation_Error.sql
+    - GetRewardReconciliation/scripts/ddl/table_Business_Partner_Reward_Reconciliation_Error_Exceptions.sql
+    - GetRewardReconciliation/scripts/ddl/table_Business_Partner_Reward_Reconciliation_Exceptions.sql
+    - GetRewardReconciliation/scripts/ddl/table_ESED_PARTNERREWARDRECONCILIATION_Rerun.sql
+    - GetRewardReconciliation/scripts/ddl/table_ESED_PartnerRewardReconciliation.sql
+    - GetRewardReconciliation/scripts/ddl/table_GetPartnerRewardReconciliation_Flat.sql
+    - GetRewardReconciliation/scripts/ddl/table_GetPartnerRewardReconciliation_Flat_Rerun.sql
+    - GetRewardReconciliation/scripts/ddl/view_Business_Partner_Reward_Reconciliation.sql
+    - GetRewardReconciliation/scripts/ddl/view_Business_Partner_Reward_Reconciliation_Error.sql

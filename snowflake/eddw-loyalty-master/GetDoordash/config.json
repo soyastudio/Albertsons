@@ -1,0 +1,16 @@
+{
+    "env" : "PRD",
+    "user": "APPL_EDM_MONITOR",
+    "account": "abs_itds_prd.west-us-2.azure",
+    "warehouse": "PROD_MONITOR_WH",
+    "role": "ROLE_APPL_EDM_MONITOR",
+    "database":"EDM_CONFIRMED_PRD",
+    "schema":"DW_C_PRODUCT",
+    "SP": [""],
+    "pipe": ["ESED_DOORDASH_Transaction_SNOWPIPE_PRDBLOB_INC","ESED_DOORDASH_ORDER_SNOWPIPE_PRODBLOB_INC"],
+    "stage": ["ESED_DOORDASH_STAGE_PRDBLOB_INC","ESED_DOORDASH_STAGE_PRDBLOB_INC"],
+    "stream": ["DOORDASH_Transaction_INFO_FLAT_R_STREAM","DOORDASH_ORDER_INFO_FLAT_R_STREAM"],
+    "table": ["Doordash_transaction_info","doordash_order_info"],
+    "task": ["",""],
+    "view": [""]
+}

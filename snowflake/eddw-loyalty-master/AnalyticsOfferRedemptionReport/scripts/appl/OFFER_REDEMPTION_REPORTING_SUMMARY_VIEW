@@ -1,0 +1,24 @@
+USE DATABASE EDM_VIEWS_PRD;
+USE SCHEMA DW_VIEWS;
+
+create or replace view EDM_VIEWS_PRD.DW_VIEWS.OFFER_REDEMPTION_REPORTING_SUMMARY(
+	OFFER_ID COMMENT 'clip type Card(C) & List(L) has same J4U offer ID(When we do clip)',
+	OFFER_START_DATE COMMENT 'Effective start date in oms offer',
+	OFFER_END_DATE COMMENT 'Effective end date in oms offer',
+	CLIPS_TOTALCOLUMN COMMENT 'clip type Card(C) & List(L) has same J4U offer ID(When we do clip)',
+	REDEMPTION_TOTALCOLUMN COMMENT 'The no of items the offers has been applied',
+	MARKDOWN_TOTALCOLUMN COMMENT 'Total Redemption Amount for the transaction',
+	TRANSACTION_DATE COMMENT 'The real time of the transaction. Date and Time as printed on the receipt which is coimg from POS'
+) COMMENT='VIEW for Offer_Redemption_Reporting_Summery'
+ as
+ 
+select 
+cast (OFFER_ID as VARCHAR) OFFER_ID,
+OFFER_START_DATE,
+OFFER_END_DATE,
+CLIPS_TOTALCOLUMN,
+REDEMPTION_TOTALCOLUMN,
+MARKDOWN_TOTALCOLUMN,
+TRANSACTION_DATE :: TIMESTAMP_NTZ TRANSACTION_DATE 
+
+From EDM_CONFIRMED_PRD.DW_C_LOYALTY.OFFER_REDEMPTION_REPORTING_DETAILED_SUMMARY;

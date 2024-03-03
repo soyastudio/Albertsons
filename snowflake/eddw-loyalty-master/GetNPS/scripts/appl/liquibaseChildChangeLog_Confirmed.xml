@@ -1,0 +1,22 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+	<include file="GetNPS/scripts/appl/Pipe_EDM_GETNPSUMASURVEY_PIPE_PRDBLOB_INC.sql"/>
+	<include file="GetNPS/scripts/appl/Pipe_EDM_NPSSURVEY_PIPE_PRDBLOB_INC.sql"/>
+	<include file="GetNPS/scripts/appl/SP_ESED_NPS_SURVEY_SNOWPIPE_TO_FLAT.sql"/>
+	<include file="GetNPS/scripts/appl/SP_GETNPSDETAILS_TO_BIM_LOAD_SURVEY_SENTIMENT.sql"/>
+	<include file="GetNPS/scripts/appl/SP_GETNPSSURVEY_TO_BIM_LOAD_NET_PROMOTER_SCORE_UMA_SURVEY.sql"/>
+	<include file="GetNPS/scripts/appl/SP_GETNPS_SURVEY_SENTIMENT_TO_BIM_LOAD.sql"/>
+	<include file="GetNPS/scripts/appl/SP_GET_SURVEY_SENTIMENT_TO_FLAT.sql"/>
+	<include file="GetNPS/scripts/appl/SP_GetNPSSURVEY_TO_BIM_LOAD_NET_PROMOTER_SCORE_SURVEY.sql"/>
+	<include file="GetNPS/scripts/appl/SP_GetNPSSURVEY_TO_BIM_LOAD_SURVEY_RESPONSE.sql"/>
+	<include file="GetNPS/scripts/appl/SP_GetNPSSurvey_C_Pipeline_DDL.sql"/>
+	<include file="GetNPS/scripts/appl/SP_GetNPSSurvey_To_BIM_load.sql"/>
+	<include file="GetNPS/scripts/appl/Task_GET_NPSSURVEYUMASCORE_TASK.sql"/>
+	<include file="GetNPS/scripts/appl/Task_GET_SURVEY_SENTIMENT_TASK.sql"/>
+	<include file="GetNPS/scripts/appl/Task_SP_GETNPSSURVEY_TO_BIM_LOAD_TASK.sql"/>
+	<include file="GetNPS/scripts/appl/stage_EDM_GETNPSUMASURVEY_FLAT_STAGE_PRDBLOB_INC.sql"/>
+	<include file="GetNPS/scripts/appl/stage_EDM_NPSSURVEY_STAGE_PRDBLOB_INC.sql"/>
+	<include file="GetNPS/scripts/appl/stream_GETNPSSURVEY_FLAT_R_STREAM.sql"/>
+	<include file="GetNPS/scripts/appl/stream_GETNPSUMASURVEY_FLAT_R_STREAM.sql"/>
+</databaseChangeLog>

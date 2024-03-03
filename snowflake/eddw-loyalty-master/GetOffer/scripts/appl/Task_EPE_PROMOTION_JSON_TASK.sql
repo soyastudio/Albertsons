@@ -1,0 +1,12 @@
+--liquibase formatted sql
+--changeset SYSTEM:EPE_PROMOTION_JSON_TASK runOnChange:true splitStatements:false OBJECT_TYPE:TASK
+use database <<EDM_DB_NAME_OUT>>;
+use schema <<EDM_DB_NAME_OUT>>.DW_DCAT;
+
+CREATE OR REPLACE TASK EPE_PROMOTION_JSON_TASK
+WAREHOUSE='EDM_ADMIN_WH'
+SCHEDULE='1 minute'
+WHEN SYSTEM$STREAM_HAS_DATA('EPE_OFFER_O_STREAM')
+AS CALL sp_json_epe_promotion();
+
+ALTER TASK EPE_PROMOTION_JSON_TASK RESUME;

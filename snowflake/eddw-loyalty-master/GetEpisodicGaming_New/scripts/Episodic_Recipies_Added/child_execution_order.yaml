@@ -1,0 +1,13 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetEpisodicGaming/scripts/Episodic_Recipies_Added/ddl/BIM_EPISODIC_RECIPIES_ADDED.sql
+    - GetEpisodicGaming/scripts/Episodic_Recipies_Added/ddl/EPISODIC_RECIPIES_ADDED_FLAT.sql
+    - GetEpisodicGaming/scripts/Episodic_Recipies_Added/ddl/VIEW_EPISODIC_RECIPIES_ADDED.sql
+    - GetEpisodicGaming/scripts/Episodic_Recipies_Added/appl/EPISODIC_RECIPIES_ADDED_FLAT_RERUN.sql
+    - GetEpisodicGaming/scripts/Episodic_Recipies_Added/appl/PIPE_EPISODIC_RECIPIES_ADDED.sql
+    - GetEpisodicGaming/scripts/Episodic_Recipies_Added/appl/SP_GETEPISODIC_TO_BIM_LOAD_EPISODIC_RECIPIES_ADDED.sql
+    - GetEpisodicGaming/scripts/Episodic_Recipies_Added/appl/SP_GETEPISODIC_TO_BIM_LOAD_EPISODIC_RECIPIES_ADDED_TASK.sql

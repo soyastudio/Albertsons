@@ -1,0 +1,7 @@
+{
+    "ENV" : "QA", 
+    "ENV1" : "QA",  
+    "EDM_VIEW_NAME" : "EDM_VIEWS_QA",
+    "EDM_DB_NAME": "EDM_CONFIRMED_QA" ,
+    "EDM_DB_NAME_R": "EDM_REFINED_QA"
+}

@@ -1,0 +1,115 @@
+CREATE OR replace view EDM_VIEWS_PRD.DW_VIEWS.grocery_order_savings_wysiwyg COPY GRANTS AS
+
+  WITH ord_select AS 
+(
+  SELECT
+    * 
+  FROM
+    edm_refined_prd.dw_r_ecommerce.getgroceryorder_flat 
+  WHERE
+    fulfillingfacility_retailstoreid in  (select distinct store_id from edm_confirmed_prd.dw_c_stage.grocery_order_facilitylist_wysiwyg)
+    AND to_date(dw_createts) >= current_date - 11 
+    AND orderstatus_statustypecd = 'CREATED' 
+)
+,
+sav_amt AS 
+(
+select a.orderid,
+a.BASEPRODUCTNBR,
+a.ITEMDESCRIPTION,
+a.GROCERYORDERDETAIL_SAVINGSCATEGORYID,
+a.GROCERYORDERDETAIL_SAVINGSCATEGORYNM,
+a.GROCERYORDERDETAIL_SAVINGSAMT
+FROM
+(select *
+from edm_confirmed_prd.dw_c_ecommerce.grocery_order_savings_created_wysiwyg) a
+join
+(select orderid, max(GROCERYORDERHEADER_VERSIONNBR) as versionnbr
+from edm_confirmed_prd.dw_c_ecommerce.grocery_order_savings_created_wysiwyg 
+group by orderid) b
+on a.orderid = b.orderid
+and a.GROCERYORDERHEADER_VERSIONNBR = b.VERSIONNBR  
+)
+,
+total_sav_amt AS 
+(
+  SELECT
+    * 
+  FROM
+    (
+      SELECT
+        ord_ver.*,
+        ROW_NUMBER() OVER (PARTITION BY orderid, itemdescription, baseproductnbr,         --GROCERYORDERDETAIL_SAVINGSCATEGORYNM,
+        groceryorderdetail_totalcustomersavingsamt        --GROCERYORDERDETAIL_SAVINGSAMT
+      ORDER BY
+        creationdt DESC ) AS rn 
+      FROM
+        (
+          SELECT
+            ord.*,
+            RANK() OVER (PARTITION BY orderid, orderstatus_statustypecd 
+          ORDER BY
+            groceryorderheader_versionnbr DESC ) AS rnk 
+          FROM
+            ord_select ord 
+        )
+        ord_ver 
+      WHERE
+        rnk = 1 
+    )
+  WHERE
+    rn = 1 
+    AND groceryorderdetail_totalcustomersavingsamt IS NOT NULL 
+)
+SELECT DISTINCT
+  orderid,
+  itemdescription,
+  baseproductnbr,
+  'Club Card Savings' AS savingscategorynm,
+  groceryorderdetail_totalcustomersavingsamt AS groceryorderdetail_savingsamt 
+FROM
+  total_sav_amt 
+WHERE
+  groceryorderdetail_totalcustomersavingsamt IS NOT NULL 
+UNION ALL
+SELECT 
+  a.orderid,
+  itemdescription,
+  baseproductnbr,
+  CASE
+    WHEN
+      groceryorderdetail_savingscategorynm = '001-Club Card Savings' 
+      OR groceryorderdetail_savingscategorynm = '002-Store Coupon (paper)' 
+      OR groceryorderdetail_savingscategorynm = 'Alaska Airmiles Reporting' 
+      OR groceryorderdetail_savingscategorynm = '011-Non Discount Offers' 
+      OR groceryorderdetail_savingscategorynm = '018-Fuel' 
+      OR groceryorderdetail_savingscategoryid IN 
+      (
+        18,
+        67
+      )
+    THEN
+      'Club Card Savings' 
+    WHEN
+      groceryorderdetail_savingscategorynm = 'Grocery Rewards' 
+    THEN
+      'Rewards Savings' 
+    WHEN
+      groceryorderdetail_savingscategorynm = '006-Employee Savings' 
+    THEN
+      'Employee Savings' 
+    WHEN
+      groceryorderdetail_savingscategorynm = '003-J4U Store eCoupons (elec)' 
+      OR groceryorderdetail_savingscategorynm = '010-Basket Savings' 
+      OR groceryorderdetail_savingscategorynm = '009-Department Savings' 
+      OR groceryorderdetail_savingscategorynm = '004-J4U Personalized Savings' 
+      OR groceryorderdetail_savingscategorynm = '007-J4U Manufacturer Coupons' 
+      OR groceryorderdetail_savingscategorynm = '015 - Hot Offers' 
+    THEN
+      'J4U Savings' 
+  END
+  AS savingscategorynm , groceryorderdetail_savingsamt 
+FROM
+  sav_amt a
+  inner join (select distinct orderid from ord_select) b
+  on a.orderid=b.orderid

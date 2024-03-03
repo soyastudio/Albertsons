@@ -1,0 +1,16 @@
+{
+    "env" : "PRD",
+    "user": "APPL_EDM_MONITOR",
+    "account": "abs_itds_prd.west-us-2.azure",
+    "warehouse": "PROD_MONITOR_WH",
+    "role": "ROLE_APPL_EDM_MONITOR",
+    "database":"EDM_CONFIRMED_PRD",
+    "schema":"DW_C_PRODUCT",
+    "SP": ["SP_GetOfferOMS_To_Analytical_LOAD_Fact_Offer_Reports"],
+    "pipe": [""],
+    "stage": [""],
+    "stream": ["OfferOMS_Flat_Analytical_R_Stream"],
+    "table": ["Fact_Offer_Reports","Fact_Offer_Reports_WRK"],
+    "task": ["OfferOMS_Flat_Analytical_R_Task"],
+    "view": ["OFFER_REPORTS"]
+}

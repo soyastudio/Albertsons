@@ -1,0 +1,254 @@
+--liquibase formatted sql
+--changeset SYSTEM:SP_FRESHPASS_SUBSCRIPTION_HOUSEHOLD_LIFESAVINGS_TO_BIM_LOAD runOnChange:true splitStatements:false OBJECT_TYPE:SP
+
+Use database EDM_CONFIRMED_<<ENV>>;
+Use schema DW_APPL;
+
+CREATE OR REPLACE PROCEDURE "SP_FRESHPASS_SUBSCRIPTION_HOUSEHOLD_LIFESAVINGS_TO_BIM_LOAD"("SRC_WRK_TBL" VARCHAR(16777216), "CNF_DB" VARCHAR(16777216), "C_LOYAL" VARCHAR(16777216), "C_STAGE" VARCHAR(16777216))
+RETURNS VARCHAR(16777216)
+LANGUAGE JAVASCRIPT
+EXECUTE AS OWNER
+AS
+$$
+
+// ************** Load for FRESHPASS_SUBSCRIPTION_HOUSEHOLD_LIFESAVINGS table BEGIN *****************
+	var src_wrk_tbl = SRC_WRK_TBL;
+	var temp_wrk_tbl = `${CNF_DB}.${C_STAGE}.FRESHPASS_SUBSCRIPTION_HOUSEHOLD_LIFESAVINGS_TMP_WRK`;
+	var cnf_schema = C_LOYAL;
+	var tgt_wrk_tbl = `${CNF_DB}.${C_STAGE}.FRESHPASS_SUBSCRIPTION_HOUSEHOLD_LIFESAVINGS_WRK`;
+	var tgt_tbl = `${CNF_DB}.${cnf_schema}.FRESHPASS_SUBSCRIPTION_HOUSEHOLD_LIFE_SAVINGS`;
+	var src_rerun_tbl = `${CNF_DB}.${C_STAGE}.FRESHPASS_SUBSCRIPTION_HOUSEHOLD_LIFESAVINGS_FLAT_RERUN`;
+
+//query to empty the rerun queue table
+	var sql_empty_rerun_tbl = `TRUNCATE TABLE ${src_rerun_tbl}`;
+
+//query to load rerun queue table when encountered a failure
+	var sql_ins_rerun_tbl = `INSERT INTO ${src_rerun_tbl} SELECT * FROM ${temp_wrk_tbl}`;
+
+//***************** Truncate the temp work table ********************
+	var truncate_temp_wrk_table = `Truncate Table ${temp_wrk_tbl}`;
+	try {
+		snowflake.execute ({ sqlText: truncate_temp_wrk_table });
+	}
+	catch (err) {
+		return `Truncation of work table ${temp_wrk_tbl} Failed with error: ${err}`;   // Return a error message.
+	}
+
+// persist stream data in work table for the current transaction, includes data from previous failed run
+	var sql_crt_src_wrk_tbl = `INSERT INTO `+ temp_wrk_tbl +` 
+	SELECT * FROM `+ src_wrk_tbl +`
+	UNION ALL
+	SELECT * FROM `+ src_rerun_tbl +``;
+	try {
+		snowflake.execute ({sqlText: sql_crt_src_wrk_tbl });
+	}
+	catch (err) {
+		throw "Inserting of Source Work table "+ temp_wrk_tbl +" Failed with error: " + err; // Return a error message.
+	}
+	
+// ************************************ Truncate and Reload the work table ****************************************
+	var truncate_tgt_wrk_table = `Truncate Table ${tgt_wrk_tbl}`;
+	try {
+		snowflake.execute ({ sqlText: truncate_tgt_wrk_table });
+	}
+	catch (err) {
+		return `Deletion of work table ${tgt_wrk_tbl} Failed with error: ${err}`;   // Return a error message.
+	}
+	
+	
+// *********************** Load for Meal_Plan_Recipe table BEGIN *****************
+// identify  if the columns have changed between Target table and changed dataset and create a work table specific to the BIM table. 
+	var create_tgt_wrk_table = `INSERT INTO ${tgt_wrk_tbl}
+								SELECT DISTINCT 
+								src.Household_Id,
+								src.Delivery_Savings_Amt,
+								src.Perk_Savings_Amt,
+								src.Total_Savings_Amt,
+								src.Plan_Clebrated_Savings_Amt,
+								src.Plan_Celebrated_Ts,
+								src.Delivery_Order_Cnt,
+								src.Dug_Order_Cnt,
+								src.Instore_Order_Cnt,
+								src.Rewards_Earned_Qty,
+								src.Reward_Points_Qty,
+								src.Create_Ts,
+								src.Create_User_Id,
+								src.Update_Ts,
+								src.Update_User_Id,
+								src.FILENAME,
+								src.DW_CREATETS,
+								case when tgt.Household_Id is null then 'I' else 'U' end as DML_TYPE,
+								case when tgt.DW_FIRST_EFFECTIVE_DT = CURRENT_DATE then '1' else '0' end as SAMEDAY_CHNG_IND
+								FROM(
+									SELECT
+									Household_Id,
+								    Delivery_Savings_Amt,
+								    Perk_Savings_Amt,
+								    Total_Savings_Amt,
+								    Plan_Clebrated_Savings_Amt,
+								    Plan_Celebrated_Ts,
+								    Delivery_Order_Cnt,
+								    Dug_Order_Cnt,
+								    Instore_Order_Cnt,
+								    Rewards_Earned_Qty,
+								    Reward_Points_Qty,
+								    Create_Ts,
+								    Create_User_Id,
+								    Update_Ts,
+								    Update_User_Id,
+									FILENAME,
+									DW_CREATETS
+									FROM(
+										SELECT 
+										Household_Id,
+								        Delivery_Savings_Amt,
+								        Perk_Savings_Amt,
+								        Total_Savings_Amt,
+								        Plan_Clebrated_Savings_Amt,
+								        Plan_Celebrated_Ts,
+								        Delivery_Order_Cnt,
+								        Dug_Order_Cnt,
+								        Instore_Order_Cnt,
+								        Rewards_Earned_Qty,
+									Reward_Points_Qty,
+								        Create_Ts,
+								        Create_User_Id,
+								        Update_Ts,
+								        Update_User_Id,
+										FILENAME,
+										DW_CREATETS,
+										Row_number() OVER (
+										PARTITION BY Household_Id
+										order by DW_CREATETS,Create_Ts,Update_Ts DESC) as rn
+										FROM(
+											SELECT
+											TO_NUMBER(HOUSEHOLDID) AS Household_Id,
+											TO_NUMBER(DELIVERYSAVINGS,8,2) AS Delivery_Savings_Amt,
+											TO_NUMBER(PERKSSAVINGS,8,2) AS Perk_Savings_Amt,
+											TO_NUMBER(TOTALSAVINGS,8,2) AS Total_Savings_Amt,
+											TO_NUMBER(PLANCELEBRATEDSAVINGS,8,2) AS Plan_Clebrated_Savings_Amt,
+											TO_TIMESTAMP_NTZ(PLANCELEBRATEDDATE) AS Plan_Celebrated_Ts,
+											TO_NUMBER(DELIVERYORDERCOUNT) AS Delivery_Order_Cnt,
+											TO_NUMBER(DUGORDERCOUNT) AS Dug_Order_Cnt,
+											TO_NUMBER(INSTOREORDERCOUNT) AS Instore_Order_Cnt,
+											TO_NUMBER(REWARDSEARNED) AS Rewards_Earned_Qty,
+											TO_NUMBER(REWARDPOINTS) AS Reward_Points_Qty,
+											TO_TIMESTAMP_NTZ(CREATEDON) AS Create_Ts,
+											CREATEDBY AS Create_User_Id,
+											TO_TIMESTAMP_NTZ(MODIFIEDON) AS Update_Ts,
+											MODIFIEDBY AS Update_User_Id,
+											FILENAME,
+											DW_CREATETS
+											FROM 
+											${temp_wrk_tbl}  TWT
+											)
+										)where rn=1
+									)src
+                                    left outer join ${tgt_tbl} TGT on 
+                                    tgt.Household_Id = src.Household_Id 
+                                    and tgt.DW_CURRENT_VERSION_IND=True`;
+	try {
+    //return create_tgt_wrk_table
+	snowflake.execute ({ sqlText: create_tgt_wrk_table });
+	}
+	catch (err) {
+	snowflake.execute ({ sqlText: sql_ins_rerun_tbl});
+	return `Inserting of work table ${tgt_wrk_tbl} Failed with error: ${err}`;   // Return a error message.
+	}
+	
+
+// Transaction for Updates, Insert begins     
+    var sql_begin = "BEGIN"
+                                               
+	var sql_Delete_Check = `UPDATE ${tgt_tbl} as tgt
+							SET 
+							DW_Last_Effective_dt = CURRENT_DATE - 1,
+							DW_CURRENT_VERSION_IND = FALSE,
+							DW_LAST_UPDATE_TS = CURRENT_TIMESTAMP,
+							DW_LOGICAL_DELETE_IND = TRUE 
+							from( 
+								SELECT 
+								Household_Id
+								from  ${tgt_wrk_tbl} as b 
+								where DML_TYPE = 'U' 
+							) src
+							where tgt.Household_Id = src.Household_Id
+							and tgt.DW_CURRENT_VERSION_IND = True`;
+				  
+					  
+		
+	// Processing Inserts
+	var sql_inserts = `INSERT INTO ${tgt_tbl} 
+						(
+						HOUSEHOLD_ID,
+						DW_FIRST_EFFECTIVE_DT,
+						DW_LAST_EFFECTIVE_DT,
+						DELIVERY_SAVINGS_AMT,
+						PERK_SAVINGS_AMT,
+						TOTAL_SAVINGS_AMT,
+						PLAN_CLEBRATED_SAVINGS_AMT,
+						PLAN_CELEBRATED_TS,
+						DELIVERY_ORDER_CNT,
+						DUG_ORDER_CNT,
+						INSTORE_ORDER_CNT,
+						REWARDS_EARNED_QTY,
+						REWARD_POINTS_QTY,
+						CREATE_TS,
+						CREATE_USER_ID,
+						UPDATE_TS,
+						UPDATE_USER_ID,
+						DW_CREATE_TS,
+						DW_LAST_UPDATE_TS,
+						DW_LOGICAL_DELETE_IND,
+						DW_SOURCE_CREATE_NM,
+						DW_SOURCE_UPDATE_NM,
+						DW_CURRENT_VERSION_IND 
+						)
+						SELECT 
+						HOUSEHOLD_ID,
+						CURRENT_DATE,        
+						'31-DEC-9999',
+						DELIVERY_SAVINGS_AMT,
+						PERK_SAVINGS_AMT,
+						TOTAL_SAVINGS_AMT,
+						PLAN_CLEBRATED_SAVINGS_AMT,
+						PLAN_CELEBRATED_TS,
+						DELIVERY_ORDER_CNT,
+						DUG_ORDER_CNT,
+						INSTORE_ORDER_CNT,
+						REWARDS_EARNED_QTY,
+						REWARD_POINTS_QTY,
+						CREATE_TS,
+						CREATE_USER_ID,
+						UPDATE_TS,
+						UPDATE_USER_ID,
+						CURRENT_TIMESTAMP,
+						CURRENT_TIMESTAMP,
+						FALSE,
+						FILENAME,         
+						NULL,
+						TRUE
+						FROM ${tgt_wrk_tbl}
+						WHERE
+						DML_TYPE in ('I','U')`;
+    
+	var sql_commit = "COMMIT";
+	var sql_rollback = "ROLLBACK";
+    
+	try {
+        snowflake.execute ({ sqlText: sql_begin });
+		snowflake.execute ({ sqlText: sql_empty_rerun_tbl });
+		snowflake.execute ({ sqlText: sql_Delete_Check });
+        //snowflake.execute ({ sqlText: sql_delete });
+        snowflake.execute ({ sqlText: sql_inserts });
+        snowflake.execute ({ sqlText: sql_commit });
+		} 
+	catch (err) {
+				snowflake.execute ({ sqlText: sql_rollback });
+				snowflake.execute ({ sqlText: sql_ins_rerun_tbl});
+				return `Loading of table ${tgt_tbl} Failed with error: ${err}` ;   // Return a error message.
+				}	
+                               
+// ************** Load for FRESHPASS_SUBSCRIPTION_HOUSEHOLD_LIFESAVINGS table END *****************
+				
+$$;

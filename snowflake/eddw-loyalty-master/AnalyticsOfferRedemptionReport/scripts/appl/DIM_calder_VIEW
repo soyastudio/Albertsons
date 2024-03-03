@@ -1,0 +1,9 @@
+USE DATABASE EDM_VIEWS_PRD;
+USE SCHEMA DW_VIEWS;
+
+
+create or replace view DIM_CALENDAR(
+CALENDAR_DT comment 'date of the year'
+) as
+select distinct calendar_dt
+from EDM_CONFIRMED_PRD.DW_C_MASTERDATA.CALENDAR;

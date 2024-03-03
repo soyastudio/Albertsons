@@ -1,0 +1,7 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetRedemptionToNeptune/scripts/ddl/table_COUPON_SRV_RESPONSE.sql

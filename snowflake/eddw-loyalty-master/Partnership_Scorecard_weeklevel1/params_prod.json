@@ -1,0 +1,9 @@
+{
+    "ENV":"PRD",
+    "EDM_DB_NAME" : "EDM_ANALYTICS_PRD",
+    "EDM_DB_NAME_C" : "EDM_CONFIRMED_PRD",
+    "EDM_DB_NAME_R" : "EDM_REFINED_PRD",
+    "EDM_VIEW_NAME" : "EDM_VIEWS_PRD",
+    "WH" : "EDM_ADMIN_WH",
+    "BIZ" : "EDM_BIZOPS_PRD"
+}

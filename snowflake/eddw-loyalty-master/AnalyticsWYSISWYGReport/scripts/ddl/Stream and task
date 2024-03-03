@@ -1,0 +1,23 @@
+// Step 1: Create new stream on table EDM_REFINED_PRD.DW_R_ECOMMERCE.ESED_GROCERYORDER
+
+use database edm_refined_prd;
+use schema dw_appl;
+
+CREATE or REPLACE STREAM esed_groceryorder_wysiwyg_r_stream on table EDM_REFINED_PRD.DW_R_ECOMMERCE.ESED_GROCERYORDER;
+
+// Step 2 : Create SP to read data from Stream to a table and then Insert into edm_confirmed_prd.dw_c_ecommerce.grocery_order_savings_created_WYSIWYG
+
+use database edm_confirmed_prd;
+use schema dw_appl;
+
+CREATE OR REPLACE TASK SP_GroceryOrder_To_wysiwyg_Savings_Load
+WAREHOUSE = 'EDM_ADMIN_WH'
+SCHEDULE = '1 minutes'
+WHEN
+  SYSTEM$STREAM_HAS_DATA('EDM_REFINED_PRD.DW_APPL.esed_groceryorder_wysiwyg_r_stream')
+AS 
+CALL SP_GroceryOrder_To_wysiwyg_Savings_Load();
+
+use database edm_confirmed_prd;
+use schema dw_appl;
+ALTER TASK SP_GroceryOrder_To_wysiwyg_Savings_Load resume;

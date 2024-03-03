@@ -1,0 +1,11 @@
+{
+    "ENV":"PRD",
+    "EDM_DB_NAME" : "EDM_CONFIRMED_PRD",
+    "EDM_DB_NAME_OUT" : "EDM_CONFIRMED_OUT_PRD",
+    "EDM_DB_NAME_R" : "EDM_REFINED_PRD",
+    "EDM_DB_NAME_VIEW" : "EDM_VIEWS_PRD",
+    "PIPE_INTEGRATION" : "EDDW_PRD_SNOWPIPEINTEGRATION",
+    "STORAGE_INTEGRATION" : "STORAGE_ABSITDSPRODWUSSEDDW001",
+    "STAGE_URL" : "\"azure://absitdsprodwusseddw001.blob.core.windows.net/itds-prod-direct-feeds\"",
+    "ENVFULL" : "PROD"
+}

@@ -1,0 +1,45 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetAdobeClick/scripts/appl/SP_CLICK_STREAM_BOT_LOGIC_PRC.sql
+    - GetAdobeClick/scripts/appl/SP_CREATE_TASKS_LOOKUP_TABLES.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_CLICK_STREAM_LOG.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_CLICK_STREAM_SOURCE_STREAM_DDL.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_LOAD_CLICK_STREAM_CONTROL_TABLE.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_BROWSER.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_CLICK_EVENT.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_CONNECTION_TYPE.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_COUNTRY.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_LANGUAGE.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_LOYALTY.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_METRICS.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_OPERATING_SYSTEM.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_OTHER.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_PLUGIN.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_REFERRER_TYPE.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_RESOLUTION.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_SEARCH_ENGINE.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_SHOP.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_UNASSIGNED.sql
+    - GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_LOAD_CLICK_STREAM_HISTORY.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_BROWSER_C_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_CLICK_EVENT_C_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_CONNECTION_TYPE_C_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_CONTROL_TABLE_DAILY_LOAD_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_COUNTRY_C_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_HISTORICAL_LOAD_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_LANGUAGE_C_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_LOYALTY_LOAD_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_METRICS_LOAD_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_OPERATING_SYSTEM_C_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_OTHER_LOAD_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_PLUGIN_C_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_REFERRER_TYPE_C_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_RESOLUTION_C_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_SEARCH_ENGINE_C_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_SHOP_LOAD_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_CLICK_STREAM_UNASSIGNED_LOAD_TASK.sql
+    - GetAdobeClick/scripts/appl/Task_SP_CLICK_STREAM_BOT_LOGIC_TASK.sql

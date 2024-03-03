@@ -1,0 +1,16 @@
+{
+    "env" : "PRD",
+    "user": "APPL_EDM_MONITOR",
+    "account": "abs_itds_prd.west-us-2.azure",
+    "warehouse": "PROD_MONITOR_WH",
+    "role": "ROLE_APPL_EDM_MONITOR",
+    "database":"EDM_CONFIRMED_PRD",
+    "schema":"DW_C_PRODUCT",
+    "SP": ["SP_PRODUCTGROUP_TO_FLAT_LOAD_RERUN"],
+    "pipe": [""],
+    "stage": [""],
+    "stream": ["ESED_PRODUCTGROUP_R_STREAM","PRODUCTGROUP_FLAT_R_STREAM"],
+    "table": ["PRODUCTGROUP_FLAT"],
+    "task": [""],
+    "view": [""]
+}

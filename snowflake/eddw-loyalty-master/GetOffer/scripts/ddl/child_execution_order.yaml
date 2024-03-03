@@ -1,0 +1,11 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetOffer/scripts/ddl/table_EPE_OFFER.sql
+    - GetOffer/scripts/ddl/table_EPE_OFFER_EXCEPTIONS.sql
+    - GetOffer/scripts/ddl/table_EPE_OFFER_JSON.sql
+    - GetOffer/scripts/ddl/table_EPE_OFFER_JSON_AUDIT.sql
+    - GetOffer/scripts/ddl/table_GetOffer_Flat.sql

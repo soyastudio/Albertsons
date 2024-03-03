@@ -1,0 +1,13 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetEpisodicGaming/scripts/Episodic_Loyalty_Reward/ddl/BIM_EPISODIC_LOYALTY_REWARD.sql
+    - GetEpisodicGaming/scripts/Episodic_Loyalty_Reward/ddl/EPISODIC_LOYALTY_REWARD_FLAT.sql
+    - GetEpisodicGaming/scripts/Episodic_Loyalty_Reward/ddl/VIEW_EPISODIC_LOYALTY_REWARD.sql
+    - GetEpisodicGaming/scripts/Episodic_Loyalty_Reward/appl/EPISODIC_LOYALTY_REWARD_FLAT_RERUN.sql
+    - GetEpisodicGaming/scripts/Episodic_Loyalty_Reward/appl/PIPE_EPISODIC_LOYALTY_REWARD.sql
+    - GetEpisodicGaming/scripts/Episodic_Loyalty_Reward/appl/SP_GETEPISODIC_TO_BIM_LOAD_EPISODIC_LOYALTY_REWARD.sql
+    - GetEpisodicGaming/scripts/Episodic_Loyalty_Reward/appl/SP_GETEPISODIC_TO_BIM_LOAD_EPISODIC_LOYALTY_REWARD_TASK.sql

@@ -1,0 +1,17 @@
+Use database EDM_CONFIRMED_PRD;
+Use schema DW_APPL;
+
+// Create Stream on Flat table
+	CREATE OR REPLACE STREAM OfferOMS_Flat_Analytical_R_Stream ON TABLE EDM_CONFIRMED_PRD.DW_C_PRODUCT.OfferOMS_FLAT;
+
+//Task
+	CREATE OR REPLACE TASK OfferOMS_Flat_Analytical_R_Task
+	WAREHOUSE = 'EDM_ADMIN_WH'
+	SCHEDULE = '1 minutes'
+	WHEN
+	  SYSTEM$STREAM_HAS_DATA('EDM_CONFIRMED_PRD.DW_APPL.OfferOMS_Flat_Analytical_R_Stream')
+	AS 
+	call EDM_CONFIRMED_PRD.DW_APPL.SP_GetOfferOMS_To_Analytical_LOAD_Fact_Offer_Reports();
+	
+	//Task Resume
+	ALTER task OfferOMS_Flat_Analytical_R_Task resume ;

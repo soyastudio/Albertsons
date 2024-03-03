@@ -1,0 +1,77 @@
+--liquibase formatted sql
+--changeset SYSTEM:Create_TRANSIENT_Table_For_Foodstorm runOnChange:true splitStatements:false OBJECT_TYPE:TABLE
+USE DATABASE <<EDM_DB_NAME>>;
+USE SCHEMA <<EDM_DB_NAME>>.DW_C_STAGE;
+
+create or replace TRANSIENT TABLE GETFoodstorm_FLAT_Wrk (
+	TYPE VARCHAR(16777216),
+	STORE VARCHAR(16777216),
+	ORDERNO VARCHAR(16777216),
+	DELIVERYDATE VARCHAR(16777216),
+	UPC VARCHAR(16777216),
+	ITEM VARCHAR(16777216),
+	DEPARTMENT VARCHAR(16777216),
+	PRICE VARCHAR(16777216),
+	QTY VARCHAR(16777216),
+	ITEMTOTAL VARCHAR(16777216),
+	TAXCODE VARCHAR(16777216),
+	TAXRATE VARCHAR(16777216),
+	DELIVERYZIP VARCHAR(16777216),
+	TOTAL VARCHAR(16777216),
+	TOTALTAX VARCHAR(16777216),
+	PAYMENTTOTAL VARCHAR(16777216),
+	BALANCE VARCHAR(16777216),
+	TAXEXEMPT VARCHAR(16777216),
+	TAXEXEMPTID VARCHAR(16777216),
+	HOUSEACCOUNT VARCHAR(16777216),
+	CUSTOMERGUID VARCHAR(16777216),
+	PHONE_NUMBER VARCHAR(16777216),
+	DW_CREATETS TIMESTAMP_LTZ(9),
+	FILE_NAME VARCHAR(16777216),
+	METADATA$ACTION VARCHAR(10),
+	METADATA$ISUPDATE BOOLEAN,
+	METADATA$ROW_ID VARCHAR(40)
+);
+
+CREATE OR REPLACE transient TABLE Foodstorm_Order_Item_WRK
+(
+ Order_Id              VARCHAR(16777216) ,
+ Upc_Id                VARCHAR(16777216) ,
+ Item_Nm               VARCHAR(16777216) ,
+ Department_Nm         VARCHAR(16777216) ,
+ Item_Price_Amt        VARCHAR(16777216) ,
+ Item_Qty              VARCHAR(16777216) ,
+ Item_Total_Amt        VARCHAR(16777216) ,
+ Tax_Cd                VARCHAR(16777216) ,
+ Tax_Rate_Pct          VARCHAR(16777216) ,
+ Filename              VARCHAR(16777216) ,
+ DW_LOGICAL_DELETE_IND      BOOLEAN ,
+ DML_TYPE                   VARCHAR(1),
+ Sameday_chg_ind            NUMBER(1,0)
+);
+
+CREATE OR REPLACE TRANSIENT TABLE Foodstorm_Order_Wrk
+(
+ Order_Id              NUMBER  ,
+ Facility_Integration_Id  NUMBER  ,
+ Store_Id              VARCHAR  ,
+ Partner_Id            NUMBER  ,
+ Partner_Nm            VARCHAR  ,
+ Order_Type_Cd         VARCHAR  ,
+ Delivery_Dt           DATE  ,
+ Delivery_Zip_Cd       VARCHAR  ,
+ Total_Amt             NUMBER(8,2)  ,
+ Tax_Amt               NUMBER(8,2)  ,
+ Payment_Amt           NUMBER(8,2)  ,
+ Balance_Due_Amt       NUMBER(8,2)  ,
+ Tax_Exempt_Id         VARCHAR  ,
+ Tax_Exempt_Ind        BOOLEAN  ,
+ House_Account_Ind     BOOLEAN  ,
+ Source_Customer_Id    VARCHAR  ,
+ Customer_Loyalty_Phone_Nbr  VARCHAR  ,
+ Dw_Logical_Delete_Ind  BOOLEAN  ,
+ FILENAME VARCHAR(16777216),
+ DML_TYPE VARCHAR(1),
+ SAMEDAY_CHG_IND NUMBER(1,0)
+
+);

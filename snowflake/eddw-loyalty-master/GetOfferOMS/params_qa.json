@@ -1,0 +1,14 @@
+{
+    "ENV" : "QA",      
+    "EDM_VIEW_NAME" : "EDM_VIEWS_QA",
+    "EDM_DB_NAME_OUT": "EDM_CONFIRMED_OUT_QA" ,
+    "EDM_DB_NAME": "EDM_CONFIRMED_QA" ,
+    "EDM_ANALYTICS": "EDM_ANALYTICS_QA" ,
+    "EDM_DB_NAME_R": "EDM_REFINED_QA",
+    "WH": "QA_ADMIN_WH",
+    "STORAGE_ACC1": "STORAGE_ABSITDSQAWUSSEDDW001",
+    "KAFKA_TOPICS":"itds-qa-kafka-topics",
+    "URL1":"azure://absitdsqawusseddw001.blob.core.windows.net/itds-qa-direct-feeds/replenium_inbound/",   
+    "INTEGRATION":"EDDW_SNOWPIPEINTEGRATION",
+	  "ENV_PRODBLOB":"QABLOB"
+}

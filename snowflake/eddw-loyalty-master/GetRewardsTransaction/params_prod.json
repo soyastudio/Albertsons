@@ -1,0 +1,8 @@
+{
+    "ENV":"PRD",
+    "ENV1" : "PROD",
+
+    "EDM_DB_NAME" : "EDM_CONFIRMED_PRD",
+    "EDM_DB_NAME_R" : "EDM_REFINED_PRD",
+    "EDM_VIEW_NAME" : "EDM_VIEWS_PRD"
+   }

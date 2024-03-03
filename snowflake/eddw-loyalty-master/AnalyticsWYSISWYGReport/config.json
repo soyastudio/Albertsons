@@ -1,0 +1,16 @@
+{
+    "env" : "PRD",
+    "user": "APPL_EDM_MONITOR",
+    "account": "abs_itds_prd.west-us-2.azure",
+    "warehouse": "PROD_MONITOR_WH",
+    "role": "ROLE_APPL_EDM_MONITOR",
+    "database":"EDM_CONFIRMED_PRD",
+    "schema":"DW_C_PRODUCT",
+    "SP": ["SP_GroceryOrder_To_wysiwyg_Savings_Load"],
+    "pipe": [""],
+    "stage": [""],
+    "stream": ["esed_groceryorder_wysiwyg_r_stream"],
+    "table": ["grocery_order_savings_created_wysiwyg","grocery_order_facilitylist_wysiwyg"],
+    "task": ["SP_GroceryOrder_To_wysiwyg_Savings_Load"],
+    "view": ["grocery_order_completed_favunfav_wysiwyg_v2","grocery_order_completed_savings_categorized_wysiwyg","grocery_order_completed_wysiwyg_v2","grocery_order_created_wysiwyg","grocery_order_savings_wysiwyg"]
+}

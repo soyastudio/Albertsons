@@ -1,0 +1,18 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+  <include file="GetOffer/scripts/appl/SP_EPE_OFFER_COPY_ACTIVE_OFFERS_LOAD.sql"/>
+  <include file="GetOffer/scripts/appl/SP_EPE_OFFER_COPY_PAYLOAD.sql"/>
+  <include file="GetOffer/scripts/appl/SP_JSON_EPE_OFFER.sql"/>
+  <include file="GetOffer/scripts/appl/SP_JSON_EPE_PROMOTION.sql"/>
+  <include file="GetOffer/scripts/appl/SP_LOAD_EPE_PROMOTION.sql"/>
+  <include file="GetOffer/scripts/appl/Task_EPE_OFFER_COPY_PAYLOAD_TASK.sql"/>
+  <include file="GetOffer/scripts/appl/Task_EPE_OFFER_JSON_TASK.sql"/>
+  <include file="GetOffer/scripts/appl/Task_EPE_PROMOTION_JSON_TASK.sql"/>
+  <include file="GetOffer/scripts/appl/Task_ESED_Offer_Outbound_R_TASK.sql"/>
+  <include file="GetOffer/scripts/appl/sp_split_full_load_offer.sql"/>
+  <include file="GetOffer/scripts/appl/stream_EPE_OFFER_JSON_O_STREAM.sql"/>
+  <include file="GetOffer/scripts/appl/stream_EPE_OFFER_O_STREAM.sql"/>
+  <include file="GetOffer/scripts/appl/stream_ESED_Offer_Outbound_R_STREAM.sql"/>
+  <include file="GetOffer/scripts/appl/stream_GETOFFER_FLAT_O_STREAM.sql"/>
+</databaseChangeLog>

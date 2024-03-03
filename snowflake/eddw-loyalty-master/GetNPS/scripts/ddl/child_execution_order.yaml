@@ -1,0 +1,18 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetNPS/scripts/ddl/table_GETNPSSURVEY_FLAT.sql
+    - GetNPS/scripts/ddl/table_GETNPSUMASURVEY_FLAT.sql
+    - GetNPS/scripts/ddl/table_NET_PROMOTER_SCORE_SURVEY.sql
+    - GetNPS/scripts/ddl/table_NET_PROMOTER_SCORE_UMA_SURVEY.sql
+    - GetNPS/scripts/ddl/table_SURVEY_RESPONSE.sql
+    - GetNPS/scripts/ddl/table_SURVEY_SENTIMENT.sql
+    - GetNPS/scripts/ddl/table_SURVEY_SENTIMENT_EXCEPTIONS.sql
+    - GetNPS/scripts/ddl/view_NET_PROMOTER_SCORE_UMA_SURVEY.sql
+    - GetNPS/scripts/ddl/view_Net_Promoter_Score_Survey.sql
+    - GetNPS/scripts/ddl/view_SURVEY_SENTIMENT.sql
+    - GetNPS/scripts/ddl/view_Survey_Question.sql
+    - GetNPS/scripts/ddl/view_Survey_Response.sql

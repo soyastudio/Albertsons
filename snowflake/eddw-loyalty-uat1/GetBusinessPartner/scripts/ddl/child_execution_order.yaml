@@ -1,0 +1,41 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetBusinessPartner/scripts/ddl/table_BUSINESS_PARTNER_NOTE_EXCEPTIONS.sql
+    - GetBusinessPartner/scripts/ddl/table_BUSINESS_PARTNER_ORGANIZATION_EXCEPTIONS.sql
+    - GetBusinessPartner/scripts/ddl/table_BUSINESS_PARTNER_SERVICE_AREA_EXCEPTIONS.sql
+    - GetBusinessPartner/scripts/ddl/table_BUSINESS_PARTNER_SERVICE_AREA_LOCATION_EXCEPTIONS.sql
+    - GetBusinessPartner/scripts/ddl/table_BUSINESS_PARTNER_SERVICE_FEE_EXCEPTIONS.sql
+    - GetBusinessPartner/scripts/ddl/table_BUSINESS_PARTNER_SITE_ORGANIZATION_EXCEPTIONS.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner_Contact.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner_Contact_EXCEPTIONS.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner_Note.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner_Organization.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner_Profile.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner_Service_Area.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner_Service_Area_Location.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner_Service_Fee.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner_Service_Override.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner_Service_Override_Exceptions.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner_Site_Contact.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner_Site_Contact_EXCEPTIONS.sql
+    - GetBusinessPartner/scripts/ddl/table_Business_Partner_Site_Organization.sql
+    - GetBusinessPartner/scripts/ddl/table_ESED_BusinessPartner.sql
+    - GetBusinessPartner/scripts/ddl/table_ESED_BusinessPartner_Rerun.sql
+    - GetBusinessPartner/scripts/ddl/table_GetBusinessPartner_Flat.sql
+    - GetBusinessPartner/scripts/ddl/table_GetBusinessPartner_Flat_Rerun.sql
+    - GetBusinessPartner/scripts/ddl/view_Business_Partner.sql
+    - GetBusinessPartner/scripts/ddl/view_Business_Partner_Contact.sql
+    - GetBusinessPartner/scripts/ddl/view_Business_Partner_Note.sql
+    - GetBusinessPartner/scripts/ddl/view_Business_Partner_Organization.sql
+    - GetBusinessPartner/scripts/ddl/view_Business_Partner_Profile.sql
+    - GetBusinessPartner/scripts/ddl/view_Business_Partner_Service_Area.sql
+    - GetBusinessPartner/scripts/ddl/view_Business_Partner_Service_Area_Location.sql
+    - GetBusinessPartner/scripts/ddl/view_Business_Partner_Service_Fee.sql
+    - GetBusinessPartner/scripts/ddl/view_Business_Partner_Service_Override.sql
+    - GetBusinessPartner/scripts/ddl/view_Business_Partner_Site_Contact.sql
+    - GetBusinessPartner/scripts/ddl/view_Business_Partner_Site_Organization.sql

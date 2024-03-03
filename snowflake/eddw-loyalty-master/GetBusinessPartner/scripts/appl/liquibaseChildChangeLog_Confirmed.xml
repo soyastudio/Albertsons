@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+	<include file="GetBusinessPartner/scripts/appl/Pipe_EDDW_BUSINESSPARTNER_PIPE_PRDBLOB_INC.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_TO_BIM_LOAD_Business_Partner.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_TO_BIM_LOAD_Business_Partner_Profile.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_TO_BIM_LOAD_Business_Partner_Service_Area_Location.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_Business_Partner_Note.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_Business_Partner_Service_Fee.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_Business_Partner_Service_Override.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_LOAD_Business_Partner_Service_Area.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_load_Business_Partner_Contact.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_load_Business_Partner_Organization.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_load_Business_Partner_Site_Contact.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/SP_GetBusinessPartner_To_BIM_load_Business_Partner_Site_Organization.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/Task_SP_GetBusinessPartner_To_BIM_load_TASK.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/sp_GetBusinessPartner_To_BIM_load.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/stream_ESED_BusinessPartner_R_STREAM.sql"/>
+	<include file="GetBusinessPartner/scripts/appl/stream_GetBusinessPartner_Flat_R_STREAM.sql"/>
+</databaseChangeLog>

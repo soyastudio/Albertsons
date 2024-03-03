@@ -1,0 +1,71 @@
+USE DATABASE EDM_ANALYTICS_PRD;
+USE SCHEMA DW_RETAIL_EXP;
+
+CREATE OR REPLACE TABLE F_PARTNER_ORDER_TRANSACTION_BKP AS 
+SELECT RETAIL_CUSTOMER_D1_SK,
+	RETAIL_STORE_D1_SK,
+	BANNER_D1_SK,
+	DAY_ID,
+	DIVISION_D1_SK,
+	BUSINESS_PARTNER_D1_SK,
+	TRANSACTION_DT,
+	PARTNER_ORDER_USER_IDENTIFIER,
+	ORDER_ID,
+	LOYALTY_IND_CD,
+	GMV_ORDER_VALUE,
+	DW_LAST_UPDATE_TS,
+	DW_CREATE_TS
+ FROM F_PARTNER_ORDER_TRANSACTION;
+
+
+
+CREATE OR REPLACE TABLE F_PARTNER_ORDER_TRANSACTION (
+	PARTNER_ORDER_F_SK NUMBER(38,0) autoincrement COMMENT 'Unique identifier for each partner order transaction.',
+	RETAIL_CUSTOMER_D1_SK NUMBER(38,0) NOT NULL COMMENT 'Unique identifier for each customer',
+	RETAIL_STORE_D1_SK NUMBER(38,0) NOT NULL COMMENT 'Unique identifier for each store',
+	BANNER_D1_SK NUMBER(38,0) NOT NULL COMMENT 'Unique Banner Id of the store where actual transaction happened.',
+	DAY_ID NUMBER(8,0) NOT NULL COMMENT 'Unique day Id of the transaction date.',
+	DIVISION_D1_SK NUMBER(38,0) COMMENT 'Unique Division ID of the store where actual transaction happened.',
+	BUSINESS_PARTNER_D1_SK NUMBER(38,0) NOT NULL COMMENT 'Unique Delivery partner channel id through which order was placed. 1 for Instacart',
+	TRANSACTION_DT DATE NOT NULL COMMENT 'Date when a Partner transaction fulfilled at the Albertsons Store.',
+	PARTNER_ORDER_USER_IDENTIFIER VARCHAR(50) NOT NULL COMMENT 'Unique ID for customer at the partner channel who made the transaction at third party channel.',
+	ORDER_ID VARCHAR(50) NOT NULL COMMENT 'Unique ID for the order placed at partner channel',
+	LOYALTY_IND_CD VARCHAR(50) NOT NULL COMMENT 'Indicator to specify if the phone number entered at partner channel while placing the order exists in Albertsons Customer base or not',
+	GMV_ORDER_VALUE NUMBER(9,2) NOT NULL COMMENT 'Total order amount paid by the customer for the particular order to Partner. It is set to Gross Merch Value of the order',
+	DW_LAST_UPDATE_TS TIMESTAMP_LTZ(9) NOT NULL COMMENT 'Timestamp representing updation of record in the Table',
+	DW_CREATE_TS TIMESTAMP_LTZ(9) NOT NULL COMMENT 'Timestamp representing creation of record in the Table'
+)COMMENT='This table contains total amount spent by each customer on each order. This table contains transactions made at Partner channel only'
+;
+
+INSERT INTO F_PARTNER_ORDER_TRANSACTION
+(
+RETAIL_CUSTOMER_D1_SK,
+	RETAIL_STORE_D1_SK,
+	BANNER_D1_SK,
+	DAY_ID,
+	DIVISION_D1_SK,
+	BUSINESS_PARTNER_D1_SK,
+	TRANSACTION_DT,
+	PARTNER_ORDER_USER_IDENTIFIER,
+	ORDER_ID,
+	LOYALTY_IND_CD,
+	GMV_ORDER_VALUE,
+	DW_LAST_UPDATE_TS,
+	DW_CREATE_TS)
+	SELECT 
+	RETAIL_CUSTOMER_D1_SK,
+	RETAIL_STORE_D1_SK,
+	BANNER_D1_SK,
+	DAY_ID,
+	DIVISION_D1_SK,
+	BUSINESS_PARTNER_D1_SK,
+	TRANSACTION_DT,
+	PARTNER_ORDER_USER_IDENTIFIER,
+	ORDER_ID,
+	LOYALTY_IND_CD,
+	GMV_ORDER_VALUE,
+	DW_LAST_UPDATE_TS,
+	DW_CREATE_TS
+	FROM F_PARTNER_ORDER_TRANSACTION_BKP;
+    
+    DROP TABLE F_PARTNER_ORDER_TRANSACTION_BKP;

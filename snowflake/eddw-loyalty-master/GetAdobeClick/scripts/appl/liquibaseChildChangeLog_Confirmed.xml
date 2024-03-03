@@ -1,0 +1,43 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+	<include file="GetAdobeClick/scripts/appl/SP_CLICK_STREAM_BOT_LOGIC_PRC.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_CREATE_TASKS_LOOKUP_TABLES.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_CLICK_STREAM_LOG.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_CLICK_STREAM_SOURCE_STREAM_DDL.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_LOAD_CLICK_STREAM_CONTROL_TABLE.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_BROWSER.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_CLICK_EVENT.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_CONNECTION_TYPE.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_COUNTRY.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_LANGUAGE.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_LOYALTY.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_METRICS.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_OPERATING_SYSTEM.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_OTHER.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_PLUGIN.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_REFERRER_TYPE.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_RESOLUTION.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_SEARCH_ENGINE.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_SHOP.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_BIM_LOAD_CLICK_STREAM_UNASSIGNED.sql"/>
+	<include file="GetAdobeClick/scripts/appl/SP_GETADOBECLICKHITDATA_TO_LOAD_CLICK_STREAM_HISTORY.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_BROWSER_C_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_CLICK_EVENT_C_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_CONNECTION_TYPE_C_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_CONTROL_TABLE_DAILY_LOAD_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_COUNTRY_C_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_HISTORICAL_LOAD_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_LANGUAGE_C_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_LOYALTY_LOAD_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_METRICS_LOAD_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_OPERATING_SYSTEM_C_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_OTHER_LOAD_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_PLUGIN_C_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_REFERRER_TYPE_C_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_RESOLUTION_C_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_SEARCH_ENGINE_C_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_SHOP_LOAD_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_CLICK_STREAM_UNASSIGNED_LOAD_TASK.sql"/>
+	<include file="GetAdobeClick/scripts/appl/Task_SP_CLICK_STREAM_BOT_LOGIC_TASK.sql"/>
+</databaseChangeLog>

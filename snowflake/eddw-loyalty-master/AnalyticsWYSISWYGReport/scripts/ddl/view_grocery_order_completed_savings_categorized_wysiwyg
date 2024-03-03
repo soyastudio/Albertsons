@@ -1,0 +1,231 @@
+create or replace view EDM_VIEWS_PRD.DW_VIEWS.grocery_order_completed_savings_categorized_wysiwyg COPY GRANTS as
+WITH txn_hdr_driver AS (
+SELECT  h.txn_id
+,       h.txn_dte
+,       g.order_id
+,       h.txn_tm
+,       h.store_id
+,       h.card_nbr
+,       h.checker_nbr
+,       h.register_nbr
+,      h.net_amt
+  ,     h.TOTAL_MISC_AMT
+  ,     h.TOTAL_MFR_CPN_AMT
+FROM    EDM_VIEWS_PRD.DW_EDW_VIEWS.txn_hdr h
+inner join EDM_VIEWS_PRD.DW_EDW_VIEWS.gw_online_register_txn g
+on      g.TXN_DT = h.txn_dte
+and     g.txn_id  = h.txn_id
+AND     G.STORE_ID = H.STORE_ID
+WHERE   g.TXN_DT  >= current_date - 3
+ AND     G.STORE_ID  in (select distinct store_id from edm_confirmed_prd.dw_c_stage.grocery_order_facilitylist_wysiwyg)
+)
+
+,offers as 
+( 
+ select incentive_id, offer_category_id ,Offer_type
+
+from (
+select incentive_id, offer_category_id ,Offer_type
+from (
+select incentive_id
+, offer_category_id 
+,last_update_ts
+,case when offer_category_id = 42 then '007-J4U Manufacturer Coupons'
+                                when offer_category_id = 67 then '001-Club Card Savings'
+                                when offer_category_id = 68 then '002-Store Coupon (paper)' 
+                                when offer_category_id = 69 then '003-J4U Store eCoupons (elec)' 
+                                when offer_category_id = 70 then '004-J4U Personalized Savings' 
+                                when offer_category_id = 72 then '006-Employee Savings' 
+                                when offer_category_id = 74 then '008-Multiplied Coupon (mfr eCpns)' 
+                                when offer_category_id = 75 then '009-Department Savings' 
+                                when offer_category_id = 76 then '010-Basket Savings' 
+        when offer_category_id = 78 then '012-Customer Service Credit' 
+                                when offer_category_id = 89 then 'Grocery Rewards' 
+                                when offer_category_id = 80 then '015 - Hot Offers' else 'OTHER' end as Offer_type
+                                ,rank() over (partition by incentive_id
+        order by last_update_ts desc) rnk
+        from
+EDM_VIEWS_PRD.DW_EDW_VIEWS.lu_offer 
+  where offer_start_dt > current_date - 360
+  and offer_end_dt >= offer_start_dt
+  and  incentive_id <> 0
+group by 1,2,3,4
+) a where rnk = 1
+union
+select incentive_id, offer_category_id ,Offer_type
+from (
+select incentive_id
+, offer_category_id 
+,last_update_ts
+,case when offer_category_id = 42 then '007-J4U Manufacturer Coupons'
+                                when offer_category_id = 67 then '001-Club Card Savings'
+                                when offer_category_id = 68 then '002-Store Coupon (paper)' 
+                                when offer_category_id = 69 then '003-J4U Store eCoupons (elec)' 
+                                when offer_category_id = 70 then '004-J4U Personalized Savings' 
+                                when offer_category_id = 72 then '006-Employee Savings' 
+                                when offer_category_id = 74 then '008-Multiplied Coupon (mfr eCpns)' 
+                                when offer_category_id = 75 then '009-Department Savings' 
+                                when offer_category_id = 76 then '010-Basket Savings' 
+        when offer_category_id = 78 then '012-Customer Service Credit' 
+                                when offer_category_id = 89 then 'Grocery Rewards' 
+                                when offer_category_id = 80 then '015 - Hot Offers' else 'OTHER' end as Offer_type
+                                ,rank() over (partition by incentive_id
+        order by last_update_ts desc) rnk
+        from
+EDM_VIEWS_PRD.DW_EDW_VIEWS.lu_offer 
+  where offer_end_dt > current_date
+  and offer_end_dt >= offer_start_dt
+  and  incentive_id <> 0
+group by 1,2,3,4
+) a where rnk = 1
+   ) group by 1,2,3
+)
+
+,  WOD as 
+(with WODS as (
+  select offer_id as incentive_id from edm_views_prd.dw_views.Discount_Reward_Tier
+where discount_type_cd = 'Basket Level'
+group by 1
+
+)
+select incentive_id, offer_category_id ,Offer_type,coupon_amt from (
+   select incentive_id, offer_category_id ,Offer_type,coupon_amt
+from (
+select a.incentive_id
+, offer_category_id 
+, coupon_amt
+,last_update_ts
+,case when offer_category_id = 42 then '007-J4U Manufacturer Coupons'
+                                when offer_category_id = 67 then '001-Club Card Savings'
+                                when offer_category_id = 68 then '002-Store Coupon (paper)' 
+                                when offer_category_id = 69 then '003-J4U Store eCoupons (elec)' 
+                                when offer_category_id = 70 then '004-J4U Personalized Savings' 
+                                when offer_category_id = 72 then '006-Employee Savings' 
+                                when offer_category_id = 74 then '008-Multiplied Coupon (mfr eCpns)' 
+                                when offer_category_id = 75 then '009-Department Savings' 
+                                when offer_category_id = 76 then '010-Basket Savings' 
+        when offer_category_id = 78 then '012-Customer Service Credit' 
+                                when offer_category_id = 89 then 'Grocery Rewards' 
+                                when offer_category_id = 80 then '015 - Hot Offers' else 'OTHER' end as Offer_type
+                                                                                                                                ,rank() over (partition by a.incentive_id
+        order by last_update_ts desc) rnk
+        from
+EDM_VIEWS_PRD.DW_EDW_VIEWS.lu_offer  a
+join WODS b
+on a.incentive_id = b.incentive_id
+  where offer_end_dt >= current_date
+  and offer_end_dt >= offer_start_dt
+  and offer_start_dt <= current_date
+  and  a.incentive_id <> 0
+  and offer_category_id in (89,69,70,42,80)
+group by 1,2,3,4,5
+) a where rnk = 1
+   ) group by 1,2,3,4
+   )
+
+,  DEPT as 
+(with DEPTS as (
+  select offer_id as incentive_id from edm_views_prd.dw_views.Discount_Reward_Tier
+where discount_type_cd = 'Department Level'
+group by 1
+
+)
+select incentive_id, offer_category_id ,Offer_type,coupon_amt from (
+   select incentive_id, offer_category_id ,Offer_type,coupon_amt
+from (
+select a.incentive_id
+, offer_category_id 
+, coupon_amt
+,last_update_ts
+,case when offer_category_id = 42 then '007-J4U Manufacturer Coupons'
+                                when offer_category_id = 67 then '001-Club Card Savings'
+                                when offer_category_id = 68 then '002-Store Coupon (paper)' 
+                                when offer_category_id = 69 then '003-J4U Store eCoupons (elec)' 
+                                when offer_category_id = 70 then '004-J4U Personalized Savings' 
+                                when offer_category_id = 72 then '006-Employee Savings' 
+                                when offer_category_id = 74 then '008-Multiplied Coupon (mfr eCpns)' 
+                                when offer_category_id = 75 then '009-Department Savings' 
+                                when offer_category_id = 76 then '010-Basket Savings' 
+        when offer_category_id = 78 then '012-Customer Service Credit' 
+                                when offer_category_id = 89 then 'Grocery Rewards' 
+                                when offer_category_id = 80 then '015 - Hot Offers' else 'OTHER' end as Offer_type
+                                                                                                                                ,rank() over (partition by a.incentive_id
+        order by last_update_ts desc) rnk
+        from
+EDM_VIEWS_PRD.DW_EDW_VIEWS.lu_offer  a
+join DEPTS b
+on a.incentive_id = b.incentive_id
+  where offer_end_dt >= current_date
+  and offer_end_dt >= offer_start_dt
+  and offer_start_dt <= current_date
+  and  a.incentive_id <> 0
+  and offer_category_id in (89,69,70,42,80)
+group by 1,2,3,4,5
+) a where rnk = 1
+   ) group by 1,2,3,4
+   )
+
+,savings as
+(
+select 
+h.order_id
+, h.txn_dte
+,  h.txn_tm
+,  h.store_id
+,a.txn_id
+,a.upc_id
+, sum(case when (a.incentive_id = 0 and promotion_id > 0  or r.offer_category_id = 67 or a.incentive_id = 0 and coupon_id > 0 )then  a.mkdn_amt +  mkdn_wod_alloc_amt + mkdn_pod_alloc_amt else 0 end) as club_mkdn
+, sum(case when  r.offer_category_id in (68) then  a.mkdn_amt +  mkdn_wod_alloc_amt + mkdn_pod_alloc_amt  else 0 end) as StorePaperCoupon_mkdn
+, sum(case when  r.offer_category_id in (69,70,42,80) and w.incentive_id is null then  a.mkdn_amt  else 0 end) as J4U_mkdn
+  , sum(case when  w.offer_category_id in (69,70,42,80) and w.incentive_id is not null then a.mkdn_amt+mkdn_wod_alloc_amt + mkdn_pod_alloc_amt  else 0 end) as J4U_BASKET_mkdn
+    , sum(case when  w.offer_category_id in (69,70,42,80) and DD.incentive_id is not null then a.mkdn_amt+mkdn_wod_alloc_amt + mkdn_pod_alloc_amt  else 0 end) as J4U_DEPT_mkdn
+, sum(case when  r.offer_category_id in (72) then  a.mkdn_amt +  mkdn_wod_alloc_amt + mkdn_pod_alloc_amt  else 0 end) as EMPLOYEE_mkdn
+, sum(case when  r.offer_category_id in (75) then  a.mkdn_amt +  mkdn_wod_alloc_amt + mkdn_pod_alloc_amt  else 0 end) as DEPARTMENT_mkdn
+, sum(case when  r.offer_category_id in (76) then  a.mkdn_amt +  mkdn_wod_alloc_amt + mkdn_pod_alloc_amt  else 0 end) as BASKET_mkdn
+, sum(case when  r.offer_category_id in (89) and w.incentive_id is null then  a.mkdn_amt   else 0 end) as REWARDS_mkdn
+  , sum(case when  w.offer_category_id in (89) and w.incentive_id is not null then a.mkdn_amt+ mkdn_wod_alloc_amt + mkdn_pod_alloc_amt  else 0 end) as REWARDS_BASKET_mkdn
+    , sum(case when  w.offer_category_id in (89) and DD.incentive_id is not null then a.mkdn_amt+ mkdn_wod_alloc_amt + mkdn_pod_alloc_amt  else 0 end) as REWARDS_DEPT_mkdn
+, sum(case when  r.offer_category_id in (78) then a.mkdn_amt +  mkdn_wod_alloc_amt + mkdn_pod_alloc_amt else 0 end) as CSCCredit_mkdn
+, sum(case when  r.Offer_type = 'OTHER' then  a.mkdn_amt +  mkdn_wod_alloc_amt + mkdn_pod_alloc_amt  else 0 end) as OTHER_mkdn
+,sum(w.coupon_amt) as WOD_AMT
+from txn_hdr_driver h 
+INNER JOIN EDM_VIEWS_PRD.DW_EDW_VIEWS.txn_facts a
+ON      a.txn_id = h.txn_id
+AND     a.txn_dte = h.txn_dte
+LEFT join (select offer_id, max(client_offer_id) as client_offer_id
+                from EDM_VIEWS_PRD.DW_EDW_VIEWS.lu_offer                    
+                where offer_id > 0
+                group by 1) as d
+on a.promotion_id = d.offer_id
+left join offers R
+on r.incentive_id = a.incentive_id
+left join WOD w
+on r.incentive_id = w.incentive_id
+left join DEPT DD
+on r.incentive_id = DD.incentive_id
+group by 1,2,3,4,5,6
+)
+
+SELECT distinct
+order_id as ORDERID
+,lpad(store_id,4,0) AS STOREID
+,UPC_ID as UPCID
+,club_mkdn            
+,StorePaperCoupon_mkdn
+,J4U_mkdn 
+,J4U_BASKET_mkdn  
+,J4U_DEPT_mkdn  
+,EMPLOYEE_mkdn        
+,DEPARTMENT_mkdn      
+,BASKET_mkdn          
+,REWARDS_mkdn
+,REWARDS_BASKET_mkdn          
+,REWARDS_DEPT_mkdn   
+,CSCCredit_mkdn       
+,OTHER_mkdn 
+,club_mkdn + StorePaperCoupon_mkdn + J4U_mkdn + J4U_basket_mkdn  + J4U_DEPT_mkdn + EMPLOYEE_mkdn + DEPARTMENT_mkdn + BASKET_mkdn + REWARDS_mkdn + REWARDS_Basket_mkdn + REWARDS_DEPT_mkdn + CSCCredit_mkdn + OTHER_mkdn 
+as Total_Savings_categorized
+,WOD_AMT
+from savings
+group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,WOD_AMT
+order by 1,2,3

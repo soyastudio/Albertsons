@@ -1,0 +1,16 @@
+{
+    "env" : "PRD",
+    "user": "APPL_EDM_MONITOR",
+    "account": "abs_itds_prd.west-us-2.azure",
+    "warehouse": "PROD_MONITOR_WH",
+    "role": "ROLE_APPL_EDM_MONITOR",
+    "database":"EDM_CONFIRMED_PRD",
+    "schema":"DW_C_PRODUCT",
+    "SP": ["sp_GetInstantAllocation_To_FLAT_load"],
+    "pipe": ["EDDW_InstantAllocation_PIPE_DEVBLOB_INC"],
+    "stage": ["EDDW_InstantAllocation_STAGE_DEVBLOB_INC"],
+    "stream": ["ESED_InstantAllocation_R_STREAM","GetInstantAllocation_Flat_R_STREAM"],
+    "table": ["GetInstantAllocation_Flat","ESED_InstantAllocation"],
+    "task": ["ESED_InstantAllocation_R_TASK"],
+    "view": [""]
+}

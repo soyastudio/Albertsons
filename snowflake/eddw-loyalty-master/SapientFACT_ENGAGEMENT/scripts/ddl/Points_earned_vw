@@ -1,0 +1,41 @@
+USE DATABASE EDM_VIEWS_PRD;
+USE SCHEMA DW_VIEWS;
+
+create or replace view HH_REWARD_POINTS_EARN(
+EARN_DT COMMENT 'Transaction Date when a acustomer have actually earned any reward point',
+LOYALTY_ACTIVE_ID COMMENT 'Indicator to identify if a Household has Digital presence or not. If a household has online account at Albertsns then 1 else 2 for In-Store activated.',
+BUSINESS_PARTNER_D1_SK COMMENT 'Partner channel number through trnascation has made for which reward has been earned. 1 for Instacart and 9999 for directly at Albertsons',
+BANNER_D1_SK COMMENT 'BANNER ID of the transacted store.',
+DIVISION_D1_SK COMMENT 'DIVISION ID of the transacted store.',
+POINTS_EARNED_NBR COMMENT 'Total reward points earned by a perticular household for a given date over all the transactions.',
+DW_CREATE_TS COMMENT 'Timestamp representing creation of record in the Table'
+) COMMENT='View with points earned by each household for each day. This view will have information for last 2 years only'
+as
+SELECT
+engmt.TRANSACTION_DT as EARN_DT,
+cust.LOYALTY_ACTIVE_ID,
+engmt.business_partner_d1_sk,
+engmt.BANNER_d1_sk,
+engmt.DIVISION_d1_sk,
+SUM(POINTS_EARNED_NBR) as POINTS_EARNED_NBR,
+engmt.DW_CREATE_TS
+FROM
+(
+SELECT
+DISTINCT TRANSACTION_DT,
+TRANSACTION_ID,
+business_partner_d1_sk,
+BANNER_d1_sk,
+DIVISION_d1_sk,
+engmt.Customer_Business_Partner_Registration_D1_Sk,
+POINTS_EARNED_NBR,
+DW_CREATE_TS
+FROM
+edm_analytics_PRD.dw_retail_exp.F_Transaction_Partner_Engagement engmt
+where
+POINTS_EARNED_NBR is not null
+and POINTS_EARNED_NBR > 0
+) engmt
+inner join EDM_ANALYTICS_PRD.DW_RETAIL_EXP.D1_Customer_Business_Partner_Registration cust
+on cust.Customer_Business_Partner_Registration_D1_Sk = engmt.Customer_Business_Partner_Registration_D1_Sk
+group by 1, 2, 3, 4, 5, 7;

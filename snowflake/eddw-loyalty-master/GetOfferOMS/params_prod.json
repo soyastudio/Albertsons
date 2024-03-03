@@ -1,0 +1,14 @@
+{
+    "ENV" : "PRD",      
+    "EDM_VIEW_NAME" : "EDM_VIEWS_PRD",
+    "EDM_DB_NAME_OUT": "EDM_CONFIRMED_OUT_PRD" ,
+    "EDM_DB_NAME": "EDM_CONFIRMED_PRD" ,
+    "EDM_ANALYTICS": "EDM_ANALYTICS_PRD" ,
+    "EDM_DB_NAME_R": "EDM_REFINED_PRD",
+    "WH": "PROD_INGESTION_SMALL_WH",    
+    "STORAGE_ACC3": "STORAGE_RXWACOMPRODST01",
+    "KAFKA_TOPICS":"itds-qa-kafka-topics",
+    "URL3":"azure://rxwacomprodst01.blob.core.windows.net/hw-promotion-fn/inbound/OMS",
+    "INTEGRATION":"EDDW_SNOWPIPEINTEGRATION",
+	  "ENV_PRODBLOB":"PRDBLOB"
+}

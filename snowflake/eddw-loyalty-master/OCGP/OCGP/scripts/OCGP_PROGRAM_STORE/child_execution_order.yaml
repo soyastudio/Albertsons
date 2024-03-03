@@ -1,0 +1,13 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - OCGP/scripts/OCGP_PROGRAM_STORE/ddl/01_OCGP_PROGRAM_STORE_FLAT_DDL.sql
+    - OCGP/scripts/OCGP_PROGRAM_STORE/appl/02_OCGP_PROGRAM_STORE_R_PIPELINE_DDL.sql
+    - OCGP/scripts/OCGP_PROGRAM_STORE/appl/03_OCGP_PROGRAM_STORE_RERUN_AND_WRK_DDL.sql
+    - OCGP/scripts/OCGP_PROGRAM_STORE/ddl/04_PROGRAM_STORE_BIM_DDL.sql
+    - OCGP/scripts/OCGP_PROGRAM_STORE/appl/05_SP_OCGP_PROGRAM_STORE_TO_BIM_LOAD.sql
+    - OCGP/scripts/OCGP_PROGRAM_STORE/appl/06_TASK_OCGP_PROGRAM_STORE_TO_BIM_LOAD_TASK.sql
+    - OCGP/scripts/OCGP_PROGRAM_STORE/ddl/07_VIEW_OCGP_PROGRAM_STORE.sql

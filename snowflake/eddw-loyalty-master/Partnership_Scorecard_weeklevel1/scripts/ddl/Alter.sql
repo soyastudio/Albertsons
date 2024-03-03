@@ -1,0 +1,9 @@
+--liquibase formatted sql
+--changeset SYSTEM:stream runOnChange:true splitStatements:false OBJECT_TYPE:Alter
+
+
+USE DATABASE <<EDM_VIEW_NAME>>;
+USE SCHEMA DW_BIZOPS_VIEWS;
+ALTER VIEW <<EDM_VIEW_NAME>>.DW_BIZOPS_VIEWS.GW_REG99_TXNS_2020
+SET CHANGE_TRACKING = TRUE;
+

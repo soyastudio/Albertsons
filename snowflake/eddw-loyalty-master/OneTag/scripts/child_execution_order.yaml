@@ -1,0 +1,7 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - OneTag/scripts/appl/SP_ONETAG_OTHER_TO_BIM_LOAD_EVENT_MASTER.sql

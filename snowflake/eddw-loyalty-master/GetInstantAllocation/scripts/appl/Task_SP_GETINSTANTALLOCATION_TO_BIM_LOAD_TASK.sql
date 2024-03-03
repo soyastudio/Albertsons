@@ -1,0 +1,5 @@
+create or replace task SP_GETINSTANTALLOCATION_TO_BIM_LOAD_TASK
+	warehouse=PROD_INGESTION_SMALL_WH
+	schedule='1 minutes'
+	when SYSTEM$STREAM_HAS_DATA('EDM_REFINED_PRD.DW_APPL.GetInstantAllocation_Flat_R_STREAM')
+	as CALL SP_GETINSTANTALLOCATION_To_BIM_load();

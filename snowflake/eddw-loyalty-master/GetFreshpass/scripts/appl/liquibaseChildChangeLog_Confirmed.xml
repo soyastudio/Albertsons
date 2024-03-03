@@ -1,0 +1,16 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+	<include file="GetFreshpass/scripts/appl/Pipe_EDDW_FRESHPASS_PIPE_PRDBLOB_INC.sql"/>
+	<include file="GetFreshpass/scripts/appl/SP_GETFRESHPASS_SNOWPIPE_TO_LOAD_VARIANT.sql"/>
+	<include file="GetFreshpass/scripts/appl/SP_GETFRESHPASS_SUBSCRIPTION_TO_BIM_LOAD.sql"/>
+	<include file="GetFreshpass/scripts/appl/SP_GETFRESHPASS_SUBSCRIPTION_TO_BIM_LOAD_BENEFIT.sql"/>
+	<include file="GetFreshpass/scripts/appl/SP_GETFRESHPASS_SUBSCRIPTION_TO_BIM_LOAD_EVENT.sql"/>
+	<include file="GetFreshpass/scripts/appl/SP_GETFRESHPASS_SUBSCRIPTION_TO_BIM_LOAD_PLAN.sql"/>
+	<include file="GetFreshpass/scripts/appl/SP_GETFRESHPASS_TO_FLAT_LOAD.sql"/>
+	<include file="GetFreshpass/scripts/appl/Task_ESED_FRESHPASS_R_TASK.sql"/>
+	<include file="GetFreshpass/scripts/appl/Task_GET_FRESHPASS_SUBSCRIPTION_TASK.sql"/>
+	<include file="GetFreshpass/scripts/appl/stage_EDDW_FRESHPASS_STAGE_PRDBLOB_INC.sql"/>
+	<include file="GetFreshpass/scripts/appl/stream_ESED_FRESHPASS_R_STREAM.sql"/>
+	<include file="GetFreshpass/scripts/appl/stream_GETFRESHPASS_FLAT_R_STREAM.sql"/>
+</databaseChangeLog>

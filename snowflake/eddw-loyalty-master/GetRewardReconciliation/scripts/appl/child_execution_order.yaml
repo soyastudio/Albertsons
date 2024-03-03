@@ -1,0 +1,13 @@
+order:
+- deploy:
+    comment: null
+    metadata: null
+    skip: false
+    files:
+    - GetRewardReconciliation/scripts/appl/SP_GetPartnerRewardReconciliation_TO_BIM_LOAD_Business_Partner_Reward_Reconciliation.sql
+    - GetRewardReconciliation/scripts/appl/SP_GetPartnerRewardReconciliation_TO_BIM_LOAD_Business_Partner_Reward_Reconciliation_Error.sql
+    - GetRewardReconciliation/scripts/appl/Task_SP_GETPARTNERREWARDRECONCILIATION_TO_BIM_LOAD_TASK.sql
+    - GetRewardReconciliation/scripts/appl/sp_GetPartnerRewardReconciliation_To_BIM_load.sql
+    - GetRewardReconciliation/scripts/appl/sp_GetPartnerRewardReconciliation_snowpipe_To_Load_variant.sql
+    - GetRewardReconciliation/scripts/appl/stream_ESED_PARTNERREWARDRECONCILIATION_R_STREAM.sql
+    - GetRewardReconciliation/scripts/appl/stream_GetPartnerRewardReconciliation_Flat_R_STREAM.sql
