@@ -8,7 +8,7 @@ RETURNS STRING
 LANGUAGE JAVASCRIPT
 AS
 $$
-	
+
     // Global Variable Declaration
     var wrk_schema = "DW_R_STAGE";
     var ref_db = "<<EDM_DB_NAME_R>>";
@@ -19,12 +19,12 @@ $$
     var src_wrk_tbl = ref_db + "." + wrk_schema + ".ESED_EPETransaction_wrk";
 	var src_rerun_tbl = ref_db + "." + wrk_schema + ".ESED_EPETransaction_Rerun";
     var tgt_flat_tbl = ref_db + "." + ref_schema + ".EPETransaction_Flat";
-	
+
 
 	// persist stream data in work table for the current transaction, includes data from previous failed run
 	var sql_crt_src_wrk_tbl = `create or replace transient table `+ src_wrk_tmp_tbl +`  as
-                                select * from `+ src_tbl +`  WHERE METADATA$ACTION = 'INSERT'   
-                                UNION ALL 
+                                select * from `+ src_tbl +`  WHERE METADATA$ACTION = 'INSERT'
+                                UNION ALL
                                 select * from `+ src_rerun_tbl;
     try {
         snowflake.execute (
@@ -34,30 +34,30 @@ $$
     catch (err)  {
         throw "Creation of Source Work table "+ src_wrk_tbl +" Failed with error: " + err;   // Return a error message.
         }
-	
+
 	// Empty the rerun queue table
 	var sql_empty_rerun_tbl = `TRUNCATE TABLE `+ src_rerun_tbl +` `;
 	try {
         snowflake.execute ({sqlText: sql_empty_rerun_tbl });
        }
-     catch (err) { 
+     catch (err) {
       throw "Truncation of rerun queue table "+ src_rerun_tbl +" Failed with error: " + err;   // Return a error message.
      }
-	
+
 	// query to load rerun queue table when encountered a failure
-    var sql_ins_rerun_tbl = `CREATE or REPLACE transient table   `+ src_rerun_tbl+` as SELECT * FROM `+ src_wrk_tmp_tbl +``; 
-    
+    var sql_ins_rerun_tbl = `CREATE or REPLACE transient table   `+ src_rerun_tbl+` as SELECT * FROM `+ src_wrk_tmp_tbl +``;
+
 var sql_ins_src_wrk_tbl =   `create or replace transient table `+ src_wrk_tbl +` as
 with LVL_1_FLATTEN as
-			(select 
+			(select
 			tbl.filename as filename
 			,tbl.src_json as src_json
 			,EPE.value as value
 			,EPE.seq as seq
-            
+
 			from `+ src_wrk_tmp_tbl +` tbl
-			,LATERAL FLATTEN(tbl.SRC_JSON) EPE           
-            
+			,LATERAL FLATTEN(tbl.SRC_JSON) EPE
+
 			)
 			select *
 			from
@@ -89,23 +89,23 @@ with LVL_1_FLATTEN as
              ,epe.src_json:createdDate::string as createdDate
 			 ,epe.src_json:transactionUniqueID::string as transactionUniqueID
             // ,epe.src_json:usageLimit::string as usageLimit
-			 from lvl_1_flatten epe) epe;` ; 
+			 from lvl_1_flatten epe) epe;` ;
 
     try {
             snowflake.execute ({sqlText: sql_ins_src_wrk_tbl  } );
         }
-    catch (err)  { 
+    catch (err)  {
 
             throw "Loading of table in src temp table Failed with error: " + err;   // Return a error message.
             }
-            
+
   var insert_into_flat_dml =`INSERT INTO `+ tgt_flat_tbl +`
                      select distinct filename ,
  Transaction_MemberId  ,
  Transaction_Status    ,
  StoreNumber     ,
  StoreTimeZone   ,
- terminalNumber ,  
+ terminalNumber ,
  cardSavings_savingsCategoryId ,
  cardSavings_savingsCategoryName ,
  cardSavings_savingsAmount ,
@@ -165,16 +165,16 @@ with LVL_1_FLATTEN as
  TxnLevel_discountQty ,
  TxnLevel_usageCount ,
  offersAdded ,
- offersRemoved , 
+ offersRemoved ,
  Printing_MessageNumber ,
  Printing_PrintLine ,
  Points_programCode ,
  Points_earns ,
  Points_burns ,
- Messages , 
+ Messages ,
  epeErrors ,
- notifications , 
- scoreCard , 
+ notifications ,
+ scoreCard ,
  Txn_Class ,
  createdDate ,
  transactionSource,
@@ -188,7 +188,7 @@ transactionUniqueID,
 TXNLEVEL_clipIds,
 TxnLevel_promoCode,
 fulfillmentStoreNumber,
-TxnLevel_ProgramType 
+TxnLevel_ProgramType
 			from
 			(select distinct filename,epe.seq
 			  ,Transaction_MemberId
@@ -212,11 +212,11 @@ TxnLevel_ProgramType
 			 ,scoreCard
 			 ,Points
 			 ,transactionUniqueID
-            // ,usageLimit			
+            // ,usageLimit
 			from `+ src_wrk_tbl +` as epe
            )epe
             left join
-    ( 
+    (
     select distinct Items.value:clippedOffers::array as Items_ClippedOffers
              ,Items.value:clubCardSaving::String as Items_ClubCardSaving
              ,Items.value:department::String as Items_Department
@@ -249,19 +249,19 @@ TxnLevel_ProgramType
              ,Items.Value:arSavings::String as Items_arSavings
 			 ,e.seq
      from `+ src_wrk_tbl +` e
-    ,LATERAL FLATTEN(input => ITEMS)  Items   
-    ) Items on Items.seq = epe.seq 
-    
+    ,LATERAL FLATTEN(input => ITEMS)  Items
+    ) Items on Items.seq = epe.seq
+
     left join
     (Select Redemption.value:amount::String as RedemptionAmount
              ,Redemption.value:count::String as RedemptionCount
              ,Redemption.value:offerId::String as RedemptionofferId
              ,e.seq
-   
+
      from `+ src_wrk_tbl +` e
-    ,LATERAL FLATTEN(input => EPE_Redemption)  Redemption 
+    ,LATERAL FLATTEN(input => EPE_Redemption)  Redemption
     )Redemption on Redemption.seq=epe.seq
-    
+
     left join
     (
      Select
@@ -285,38 +285,38 @@ TxnLevel_ProgramType
     ,TxnLevel.value:programCode::string as TxnLevel_programCode
     ,TxnLevel.value:source::string as TxnLevel_source
     ,TxnLevel.value:startDate::String as TxnLevel_startDate
-	,TxnLevel.value:nonDigital::String as txnlevelsavings_nondigital 
-    ,TxnLevel.value:clipIds::String as TXNLEVEL_clipIds 
+	,TxnLevel.value:nonDigital::String as txnlevelsavings_nondigital
+    ,TxnLevel.value:clipIds::String as TXNLEVEL_clipIds
 	,TxnLevel.value:promoCode::String as TxnLevel_promoCode
 	,TxnLevel.value:programType::String as TxnLevel_ProgramType
     ,e.seq
       from `+ src_wrk_tbl +` e
-    ,LATERAL FLATTEN(input => txnLevelSavings) TxnLevel 
+    ,LATERAL FLATTEN(input => txnLevelSavings) TxnLevel
      )TxnLevel on TxnLevel.seq=epe.seq
      Left join
      (
      Select   e.seq,usageLimit.value:offersAdded::array as offersAdded
              ,usageLimit.value:offersRemoved::array as offersRemoved
-     From 
+     From
      `+ src_wrk_tbl +` e
-    ,LATERAL FLATTEN(input => usageLimit) usageLimit 
+    ,LATERAL FLATTEN(input => usageLimit) usageLimit
     )usageLimit on usageLimit.seq=epe.seq
      Left join
      (
      Select   e.seq,Printing.value:messageNumber::String as Printing_MessageNumber
              ,Printing.value:printLine::String as Printing_PrintLine
-     From 
+     From
      `+ src_wrk_tbl +` e
-    ,LATERAL FLATTEN(input => Printing) Printing 
+    ,LATERAL FLATTEN(input => Printing) Printing
     )Printing on Printing.seq=epe.seq
        Left join
      (
      Select   e.seq,points.value:programCode::String as Points_programCode
              ,points.value:earns::array as Points_earns
 			 ,points.value:burns::String as Points_burns
-     From 
+     From
      `+ src_wrk_tbl +` e
-    ,LATERAL FLATTEN(input => points) points 
+    ,LATERAL FLATTEN(input => points) points
     )points on points.seq=epe.seq
 	Left join
      (
@@ -324,19 +324,19 @@ TxnLevel_ProgramType
 	         ,cardSavings.value:savingsCategoryId::String as cardSavings_savingsCategoryId
              ,cardSavings.value:savingsCategoryName::String as cardSavings_savingsCategoryName
 			 ,cardSavings.value:savingsAmount::String as cardSavings_savingsAmount
-     From 
+     From
      `+ src_wrk_tbl +` e
-    ,LATERAL FLATTEN(input => cardSavings) cardSavings 
+    ,LATERAL FLATTEN(input => cardSavings) cardSavings
     )cardSavings on cardSavings.seq=epe.seq
     ;`  ;
-    
+
 	try {
             snowflake.execute (
             {sqlText: insert_into_flat_dml  }
             );
         }
-    catch (err)  { 
-		    snowflake.execute ( 
+    catch (err)  {
+		    snowflake.execute (
 						{sqlText: sql_ins_rerun_tbl }
 						);
             throw "Loading of table "+ tgt_flat_tbl +" Failed with error: " + err;   // Return a error message.

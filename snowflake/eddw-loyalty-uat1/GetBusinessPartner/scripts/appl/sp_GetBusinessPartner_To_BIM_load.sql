@@ -9,28 +9,28 @@ LANGUAGE JAVASCRIPT
 AS
 $$
 
-   var sub_proc_nms = ['SP_GetBusinessPartner_TO_BIM_LOAD_Business_Partner', 
+   var sub_proc_nms = ['SP_GetBusinessPartner_TO_BIM_LOAD_Business_Partner',
 					   'SP_GetBusinessPartner_To_BIM_load_Business_Partner_Site_Contact',
 					   'SP_GetBusinessPartner_To_BIM_load_Business_Partner_Site_Organization',
 					   'SP_GetBusinessPartner_TO_BIM_LOAD_Business_Partner_Profile',
-					   'SP_GetBusinessPartner_To_BIM_load_Business_Partner_Contact',					   
+					   'SP_GetBusinessPartner_To_BIM_load_Business_Partner_Contact',
 					   'SP_GetBusinessPartner_To_BIM_load_Business_Partner_Organization',
 					   'SP_GetBusinessPartner_TO_BIM_LOAD_Business_Partner_Service_Area_Location',
 					   'SP_GetBusinessPartner_TO_BIM_LOAD_Business_Partner_Service_Area',
 					   'SP_GetBusinessPartner_To_BIM_Business_Partner_Note',
 					   'SP_GetBusinessPartner_To_BIM_Business_Partner_Service_Fee',
 					   'SP_GetBusinessPartner_To_BIM_Business_Partner_Service_Override']
-    
-    // Get Metadata from EDM_Environment_Variable Table 
-    var bod_nm = sub_proc_nms[0].split('_')[1]; 
-    var cur_db = snowflake.execute( {sqlText: `Select current_database()`} ); 
-    cur_db.next(); 
-    var env = cur_db.getColumnValue(1); 
-    env = env.split('_'); 
-    env = env[env.length - 1]; 
-    var env_tbl_nm = `EDM_Environment_Variable_${env}`; 
+
+    // Get Metadata from EDM_Environment_Variable Table
+    var bod_nm = sub_proc_nms[0].split('_')[1];
+    var cur_db = snowflake.execute( {sqlText: `Select current_database()`} );
+    cur_db.next();
+    var env = cur_db.getColumnValue(1);
+    env = env.split('_');
+    env = env[env.length - 1];
+    var env_tbl_nm = `EDM_Environment_Variable_${env}`;
     var env_schema_nm = "DW_R_MASTERDATA";
-    var env_db_nm = `EDM_REFINED_${env}`; 
+    var env_db_nm = `EDM_REFINED_${env}`;
     try {
         var rs = snowflake.execute( {sqlText: `SELECT * FROM ${env_db_nm}.${env_schema_nm}.${env_tbl_nm}`} );
         var metaparams = {};
@@ -42,7 +42,6 @@ $$
         var cnf_db = metaparams['CNF_DB'];
         var wrk_schema = metaparams['R_STAGE'];
         var app_schema = metaparams['APPL'];
-		
 
     } catch (err) {
         throw `Error while fetching data from EDM_Environment_Variable_${env}`;
@@ -76,7 +75,7 @@ $$
     var src_tbl = `${ref_db}.${app_schema}.GetBusinessPartner_Flat_R_Stream`;
 	var src_rerun_tbl = `${ref_db}.${wrk_schema}.GetBusinessPartner_Flat_Rerun`;
     var src_wrk_tbl = `${ref_db}.${wrk_schema}.GetBusinessPartner_Flat_wrk`;
-	
+
 	// persist stream data in work table for the current transaction, includes data from previous failed run
 	var sql_crt_src_wrk_tbl = `create or replace table ${src_wrk_tbl} DATA_RETENTION_TIME_IN_DAYS = 0 as
     SELECT * FROM ${src_tbl}
@@ -87,7 +86,7 @@ $$
     } catch (err)  {
         throw `Creation of Source Work table ${src_wrk_tbl} Failed with error: ${err}`;   // Return a error message.
     }
-	
+
 	// Empty the rerun queue table
 	var sql_empty_rerun_tbl = `TRUNCATE TABLE ${src_rerun_tbl}`;
 	try {
@@ -95,12 +94,12 @@ $$
     } catch (err) {
         throw `Truncation of rerun queue table ${src_rerun_tbl} Failed with error: ${err}`;   // Return a error message.
     }
-    
+
 	// query to load rerun queue table when encountered a failure
 	var sql_ins_rerun_tbl = `CREATE OR REPLACE TABLE ${src_rerun_tbl} as SELECT * FROM ${src_wrk_tbl}`;
-   
-   
-    // function to facilitate child stored procedure executions   
+
+
+    // function to facilitate child stored procedure executions
     function execSubProc(sub_proc_nm, params) {
         try {
              ret_obj = snowflake.execute ( {sqlText: `call ${cnf_db}.DW_APPL.${sub_proc_nm}(${params})`} );

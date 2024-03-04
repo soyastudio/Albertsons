@@ -25,7 +25,7 @@ var tgt_exp_tbl = `${CNF_DB}.${wrk_schema}.EPE_Transaction_Header_EXCEPTIONS`;
 var sql_command = `Create or replace table  ${tgt_wrk_tbl} as
                             WITH src_wrk_tbl_recs
 AS (
-	SELECT DISTINCT 
+	SELECT DISTINCT
 		case when Source_system_cd = 'ECOM' then
 												CAST(replace(replace(replace(replace(concat(
 													left(concat(try_to_numeric(Transaction_Id),
@@ -34,7 +34,7 @@ AS (
        )
             when Source_system_cd = 'STORE' then try_to_numeric(order_id) end as TRANSACTION_INTEGRATION_ID
 	   ,Store_Nbr
-       ,Register_Transaction_Sequence_Nbr										   
+       ,Register_Transaction_Sequence_Nbr
 		,Terminal_Nbr
 		,Transaction_Id
 		,Transaction_Ts
@@ -57,8 +57,8 @@ AS (
 		,storenumber as Store_Nbr
 		,try_to_numeric(TRANSACTIONNUMBER) as Register_Transaction_Sequence_Nbr
 		,TERMINALNUMBER AS Terminal_Nbr
-			,try_to_numeric(TRANSACTIONNUMBER) AS Transaction_Id                 
-			,CASE WHEN TRANSACTIONSOURCE = 'STORE' THEN to_timestamp_tz(CASE 
+			,try_to_numeric(TRANSACTIONNUMBER) AS Transaction_Id
+			,CASE WHEN TRANSACTIONSOURCE = 'STORE' THEN to_timestamp_tz(CASE
 				WHEN (
 						STRTOK(TransactionTimestamp, '+', 2) <> ''
 						AND CONTAINS (
@@ -80,11 +80,11 @@ AS (
 					THEN to_timestamp_tz(TransactionTimestamp, 'YYYY-MM-DDTHH24:MI:SS.FF8TZHTZM')
 						--when TransactionTimestamp like '%T%' then to_timestamp_ntz(TransactionTimestamp,'YYYY-MM-DD HH24:MI:SS')
 				ELSE to_timestamp_tz(TransactionTimestamp)
-				END) 
-                
+				END)
+
                 ELSE
-                
-               udf_ntz_to_tz(CASE 
+
+               udf_ntz_to_tz(CASE
 				WHEN (
 						STRTOK(TransactionTimestamp, '+', 2) <> ''
 						AND CONTAINS (
@@ -113,7 +113,7 @@ AS (
 			-- to_timestamp_ntz(transactiontimestamp) as  Transaction_Ts,
 			case when TRANSACTION_MEMBERID= '' then NULL else TRANSACTION_MEMBERID end AS Household_id
 			,TRANSACTION_STATUS AS Status_Cd
-			,CASE 
+			,CASE
 				WHEN (
 						STRTOK(createddate, '+', 2) <> ''
 						AND CONTAINS (
@@ -138,8 +138,8 @@ AS (
 			,TRANSACTIONSOURCE AS Source_System_Cd
 			,TOTALCARDSAVINGS AS Total_Card_Savings_Amt
 			,TRANSACTIONTOTAL AS Transaction_Total_Amt
-			
-			,CASE 
+
+			,CASE
 				WHEN (
 						STRTOK(UpdatedDate, '+', 2) <> ''
 						AND CONTAINS (
@@ -161,19 +161,19 @@ AS (
 					THEN to_timestamp_ltz(UpdatedDate, 'YYYY-MM-DDTHH24:MI:SS.FF8TZHTZM')
 				ELSE to_timestamp_ltz(UpdatedDate)
 				END AS UpdatedDate
-				,Case 
-                 When Source_system_cd = 'ECOM' then transactionnumber 
+				,Case
+                 When Source_system_cd = 'ECOM' then transactionnumber
                  When Source_system_cd = 'STORE' then transactionUniqueID
                  else null
                  End as order_id
 			,Filename ,STORETIMEZONE,
 			fulfillmentStoreNumber as FULFILLMENT_STORE_NBR
-			
+
 		FROM ${src_wrk_tbl}
-		/* 
+		/*
 		UNION ALL
-		
-		SELECT DISTINCT 
+
+		SELECT DISTINCT
 			TRANSACTION_INTEGRATION_ID as transactionUniqueID
 			,Store_Nbr
 			,Register_Transaction_Sequence_Nbr
@@ -186,15 +186,15 @@ AS (
 			,Source_System_Cd
 			,Total_Card_Savings_Amt
 			,Transaction_Total_Amt
-			
+
 			,cast(UpdatedDate AS VARCHAR)
             ,order_id
 			,Filename ,NULL AS STORETIMEZONE, FULFILLMENT_STORE_NBR
 		FROM ${tgt_exp_tbl}  */
 		)
         )
-		
-	
+
+
 		SELECT Distinct src.TRANSACTION_INTEGRATION_ID
 			,src.Store_Nbr
 			,src.Register_Transaction_Sequence_Nbr
@@ -211,20 +211,20 @@ AS (
 			,src.UpdatedDate
 			,src.filename
 			,src.DW_Logical_delete_ind
-			,CASE 
+			,CASE
 				WHEN tgt.TRANSACTION_INTEGRATION_ID IS NULL
 					THEN 'I'
 				ELSE 'U'
 				END AS DML_Type
-			,CASE 
+			,CASE
 				WHEN tgt.DW_First_Effective_dt = CURRENT_DATE
 					THEN 1
 				ELSE 0
 				END AS Sameday_chg_ind
 			,src.FULFILLMENT_STORE_NBR
 		FROM (
-		                                
-		                                        SELECT  
+
+		                                        SELECT
 					                             TRANSACTION_INTEGRATION_ID
 												 ,Store_Nbr
 												 ,Register_Transaction_Sequence_Nbr
@@ -242,15 +242,15 @@ AS (
 					                             ,UpdatedDate
 					                             ,Filename
 												 ,FULFILLMENT_STORE_NBR
-				                                  FROM src_wrk_tbl_recs 
+				                                  FROM src_wrk_tbl_recs
 												  where rn=1
-				                                  
-			                                    
-												
+
+
+
 				) as src
-				LEFT JOIN 
+				LEFT JOIN
 				(
-			   SELECT 
+			   SELECT
 			     tgt.TRANSACTION_INTEGRATION_ID
 				 ,tgt.Store_Nbr
 				 ,tgt.Register_Transaction_Sequence_Nbr
@@ -269,7 +269,7 @@ AS (
 				,tgt.FULFILLMENT_STORE_NBR
 			FROM ${tgt_tbl} tgt
 			WHERE tgt.DW_CURRENT_VERSION_IND = TRUE
-			) AS tgt 
+			) AS tgt
 			ON src.TRANSACTION_INTEGRATION_ID = tgt.TRANSACTION_INTEGRATION_ID
 		    WHERE tgt.TRANSACTION_INTEGRATION_ID IS NULL
 			OR (
@@ -288,16 +288,16 @@ AS (
 				OR NVL(src.FULFILLMENT_STORE_NBR,'-1') <> NVL(tgt.FULFILLMENT_STORE_NBR, '-1')
 				OR src.DW_LOGICAL_DELETE_IND <> tgt.DW_LOGICAL_DELETE_IND
 					)
-                    
+
  `;
 try {
-        
+
         snowflake.execute ({sqlText: sql_command});
         }
     catch (err)  {
         return "Creation of EPE_Transaction_Header_wrk "+ tgt_wrk_tbl +" Failed with error: " + err;   // Return a error message.
         }
- 
+
  var sql_begin = "BEGIN"
 
 
@@ -308,19 +308,19 @@ try {
 ,DW_CURRENT_VERSION_IND = FALSE
 ,DW_LAST_UPDATE_TS = CURRENT_TIMESTAMP
 ,DW_SOURCE_UPDATE_NM = FileName
- FROM ( 
-                             SELECT 
+ FROM (
+                             SELECT
                                            TRANSACTION_INTEGRATION_ID
-                                          ,filename					   
+                                          ,filename
                              FROM ${tgt_wrk_tbl}
-                             WHERE DML_Type = 'U' 
-                             AND Sameday_chg_ind = 0                                      
-                             AND TRANSACTION_INTEGRATION_ID is not NULL                              
-							 						 
+                             WHERE DML_Type = 'U'
+                             AND Sameday_chg_ind = 0
+                             AND TRANSACTION_INTEGRATION_ID is not NULL
+
                              ) src
                              WHERE tgt.TRANSACTION_INTEGRATION_ID = src.TRANSACTION_INTEGRATION_ID
-							 
-							 AND tgt.DW_CURRENT_VERSION_IND = TRUE 
+
+							 AND tgt.DW_CURRENT_VERSION_IND = TRUE
 							 AND tgt.DW_LOGICAL_DELETE_IND = FALSE`;
 
 
@@ -328,24 +328,24 @@ try {
 
 // Processing Sameday updates
 var sql_sameday = ` UPDATE ${tgt_tbl} as tgt
-					SET       Store_Nbr               = src.Store_Nbr  
+					SET       Store_Nbr               = src.Store_Nbr
 							  ,Register_Transaction_Sequence_Nbr = src.Register_Transaction_Sequence_Nbr
 							  ,Terminal_Nbr                 = src.Terminal_Nbr
 							  ,Transaction_Id           = src.Transaction_Id
 							  ,Transaction_Ts               = src.Transaction_Ts
 							  ,Order_Id                    = src.Order_Id
-							  ,Household_Id              = src.Household_Id 
+							  ,Household_Id              = src.Household_Id
 							  ,Status_Cd           = src.Status_Cd
 							  ,Create_Dt                   = src.Create_Dt
 							  ,Source_System_Cd                   = src.Source_System_Cd
 							  ,Total_Card_Savings_Amt         = src.Total_Card_Savings_Amt
                               ,Transaction_Total_Amt           = src.Transaction_Total_Amt
-							                    
+
 					   ,DW_Logical_delete_ind 			   = src.DW_Logical_delete_ind
 					   ,DW_LAST_UPDATE_TS                  = CURRENT_TIMESTAMP
 					   ,DW_SOURCE_UPDATE_NM                = FileName
 					   ,FULFILLMENT_STORE_NBR              = src.FULFILLMENT_STORE_NBR
-					   FROM ( SELECT 
+					   FROM ( SELECT
 								  TRANSACTION_INTEGRATION_ID
 								  ,Store_Nbr
 								  ,Register_Transaction_Sequence_Nbr
@@ -363,21 +363,21 @@ var sql_sameday = ` UPDATE ${tgt_tbl} as tgt
                                  ,'31-DEC-9999'
                                  ,CURRENT_TIMESTAMP
 								 ,DW_Logical_delete_ind
-                                 ,FileName  	
+                                 ,FileName
 								 ,FULFILLMENT_STORE_NBR
 							   FROM ${tgt_wrk_tbl}
 							   WHERE DML_Type = 'U'
 							   AND Sameday_chg_ind = 1
-							   AND TRANSACTION_INTEGRATION_ID IS NOT NULL																   
-							   			   
+							   AND TRANSACTION_INTEGRATION_ID IS NOT NULL
+
 							) src
-							WHERE tgt.TRANSACTION_INTEGRATION_ID = src.TRANSACTION_INTEGRATION_ID							
+							WHERE tgt.TRANSACTION_INTEGRATION_ID = src.TRANSACTION_INTEGRATION_ID
 							AND tgt.DW_CURRENT_VERSION_IND = TRUE`;
 
 // Processing Inserts
 var sql_inserts = `INSERT INTO ${tgt_tbl}
-(                                TRANSACTION_INTEGRATION_ID 
-                     
+(                                TRANSACTION_INTEGRATION_ID
+
                                  ,Terminal_Nbr
                                  ,Transaction_Id
                                  ,Transaction_Ts
@@ -389,7 +389,7 @@ var sql_inserts = `INSERT INTO ${tgt_tbl}
                                  ,Total_Card_Savings_Amt
                                  ,Transaction_Total_Amt
                                  ,DW_First_Effective_Dt
-                                 ,DW_Last_Effective_Dt            
+                                 ,DW_Last_Effective_Dt
                                  ,DW_CREATE_TS
                                  ,DW_LOGICAL_DELETE_IND
                                  ,DW_SOURCE_CREATE_NM
@@ -440,7 +440,7 @@ try {
             );
         snowflake.execute (
             {sqlText: sql_commit  }
-            );    
+            );
 
         }
     catch (err)  {
@@ -449,8 +449,8 @@ try {
             );
 		return `Loading of EPE_Transaction_Header table ${tgt_tbl} Failed with error: ${err}` ;   // Return a error message.
         }
-		
-		
+
+
  /*var truncate_exceptions = `DELETE FROM ${tgt_exp_tbl};`;*/
 
 var sql_exceptions = `INSERT INTO  ${tgt_exp_tbl} (TRANSACTION_INTEGRATION_ID
@@ -472,8 +472,8 @@ var sql_exceptions = `INSERT INTO  ${tgt_exp_tbl} (TRANSACTION_INTEGRATION_ID
 ,DW_CREATE_TS
    ,Store_Nbr
    ,Register_Transaction_Sequence_Nbr
-   ,FULFILLMENT_STORE_NBR) 
-							select Distinct 
+   ,FULFILLMENT_STORE_NBR)
+							select Distinct
    TRANSACTION_INTEGRATION_ID
     ,Terminal_Nbr
 ,Transaction_Id
@@ -495,21 +495,21 @@ END AS Exception_Reason,
    Store_Nbr,
    Register_Transaction_Sequence_Nbr,
    FULFILLMENT_STORE_NBR
-   
+
 FROM  ${tgt_wrk_tbl}
 WHERE  TRANSACTION_INTEGRATION_ID IS NULL
 `;
 
 
-              
-              try 
+
+              try
               {
                      snowflake.execute (
                      {sqlText: sql_begin }
                      );
                      /*snowflake.execute(
                      {sqlText: truncate_exceptions}
-                     );*/  
+                     );*/
                      snowflake.execute (
                      {sqlText: sql_exceptions  }
                      );

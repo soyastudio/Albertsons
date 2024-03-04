@@ -14,7 +14,7 @@ $$
 	var wrk_schema = C_STAGE;
 	var tgt_wrk_tbl = `${CNF_DB}.${wrk_schema}.Business_Partner_Contact_wrk`;
     var tgt_tbl = `${CNF_DB}.${cnf_schema}.Business_Partner_Contact`;
-	var lkp_tbl = `${CNF_DB}.${cnf_schema}.Business_Partner_Profile`;	
+	var lkp_tbl = `${CNF_DB}.${cnf_schema}.Business_Partner_Profile`;
 	var tgt_exp_tbl = `${CNF_DB}.${wrk_schema}.Business_Partner_Contact_EXCEPTIONS`;
 
 // ************** Load for Business_Partner_Contact table BEGIN *****************
@@ -22,7 +22,7 @@ $$
 
 var sql_command = `CREATE OR REPLACE TABLE ${tgt_wrk_tbl} as
                             WITH src_wrk_tbl_recs as
-                            (SELECT DISTINCT 
+                            (SELECT DISTINCT
                              Partner_Nm
 							,Partner_Contact_Type_Cd
 							,Partner_Contact_Dsc
@@ -35,7 +35,7 @@ var sql_command = `CREATE OR REPLACE TABLE ${tgt_wrk_tbl} as
 							,Row_number() OVER ( partition BY Partner_Nm, Partner_Contact_Type_Cd ORDER BY To_timestamp_ntz(CreationDt) DESC) AS rn
                             from
                             (
-                            SELECT DISTINCT 
+                            SELECT DISTINCT
 									 PartnerProfile_PartnerNm as Partner_Nm
 									,Contact_Code as Partner_Contact_Type_Cd
 									,Contact_Description as Partner_Contact_Dsc
@@ -44,12 +44,12 @@ var sql_command = `CREATE OR REPLACE TABLE ${tgt_wrk_tbl} as
 									,Contact_PhoneNbr as Partner_Contact_Phone_Nbr
 									,Contact_EmailAddresstxt as Partner_Contact_Email_Address_txt
 									,CreationDt
-									,filename							
-							FROM ${src_wrk_tbl} 							
-						   
-						  ) 
-                          )                          
-                          
+									,filename
+							FROM ${src_wrk_tbl}
+
+						  )
+                          )
+
                           SELECT
                             src.Business_Partner_Integration_Id
 						   ,src.Partner_Nm
@@ -61,9 +61,9 @@ var sql_command = `CREATE OR REPLACE TABLE ${tgt_wrk_tbl} as
 						   ,src.Partner_Contact_Email_Address_txt
 						   ,src.CreationDt
 						   ,src.DW_Logical_delete_ind
-						   ,src.filename			
+						   ,src.filename
                            ,CASE WHEN tgt.Business_Partner_Integration_Id IS NULL AND tgt.Partner_Nm IS NULL AND tgt.Partner_Contact_Type_Cd IS NULL THEN 'I' ELSE 'U' END AS DML_Type
-                           ,CASE WHEN tgt.dw_first_effective_dt = CURRENT_DATE THEN 1  ELSE 0 END AS Sameday_chg_ind  
+                           ,CASE WHEN tgt.dw_first_effective_dt = CURRENT_DATE THEN 1  ELSE 0 END AS Sameday_chg_ind
                            from
                            (SELECT
 								   B.Business_Partner_Integration_Id
@@ -77,7 +77,7 @@ var sql_command = `CREATE OR REPLACE TABLE ${tgt_wrk_tbl} as
 								  ,s.CreationDt
 								  ,s.DW_Logical_delete_ind
 								  ,s.filename
-							FROM 
+							FROM
 							(
 							select
 								   Partner_Nm
@@ -90,21 +90,21 @@ var sql_command = `CREATE OR REPLACE TABLE ${tgt_wrk_tbl} as
 								  ,CreationDt
 								  ,FALSE AS DW_Logical_delete_ind
 								  ,filename
-							from src_wrk_tbl_recs 
-							WHERE rn = 1 
-							AND Partner_Nm is not null				  						  
+							from src_wrk_tbl_recs
+							WHERE rn = 1
+							AND Partner_Nm is not null
 							AND Partner_Contact_Type_Cd is not null
-							) s  
-						   LEFT JOIN 
+							) s
+						   LEFT JOIN
 							(	SELECT Business_Partner_Integration_Id
-									  ,Partner_Nm 
-								FROM ${lkp_tbl} 
-								WHERE DW_CURRENT_VERSION_IND = TRUE 
-								AND DW_LOGICAL_DELETE_IND = FALSE 
-							) B ON S.Partner_Nm = B.Partner_Nm   						  
+									  ,Partner_Nm
+								FROM ${lkp_tbl}
+								WHERE DW_CURRENT_VERSION_IND = TRUE
+								AND DW_LOGICAL_DELETE_IND = FALSE
+							) B ON S.Partner_Nm = B.Partner_Nm
 						)src
-							
-                        LEFT JOIN 
+
+                        LEFT JOIN
                           (SELECT  DISTINCT
 								 tgt.Business_Partner_Integration_Id
 								,tgt.Partner_Nm
@@ -116,22 +116,22 @@ var sql_command = `CREATE OR REPLACE TABLE ${tgt_wrk_tbl} as
 								,tgt.Partner_Contact_Email_Address_txt
 								,tgt.dw_logical_delete_ind
 								,tgt.dw_first_effective_dt
-                          FROM ${tgt_tbl} tgt 
+                          FROM ${tgt_tbl} tgt
                           WHERE tgt.DW_CURRENT_VERSION_IND = TRUE
-                          ) tgt 
+                          ) tgt
                           ON tgt.Business_Partner_Integration_Id = src.Business_Partner_Integration_Id
 						  AND tgt.Partner_Nm = src.Partner_Nm
 						  AND tgt.Partner_Contact_Type_Cd = src.Partner_Contact_Type_Cd
-                          WHERE  (tgt.Partner_Nm is null and tgt.Business_Partner_Integration_Id is null and tgt.Partner_Contact_Type_Cd is null)  
+                          WHERE  (tgt.Partner_Nm is null and tgt.Business_Partner_Integration_Id is null and tgt.Partner_Contact_Type_Cd is null)
                           or(
-                          NVL(src.Partner_Contact_Dsc,'-1') <> NVL(tgt.Partner_Contact_Dsc,'-1')  
-                          OR NVL(src.Partner_Contact_Short_Dsc,'-1') <> NVL(tgt.Partner_Contact_Short_Dsc,'-1')    
-						  OR NVL(src.Partner_Contact_Nm,'-1') <> NVL(tgt.Partner_Contact_Nm,'-1')    						  
+                          NVL(src.Partner_Contact_Dsc,'-1') <> NVL(tgt.Partner_Contact_Dsc,'-1')
+                          OR NVL(src.Partner_Contact_Short_Dsc,'-1') <> NVL(tgt.Partner_Contact_Short_Dsc,'-1')
+						  OR NVL(src.Partner_Contact_Nm,'-1') <> NVL(tgt.Partner_Contact_Nm,'-1')
                           OR NVL(src.Partner_Contact_Phone_Nbr,'-1') <> NVL(tgt.Partner_Contact_Phone_Nbr,'-1')
                           OR NVL(src.Partner_Contact_Email_Address_txt,'-1') <> NVL(tgt.Partner_Contact_Email_Address_txt,'-1')
 						  OR src.DW_LOGICAL_DELETE_IND  <>  tgt.DW_LOGICAL_DELETE_IND
                           )
-						  `;        
+						  `;
 
 try {
         snowflake.execute (
@@ -146,28 +146,28 @@ var sql_begin = "BEGIN"
 
 // SCD Type2 - Processing Different day updates
               var sql_updates = `UPDATE ${tgt_tbl} as tgt
-              SET 
+              SET
                              DW_Last_Effective_dt = CURRENT_DATE - 1,
                              DW_CURRENT_VERSION_IND = FALSE,
                              DW_LAST_UPDATE_TS = CURRENT_TIMESTAMP,
                              DW_SOURCE_UPDATE_NM = filename
-              FROM ( 
-                             SELECT 
-                                           Business_Partner_Integration_Id,                              
+              FROM (
+                             SELECT
+                                           Business_Partner_Integration_Id,
                                            filename,
 										   Partner_Nm,
 										   Partner_Contact_Type_Cd
                              FROM ${tgt_wrk_tbl}
-                             WHERE DML_Type = 'U' 
-                             AND Sameday_chg_ind = 0                                      
-                             AND Partner_Nm is not NULL                              
+                             WHERE DML_Type = 'U'
+                             AND Sameday_chg_ind = 0
+                             AND Partner_Nm is not NULL
 							 AND Business_Partner_Integration_Id is not null
 							 AND Partner_Contact_Type_Cd is not null
                              ) src
                              WHERE tgt.Business_Partner_Integration_Id = src.Business_Partner_Integration_Id
 							 AND tgt.Partner_Nm = src.Partner_Nm
 							 AND tgt.Partner_Contact_Type_Cd = src.Partner_Contact_Type_Cd
-							 AND tgt.DW_CURRENT_VERSION_IND = TRUE 
+							 AND tgt.DW_CURRENT_VERSION_IND = TRUE
 							 AND tgt.DW_LOGICAL_DELETE_IND = FALSE`;
 
 // Processing Sameday updates
@@ -176,11 +176,11 @@ var sql_sameday = ` UPDATE ${tgt_tbl} as tgt
 					   ,Partner_Contact_Short_Dsc = src.Partner_Contact_Short_Dsc
 					   ,Partner_Contact_Nm = src.Partner_Contact_Nm
 					   ,Partner_Contact_Phone_Nbr = src.Partner_Contact_Phone_Nbr
-					   ,Partner_Contact_Email_Address_txt = src.Partner_Contact_Email_Address_txt					
+					   ,Partner_Contact_Email_Address_txt = src.Partner_Contact_Email_Address_txt
 					   ,DW_Logical_delete_ind = src.DW_Logical_delete_ind
 					   ,DW_LAST_UPDATE_TS = CURRENT_TIMESTAMP
 					   ,DW_SOURCE_UPDATE_NM = FileName
-						FROM ( SELECT 
+						FROM ( SELECT
 								     Business_Partner_Integration_Id
 									,Partner_Nm
 									,Partner_Contact_Type_Cd
@@ -195,7 +195,7 @@ var sql_sameday = ` UPDATE ${tgt_tbl} as tgt
 							   FROM ${tgt_wrk_tbl}
 							   WHERE DML_Type = 'U'
 							   AND Sameday_chg_ind = 1
-							   AND Business_Partner_Integration_Id IS NOT NULL									
+							   AND Business_Partner_Integration_Id IS NOT NULL
 							   AND Partner_Nm IS NOT NULL
 							   AND Partner_Contact_Type_Cd IS NOT NULL
 									) src
@@ -215,12 +215,12 @@ var sql_inserts = `INSERT INTO ${tgt_tbl}
 					,Partner_Contact_Nm
 					,Partner_Contact_Phone_Nbr
 					,Partner_Contact_Email_Address_txt
-                    ,DW_First_Effective_Dt 
-                    ,DW_Last_Effective_Dt              
+                    ,DW_First_Effective_Dt
+                    ,DW_Last_Effective_Dt
                     ,DW_CREATE_TS
                     ,DW_LOGICAL_DELETE_IND
                     ,DW_SOURCE_CREATE_NM
-                    ,DW_CURRENT_VERSION_IND                                                                        
+                    ,DW_CURRENT_VERSION_IND
                    )
                    SELECT DISTINCT
                       Business_Partner_Integration_Id
@@ -232,19 +232,19 @@ var sql_inserts = `INSERT INTO ${tgt_tbl}
 					 ,Partner_Contact_Phone_Nbr
 					 ,Partner_Contact_Email_Address_txt
                      ,CURRENT_DATE as DW_First_Effective_dt
-					 ,'31-DEC-9999'                     
+					 ,'31-DEC-9999'
 					 ,CURRENT_TIMESTAMP
                      ,DW_Logical_delete_ind
                      ,FileName
-                     ,TRUE                                                                                                                       
+                     ,TRUE
 				FROM ${tgt_wrk_tbl}
                 where Business_Partner_Integration_Id is not null
 				and Partner_Nm is not null
 				and Partner_Contact_Type_Cd is not null
 				and Sameday_chg_ind = 0`;
-				
+
 var truncate_exceptions =`DELETE FROM ${tgt_exp_tbl}`;
-						  
+
 	var sql_exceptions = `INSERT INTO ` + tgt_exp_tbl  + `
 		SELECT  Business_Partner_Integration_Id
 		       ,Partner_Nm
@@ -256,11 +256,11 @@ var truncate_exceptions =`DELETE FROM ${tgt_exp_tbl}`;
 			   ,Partner_Contact_Email_Address_txt
 			   ,CreationDt
 			   ,filename
-			   ,CASE WHEN Business_Partner_Integration_Id IS NULL THEN 'Business_Partner_Integration_Id is NULL' 
+			   ,CASE WHEN Business_Partner_Integration_Id IS NULL THEN 'Business_Partner_Integration_Id is NULL'
 			         END AS Exception_Reason
-			   ,CURRENT_TIMESTAMP AS dw_create_ts						
+			   ,CURRENT_TIMESTAMP AS dw_create_ts
 		FROM `+ tgt_wrk_tbl +`
-		WHERE  Business_Partner_Integration_Id is NULL 
+		WHERE  Business_Partner_Integration_Id is NULL
 		OR Partner_Nm is NULL
 		or Partner_Contact_Type_Cd is null
 	`;
@@ -272,11 +272,11 @@ try {
 		snowflake.execute({sqlText: sql_updates});
         snowflake.execute({sqlText: sql_sameday});
         snowflake.execute({sqlText: sql_inserts});
-        snowflake.execute({sqlText: sql_commit}); 
+        snowflake.execute({sqlText: sql_commit});
 		snowflake.execute({sqlText: truncate_exceptions});
 		snowflake.execute({sqlText: sql_exceptions});
 	}
-	
+
     catch (err)  {
         snowflake.execute (
             {sqlText: sql_rollback  }

@@ -31,33 +31,33 @@ var tgt_exp_tbl = `${cnf_db}.${wrk_schema}.EPE_Transaction_Header_Saving_Points_
 
 var sql_command = `Create or replace table  ${tgt_wrk_tbl} as
                             WITH src_wrk_tbl_recs as
-                            (SELECT DISTINCT 
-                                                                 Offer_Id 
+                            (SELECT DISTINCT
+                                                                 Offer_Id
                                                                 ,Points_Program_Nm
-                                                                ,Points_Burned_Nbr 
-                                                                ,Points_Earned_Nbr 
+                                                                ,Points_Burned_Nbr
+                                                                ,Points_Earned_Nbr
                                                                 ,Scorecard_Txt
                                                                 ,TERMINALNUMBER
                                                                 ,TRANSACTIONNUMBER
                                                                 ,TRANSACTIONTIMESTAMP
                                                                 ,UpdatedDate
                                                                 ,filename
-                                                                ,Row_number() OVER ( partition BY TERMINALNUMBER,TRANSACTIONNUMBER,TRANSACTIONTIMESTAMP,Points_Program_Nm,Offer_Id ORDER BY 
+                                                                ,Row_number() OVER ( partition BY TERMINALNUMBER,TRANSACTIONNUMBER,TRANSACTIONTIMESTAMP,Points_Program_Nm,Offer_Id ORDER BY
                                                                  To_timestamp_ntz(UpdatedDate ) desc) AS rn
                                                                  from
                             (
-                            SELECT DISTINCT 
-  
-                                                                         
+                            SELECT DISTINCT
+
+
                                                                         TxnLevel_OfferId  as Offer_Id
                                                                         ,Points.VALUE:programName::string as Points_Program_Nm
                                                                         ,Points.VALUE:burn::string as Points_Burned_Nbr
                                                                         ,Points.VALUE:earn::string as Points_Earned_Nbr
                                                                         ,Points.VALUE:scoreCardText::string as Scorecard_Txt
-                                                                      
+
 									,TERMINALNUMBER
                                                                         ,try_to_numeric(TRANSACTIONNUMBER) as TRANSACTIONNUMBER
-																	  , CASE WHEN TRANSACTIONSOURCE = 'STORE' THEN to_timestamp_tz(CASE 
+																	  , CASE WHEN TRANSACTIONSOURCE = 'STORE' THEN to_timestamp_tz(CASE
 				WHEN (
 						STRTOK(TransactionTimestamp, '+', 2) <> ''
 						AND CONTAINS (
@@ -79,11 +79,11 @@ var sql_command = `Create or replace table  ${tgt_wrk_tbl} as
 					THEN to_timestamp_tz(TransactionTimestamp, 'YYYY-MM-DDTHH24:MI:SS.FF8TZHTZM')
 						--when TransactionTimestamp like '%T%' then to_timestamp_ntz(TransactionTimestamp,'YYYY-MM-DD HH24:MI:SS')
 				ELSE to_timestamp_tz(TransactionTimestamp)
-				END) 
-                
+				END)
+
                 ELSE
-                
-               udf_ntz_to_tz(CASE 
+
+               udf_ntz_to_tz(CASE
 				WHEN (
 						STRTOK(TransactionTimestamp, '+', 2) <> ''
 						AND CONTAINS (
@@ -111,35 +111,35 @@ when  (STRTOK( UpdatedDate,'+',2)<>'' and contains(STRTOK( UpdatedDate,'+',2),':
 (STRTOK( UpdatedDate,'-',4) <>''  and contains(STRTOK( UpdatedDate,'-',4),':')= false)  then to_timestamp_ltz(UpdatedDate,'YYYY-MM-DDTHH24:MI:SS.FF8TZHTZM')
 else to_timestamp_ltz(UpdatedDate)
 end as UpdatedDate
-											
-																	   
-																	   
-                                                                        ,filename 
+
+
+
+                                                                        ,filename
 FROM ${src_wrk_tbl}
 ,LATERAL FLATTEN(input => TxnLevel_Points, outer => TRUE) as Points
 Union All
 Select Distinct
-                                                                
-                                                                Offer_Id 
+
+                                                                Offer_Id
                                                                 ,Points_Program_Nm
-                                                                ,Points_Burned_Nbr 
-                                                                ,Points_Earned_Nbr 
+                                                                ,Points_Burned_Nbr
+                                                                ,Points_Earned_Nbr
                                                                 ,Scorecard_Txt
                                                                 ,TERMINALNUMBER
                                                                 ,TRANSACTIONNUMBER
                                                                 ,TRANSACTIONTIMESTAMP
                                                                 ,cast(UpdatedDate as varchar)
-																
+
                                                                 ,filename
 FROM ${tgt_exp_tbl}
-                            ) 
-                       ) 
-select 
+                            )
+                       )
+select
  src.Transaction_Integration_Id
 ,src.Offer_Id
 ,src.Points_Program_Nm
-,src.Points_Burned_Nbr 
-,src.Points_Earned_Nbr 
+,src.Points_Burned_Nbr
+,src.Points_Earned_Nbr
 ,src.Scorecard_Txt
 ,src.TERMINALNUMBER
 ,src.TRANSACTIONNUMBER
@@ -148,15 +148,15 @@ select
 ,src.UpdatedDate
 ,src.filename
 ,CASE WHEN tgt.Transaction_Integration_Id IS NULL  AND tgt.Offer_Id IS NULL AND tgt.Points_Program_Nm IS NULL THEN 'I' ELSE 'U' END AS DML_Type
-,CASE WHEN tgt.dw_first_effective_dt = CURRENT_DATE THEN 1  ELSE 0 END AS Sameday_chg_ind 
-from 
+,CASE WHEN tgt.dw_first_effective_dt = CURRENT_DATE THEN 1  ELSE 0 END AS Sameday_chg_ind
+from
 (
 select
  LKP_EPE_Transaction_Header.Transaction_Integration_Id AS Transaction_Integration_Id
 ,src1.Offer_Id
 ,src1.Points_Program_Nm
-,src1.Points_Burned_Nbr 
-,src1.Points_Earned_Nbr 
+,src1.Points_Burned_Nbr
+,src1.Points_Earned_Nbr
 ,src1.Scorecard_Txt
 ,src1.TERMINALNUMBER
 ,src1.TRANSACTIONNUMBER
@@ -167,11 +167,11 @@ select
 from
 (
 select
-Offer_Id 
+Offer_Id
 ,Points_Program_Nm
-,Points_Burned_Nbr 
-,Points_Earned_Nbr 
-,Scorecard_Txt 
+,Points_Burned_Nbr
+,Points_Earned_Nbr
+,Scorecard_Txt
 ,TERMINALNUMBER
 ,TRANSACTIONNUMBER
 ,TRANSACTIONTIMESTAMP
@@ -198,31 +198,31 @@ LEFT JOIN (SELECT
 tgt.Transaction_Integration_Id
 ,tgt.Offer_Id
 ,tgt.Points_Program_Nm
-,tgt.Points_Burned_Nbr 
-,tgt.Points_Earned_Nbr 
-,tgt.Scorecard_Txt 
+,tgt.Points_Burned_Nbr
+,tgt.Points_Earned_Nbr
+,tgt.Scorecard_Txt
 ,tgt.dw_logical_delete_ind
 ,tgt.dw_first_effective_dt
 FROM ${tgt_tbl} tgt
 WHERE tgt.DW_CURRENT_VERSION_IND = TRUE
-) as tgt 
+) as tgt
 ON tgt.Transaction_Integration_Id = src.Transaction_Integration_Id
 AND tgt.Offer_Id = src.Offer_Id
 AND tgt.Points_Program_Nm = src.Points_Program_Nm
- 
+
 where (tgt.Transaction_Integration_Id IS NULL  AND tgt.Offer_Id IS NULL  AND tgt.Points_Program_Nm IS NULL)
-OR ( 
+OR (
 NVL(src.Points_Burned_Nbr,'-1') <> NVL(tgt.Points_Burned_Nbr,'-1')
                                                         OR NVL(src.Points_Earned_Nbr,'-1') <> NVL(tgt.Points_Earned_Nbr,'-1')
                                                         OR NVL(src.Scorecard_Txt,'-1') <> NVL(tgt.Scorecard_Txt,'-1')
-                                                        
+
 OR src.DW_LOGICAL_DELETE_IND  <>  tgt.DW_LOGICAL_DELETE_IND
 )
 `;
 try {
-        
+
         snowflake.execute ({sqlText: sql_command});
-            
+
         }
     catch (err)  {
         throw "Creation of EPE_Transaction_Header_Saving_Points work table Failed with error: "+ err;   // Return a error message.
@@ -251,27 +251,27 @@ AND Transaction_Integration_Id  IS NOT NULL
 AND Offer_Id IS NOT NULL
 AND Points_Program_Nm IS NOT NULL
 ) src
-WHERE tgt.Transaction_Integration_Id = src.Transaction_Integration_Id  
+WHERE tgt.Transaction_Integration_Id = src.Transaction_Integration_Id
 AND tgt.Offer_Id = src.Offer_Id
 AND tgt.Points_Program_Nm = src.Points_Program_Nm
 AND tgt.DW_CURRENT_VERSION_IND = TRUE
 AND tgt.DW_LOGICAL_DELETE_IND = FALSE`;
-   
+
 
 // Processing Sameday updates
 var sql_sameday = ` UPDATE ${tgt_tbl} as tgt
-SET  
+SET
      Points_Burned_Nbr = src.Points_Burned_Nbr
-    ,Points_Earned_Nbr = src.Points_Earned_Nbr 
-    ,Scorecard_Txt  = src.Scorecard_Txt 
+    ,Points_Earned_Nbr = src.Points_Earned_Nbr
+    ,Scorecard_Txt  = src.Scorecard_Txt
 ,DW_LAST_UPDATE_TS = CURRENT_TIMESTAMP
 ,DW_SOURCE_UPDATE_NM = FileName
 FROM ( SELECT
 Transaction_Integration_Id
-,Offer_Id 
+,Offer_Id
 ,Points_Program_Nm
-,Points_Burned_Nbr 
-,Points_Earned_Nbr 
+,Points_Burned_Nbr
+,Points_Earned_Nbr
 ,Scorecard_Txt
 ,DW_Logical_delete_ind
 ,UpdatedDate
@@ -296,7 +296,7 @@ Offer_Id,
 Points_Program_Nm,
 DW_Last_Effective_Dt ,
 DW_First_Effective_Dt ,
-Points_Burned_Nbr, 
+Points_Burned_Nbr,
 Points_Earned_Nbr ,
 Scorecard_Txt,
 DW_CREATE_TS ,
@@ -305,13 +305,13 @@ DW_SOURCE_CREATE_NM ,
 DW_CURRENT_VERSION_IND
 )
    SELECT DISTINCT
-Transaction_Integration_Id 
+Transaction_Integration_Id
 ,Offer_Id
 ,Points_Program_Nm
 ,'31-DEC-9999'
 ,CURRENT_DATE
-,Points_Burned_Nbr 
-,Points_Earned_Nbr 
+,Points_Burned_Nbr
+,Points_Earned_Nbr
 ,Scorecard_Txt
 ,CURRENT_TIMESTAMP
 ,DW_Logical_delete_ind
@@ -343,7 +343,7 @@ try {
             );
         snowflake.execute (
             {sqlText: sql_commit  }
-            );    
+            );
 
         }
     catch (err)  {
@@ -351,16 +351,16 @@ try {
             {sqlText: sql_rollback  }
             );
         return `Loading of EPE_Transaction_Header_Saving_Points table ${tgt_tbl} Failed with error:  ${err}`;   // Return a error message.
-       
+
 }
  var truncate_exceptions = `DELETE FROM ${tgt_exp_tbl};`;
 
-var sql_exceptions = `INSERT INTO  ${tgt_exp_tbl}  
+var sql_exceptions = `INSERT INTO  ${tgt_exp_tbl}
 select Distinct
 Transaction_Integration_Id,
 Offer_Id ,
 Points_Program_Nm,
-Points_Burned_Nbr, 
+Points_Burned_Nbr,
 Points_Earned_Nbr,
 Scorecard_Txt,
 TERMINALNUMBER,
@@ -376,12 +376,12 @@ END AS Exception_Reason,
 CURRENT_TIMESTAMP AS DW_CREATE_TS,
 TO_TIMESTAMP_NTZ (TRANSACTIONTIMESTAMP) AS TRANSACTIONTIMESTAMP
 FROM  ${tgt_wrk_tbl}
-WHERE Transaction_Integration_Id IS NULL 
+WHERE Transaction_Integration_Id IS NULL
 or Offer_Id IS NULL
 or Points_Program_Nm IS NULL
 `;
 
-         
+
               try
               {
                      snowflake.execute (
@@ -389,7 +389,7 @@ or Points_Program_Nm IS NULL
                      );
                      snowflake.execute(
                      {sqlText: truncate_exceptions}
-                     );  
+                     );
                      snowflake.execute (
                      {sqlText: sql_exceptions  }
                      );

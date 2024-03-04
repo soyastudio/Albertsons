@@ -9,8 +9,8 @@ LANGUAGE JAVASCRIPT
 AS
 $$
 	
-	var cur_db = snowflake.execute( {sqlText: `Select current_database()`} ); 
-	cur_db.next(); 
+	var cur_db = snowflake.execute( {sqlText: `Select current_database()`} );
+	cur_db.next();
 	var env = cur_db.getColumnValue(1);
 	env = env.split('_');
 	env = env[env.length - 1];
@@ -18,22 +18,22 @@ $$
 	var env_schema_nm = 'DW_R_MASTERDATA';
 	var env_db_nm = `EDM_REFINED_${env}`;
 
-	try { 
-		var rs = snowflake.execute( {sqlText: `SELECT * FROM ${env_db_nm}.${env_schema_nm}.${env_tbl_nm}`} ); 
+	try {
+		var rs = snowflake.execute( {sqlText: `SELECT * FROM ${env_db_nm}.${env_schema_nm}.${env_tbl_nm}`} );
 		var metaparams = {};
 		while (rs.next()) {
 			metaparams[rs.getColumnValue(1)] = rs.getColumnValue(2);
 		}
 		// Global variables
-		var ref_db = metaparams['REF_DB']; 
-		var ref_schema = metaparams['R_RETAIL']; 
-		var app_schema = metaparams['APPL']; 
+		var ref_db = metaparams['REF_DB'];
+		var ref_schema = metaparams['R_RETAIL'];
+		var app_schema = metaparams['APPL'];
 		var wrk_schema = metaparams['R_STAGE'];
-		var azure_blob_url = metaparams['AZURE_BLOB_URL']; 
+		var azure_blob_url = metaparams['AZURE_BLOB_URL'];
 		var pipe_integration = metaparams['PIPE_INTEGRATION'];
 		var storage_integration = metaparams['STORAGE_INTEGRATION'];
 		var warehouse = metaparams['WAREHOUSE'];
-	} catch (err) { 
+	} catch (err) {
 		throw `Error while fetching data from EDM_Environment_Variable_${env}`;
 	}
 
@@ -47,10 +47,10 @@ $$
 	var variant_src_tbl = `${ref_db}.${app_schema}.${variant_nm}_R_STREAM`;
 	var variant_src_rerun_tbl = `${ref_db}.${wrk_schema}.${variant_nm}_Rerun`;
 	var flat_src_tbl = `${ref_db}.${app_schema}.GetEPETRANSACTION_Flat_R_STREAM`;
-	var flat_src_rerun_tbl = `${ref_db}.${wrk_schema}.GetEPETRANSACTION_Flat_Rerun`;  
-	var topic_nm_location = 'ESED_GetEPETransaction/';  
-	
-	
+	var flat_src_rerun_tbl = `${ref_db}.${wrk_schema}.GetEPETRANSACTION_Flat_Rerun`;
+	var topic_nm_location = 'ESED_GetEPETransaction/';
+
+
 	//create stage
 	var create_stage = `CREATE OR REPLACE stage ${stage_nm}
 	url = '${azure_blob_url}'
@@ -78,8 +78,8 @@ $$
 	} catch (err) {
 		throw `Creation of rerun queue table ${variant_src_rerun_tbl} Failed with error: ${err}`;   // Return a error message.
 	}
-	
-	// create pipe  
+
+	// create pipe
 	var create_pipe = `CREATE OR REPLACE pipe ${pipe_nm}
 	auto_ingest = true
 	integration = '${pipe_integration}'
@@ -95,7 +95,7 @@ $$
         snowflake.execute({ sqlText: create_pipe });
     } catch (err) {
         throw `Creation of Pipe failed with error: ${err}`;   // Return a error message.
-    }    
+    }
 
 	var create_stream_on_flat = `CREATE OR REPLACE STREAM ${bod_nm}_Flat_R_STREAM ON TABLE ${ref_db}.${ref_schema}.${short_bod_nm}_Flat`;
 
@@ -103,7 +103,7 @@ $$
         snowflake.execute({ sqlText: create_stream_on_flat });
     } catch (err) {
         throw `Creation of stream on flat table failed with error: ${err}`;   // Return a error message.
-    }   
+    }
 
 	var flat_sql_crt_rerun_tbl = `CREATE TABLE IF NOT EXISTS ${flat_src_rerun_tbl} DATA_RETENTION_TIME_IN_DAYS = 0 AS SELECT * FROM ${flat_src_tbl} where 1=2 `;
 	try {
@@ -115,11 +115,11 @@ $$
 
 	// Task for FLAT Table
 	var create_task = `CREATE OR REPLACE TASK ESED_GetEPETransaction_R_TASK
-	WAREHOUSE = 'PROD_INGESTION_SMALL_WH'
+	WAREHOUSE = '${warehouse}'
 	SCHEDULE = '1 minutes'
 	WHEN
 	SYSTEM$STREAM_HAS_DATA('ESED_EPETransaction_R_STREAM')
-	AS 
+	AS
 	call SP_EPETransaction_TO_FLAT_LOAD();`
 
 	try {
